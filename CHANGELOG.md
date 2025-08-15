@@ -1,18 +1,25 @@
-## 0.1.0
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [0.1.0] - 2025-08-15
 
 ### Added
-- Initial release of Flutter TWind Components
-- WContainer component with className-based styling
-- WFlex layout component
-- WText component with typography support
-- UniversalStyleParser for Tailwind-like class parsing
+- Initial release of Flutter TWind
+- Basic layout components (WContainer, WFlex, WRow, WColumn)
+- Visual components (WText, WCard, WIcon, WAvatar)
+- Interactive components (WButton, WInput)
+- List components (WList, WListTile)
+- Functional components (WAppBar, WBadge)
+- Tailwind CSS-like styling system
 - Responsive design support
-- Wind configuration system
-- Comprehensive documentation and examples
+- Theme customization
+- Comprehensive test suite
 
 ### Features
-- 🎨 Tailwind CSS-inspired className styling
-- 📱 Responsive design support
-- 🧩 Modular component architecture
-- ⚡ High performance styling parser
-- 🎯 Type-safe component APIs
+- 🎨 Tailwind CSS-like styling system
+- 🧩 Rich component library
+- 📱 Responsive design
+- 🚀 High performance
+- 🔧 Easy to use
+- 🎯 Type safety

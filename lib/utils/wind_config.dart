@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 
-/// Wind UI库配置
+/// Wind UI library configuration class.
+/// 
+/// This class provides centralized configuration for the Wind UI library,
+/// including colors, spacing, border radius, and shadows.
 class Wind {
   static Map<String, Color> _colors = {};
   static Map<String, double> _spacing = {};
   static Map<String, double> _borderRadius = {};
   static Map<String, List<BoxShadow>> _shadows = {};
   
+  /// Initialize Wind configuration with custom settings.
+  /// 
+  /// [breakpoints] - Screen size breakpoints for responsive design
+  /// [colors] - Color palette for the theme
+  /// [spacing] - Spacing scale for margins and padding
+  /// [borderRadius] - Border radius scale for rounded corners
+  /// [shadows] - Box shadow definitions
   static void initialize({
     required Map<String, int> breakpoints,
     required Map<String, Color> colors,
@@ -20,13 +30,28 @@ class Wind {
     _shadows = shadows;
   }
   
+  /// Get a color by name from the configured color palette.
+  /// 
+  /// Returns the color if found, otherwise returns null.
   static Color? getColor(String name) => _colors[name];
   static double? getSpacing(String name) => _spacing[name];
   static double? getBorderRadius(String name) => _borderRadius[name];
   static List<BoxShadow>? getShadow(String name) => _shadows[name];
 }
 
+/// Wind UI configuration helper class.
+/// 
+/// Provides a convenient way to initialize Wind UI with default settings.
 class WindConfig {
+  /// Initialize Wind UI with default configuration.
+  /// 
+  /// This method sets up the default theme including:
+  /// - Color palette with primary, secondary, and utility colors
+  /// - Spacing scale from 0 to 64
+  /// - Border radius options
+  /// - Box shadow definitions
+  /// 
+  /// Call this method once in your app's main function before runApp().
   static void initialize() {
     // 初始化Wind配置
     Wind.initialize(

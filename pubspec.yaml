@@ -1,5 +1,5 @@
 name: flutter_twind
-description: 一个基于 Flutter 的现代化 UI 组件库，提供类似 Tailwind CSS 的样式系统和丰富的预构建组件。支持响应式设计、主题定制和高性能渲染。
+description: A modern Flutter UI component library with Tailwind CSS-like styling system. Provides rich pre-built components, responsive design, theme customization and high-performance rendering.
 version: 0.1.0
 homepage: https://github.com/QTTQ/flutter_twind
 repository: https://github.com/QTTQ/flutter_twind
