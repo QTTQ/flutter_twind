@@ -1,0 +1,42 @@
+name: flutter_twind
+description: 一个基于 Flutter 的现代化 UI 组件库，提供类似 Tailwind CSS 的样式系统和丰富的预构建组件。支持响应式设计、主题定制和高性能渲染。
+version: 0.1.0
+homepage: https://github.com/QTTQ/flutter_twind
+repository: https://github.com/QTTQ/flutter_twind
+issue_tracker: https://github.com/QTTQ/flutter_twind/issues
+documentation: https://github.com/QTTQ/flutter_twind#readme
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+# 发布到 pub.dev 时的主题标签
+topics:
+  - ui
+  - components
+  - tailwind
+  - design-system
+  - flutter-package
+  - responsive
+  - theme
+
+# 支持的平台
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+
+screenshots:
+flutter:
