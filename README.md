@@ -634,7 +634,7 @@ WCard(
 ## 🙏 致谢
 
 - 感谢 [Tailwind CSS](https://tailwindcss.com/) 提供的设计灵感
-- 感谢 [Tailwind CSS](https://wind.fluttersdk.com/) 提供的设计灵感
+- 感谢 [fluttersdk](https://wind.fluttersdk.com/) 提供的设计灵感
 - 感谢 Flutter 团队提供的优秀框架
 - 感谢所有贡献者的支持
 
