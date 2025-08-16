@@ -20,7 +20,7 @@
 
 ```yaml
 dependencies:
-  flutter_twind: ^0.1.40
+  flutter_twind: ^0.1.4
 ```
 
 然后运行：
