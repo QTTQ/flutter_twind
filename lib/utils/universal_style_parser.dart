@@ -96,15 +96,6 @@ class UniversalStyleParser {
           styles['borderColor'] = Colors.grey;
         }
       }
-    }
-    
-    // 在解析完所有样式后，如果有边框颜色和宽度，构建 Border 对象
-    if (styles.containsKey('borderColor') && styles.containsKey('borderWidth')) {
-      styles['border'] = Border.all(
-        color: styles['borderColor'],
-        width: styles['borderWidth'],
-      );
-    }
       
       // 解析内边距
       else if (cls.startsWith('p-')) {
@@ -342,6 +333,14 @@ class UniversalStyleParser {
             break;
         }
       }
+    }
+    
+    // 在解析完所有样式后，如果有边框颜色和宽度，构建 Border 对象
+    if (styles.containsKey('borderColor') && styles.containsKey('borderWidth')) {
+      styles['border'] = Border.all(
+        color: styles['borderColor'],
+        width: styles['borderWidth'],
+      );
     }
     
     return styles;
