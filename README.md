@@ -1,11 +1,240 @@
-# Flutter TWind
+# Flutter TailwindCSS-like Components / Flutter TailwindCSS 风格组件
+
+**Language / 语言选择:**
+- [English](#english-version)
+- [中文版本](#中文版本)
+
+---
+
+## English Version
+
+A Flutter package that provides TailwindCSS-like utility components for rapid UI development.
 
 [![pub package](https://img.shields.io/pub/v/flutter_twind.svg)](https://pub.dev/packages/flutter_twind)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-一个基于 Flutter 的现代化 UI 组件库，提供类似 Tailwind CSS 的样式系统和丰富的预构建组件。
+### Features
 
-## ✨ 特性
+- 🎨 **TailwindCSS-like Styling**: Familiar utility classes for rapid development
+- 🧩 **Rich Components**: Pre-built components with consistent styling
+- 🎯 **Type Safety**: Full Dart type safety with IntelliSense support
+- 📱 **Responsive Design**: Built-in responsive design utilities
+- 🔧 **Customizable**: Easy theme customization and extension
+- ⚡ **Performance**: Optimized for Flutter's rendering engine
+
+### Installation
+
+Add this to your package's `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  flutter_twind: ^1.0.0
+```
+
+Then run:
+
+```bash
+flutter pub get
+```
+
+### Quick Start
+
+#### 1. Initialize WindConfig
+
+```dart
+import 'package:flutter_twind/flutter_twind.dart';
+
+void main() {
+  // Initialize WindConfig before runApp
+  WindConfig.initialize();
+  runApp(MyApp());
+}
+```
+
+#### 2. Basic Usage
+
+```dart
+import 'package:flutter_twind/flutter_twind.dart';
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: WAppBar(
+        title: WText('Flutter TailwindCSS'),
+        className: 'bg-blue-600',
+      ),
+      body: WContainer(
+        className: 'p-4 bg-gray-50',
+        child: WColumn(
+          children: [
+            WCard(
+              className: 'p-6 mb-4 bg-white rounded-lg shadow-md',
+              child: WColumn(
+                children: [
+                  WText(
+                    'Welcome to Flutter TailwindCSS',
+                    className: 'text-xl font-bold text-gray-900 mb-2',
+                  ),
+                  WText(
+                    'Build beautiful UIs with utility-first components',
+                    className: 'text-gray-600',
+                  ),
+                ],
+              ),
+            ),
+            WButton(
+              text: 'Get Started',
+              className: 'bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg',
+              onPressed: () => print('Button pressed'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Available Components
+
+#### Layout Components
+
+- **WContainer**: Container with styling support
+- **WFlex**: Flexible layout component
+- **WRow/WColumn**: Row and column layouts
+- **WStack**: Stack layout for overlapping widgets
+- **WPositioned**: Positioned widget for precise placement
+
+#### Visual Components
+
+- **WCard**: Card component with shadow and rounded corners
+- **WText**: Text component with rich styling
+- **WIcon**: Icon component with Material Design icons
+- **WImage**: Image component with various display effects
+- **WAvatar**: Circular avatar component
+- **WDivider**: Divider component for content separation
+
+#### Interactive Components
+
+- **WButton**: Button component with multiple sizes and states
+- **WInput**: Input field component with various types
+
+#### List Components
+
+- **WList**: Scrollable list component
+- **WListTile**: Standard list item layout
+
+#### Utility Components
+
+- **WAppBar**: Application bar component
+- **WBadge**: Badge component for notifications
+- **WDialog**: Modal dialog component
+
+### Utility Classes
+
+#### Color Classes
+```dart
+// Background colors
+'bg-white', 'bg-gray-100', 'bg-blue-500', 'bg-red-500'
+
+// Text colors
+'text-gray-900', 'text-blue-600', 'text-red-500'
+```
+
+#### Spacing Classes
+```dart
+// Padding
+'p-1', 'p-2', 'p-4', 'p-6', 'p-8'
+'px-4', 'py-2'  // Horizontal/vertical spacing
+
+// Margin
+'m-1', 'm-2', 'm-4', 'm-6', 'm-8'
+'mx-4', 'my-2'  // Horizontal/vertical spacing
+```
+
+#### Size Classes
+```dart
+// Width
+'w-full', 'w-1/2', 'w-32', 'w-64'
+
+// Height
+'h-full', 'h-32', 'h-64', 'h-screen'
+
+// Font size
+'text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl'
+```
+
+### Advanced Usage
+
+#### Custom Theme Configuration
+
+```dart
+// Configure custom colors and styles
+WindConfig.configure(
+  colors: {
+    'primary': Color(0xFF3B82F6),
+    'secondary': Color(0xFF10B981),
+  },
+  spacing: {
+    'xs': 4.0,
+    'sm': 8.0,
+    'md': 16.0,
+    'lg': 24.0,
+  },
+);
+```
+
+#### Responsive Design
+
+```dart
+WContainer(
+  className: 'p-2 md:p-4 lg:p-6',  // Different spacing for screen sizes
+  child: WText(
+    'Responsive text',
+    className: 'text-sm md:text-base lg:text-lg',
+  ),
+)
+```
+
+### Contributing
+
+We welcome all forms of contributions! Please read our [Contributing Guide](CONTRIBUTING.md) to learn how to participate in project development.
+
+#### Development Setup
+
+1. Fork this repository
+2. Clone to local:
+   ```bash
+   git clone https://github.com/your-username/flutter_twind.git
+   ```
+3. Install dependencies:
+   ```bash
+   flutter pub get
+   ```
+4. Run tests:
+   ```bash
+   flutter test
+   ```
+
+### License
+
+This project is licensed under the [MIT License](LICENSE).
+
+### Contact
+
+- 📧 Email: qttq369@gmail.com
+
+---
+
+## 中文版本
+
+一个为 Flutter 提供类似 TailwindCSS 实用工具组件的包，用于快速 UI 开发。
+
+[![pub package](https://img.shields.io/pub/v/flutter_twind.svg)](https://pub.dev/packages/flutter_twind)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+### 特性
 
 - 🎨 **类 Tailwind CSS 样式系统** - 通过 className 属性快速应用样式
 - 🧩 **丰富的组件库** - 包含布局、视觉、交互等各类组件
@@ -20,7 +249,7 @@
 
 ```yaml
 dependencies:
-  flutter_twind: ^0.2.0
+  flutter_twind: ^0.2.1
 ```
 
 然后运行：

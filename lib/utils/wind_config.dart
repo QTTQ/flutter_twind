@@ -42,16 +42,75 @@ class Wind {
 /// Wind UI configuration helper class.
 ///
 /// Provides a convenient way to initialize Wind UI with default settings.
+/// This class sets up the complete design system including colors, spacing,
+/// border radius, and shadows that can be used throughout your application.
+///
+/// ## Usage
+///
+/// Call [initialize] once in your app's main function before runApp():
+///
+/// ```dart
+/// void main() {
+///   WindConfig.initialize();
+///   runApp(MyApp());
+/// }
+/// ```
+///
+/// ## Default Configuration
+///
+/// The default configuration includes:
+/// - **Colors**: Primary, secondary, gray scale, and semantic colors
+/// - **Spacing**: Scale from 0 to 64 (0, 1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 56, 64)
+/// - **Border Radius**: sm, md, lg, xl, 2xl, 3xl, full
+/// - **Shadows**: sm, md, lg, xl, 2xl
+/// - **Breakpoints**: sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px)
+///
+/// ## Color Palette
+///
+/// ### Primary Colors
+/// - `primary-50` to `primary-900`: Blue color scale
+/// - `secondary-50` to `secondary-900`: Coral red color scale
+/// - `gray-50` to `gray-900`: Neutral gray scale
+///
+/// ### Semantic Colors
+/// - `success`: Green for success states
+/// - `warning`: Orange for warning states
+/// - `error`: Red for error states
+/// - `info`: Blue for informational states
+///
+/// ### Basic Colors
+/// - `white`, `black`: Pure white and black
+/// - `transparent`: Fully transparent
 class WindConfig {
   /// Initialize Wind UI with default configuration.
   ///
   /// This method sets up the default theme including:
   /// - Color palette with primary, secondary, and utility colors
   /// - Spacing scale from 0 to 64
-  /// - Border radius options
-  /// - Box shadow definitions
+  /// - Border radius options (sm, md, lg, xl, 2xl, 3xl, full)
+  /// - Box shadow definitions (sm, md, lg, xl, 2xl)
+  /// - Responsive breakpoints (sm, md, lg, xl, 2xl)
   ///
-  /// Call this method once in your app's main function before runApp().
+  /// **Important**: Call this method once in your app's main function before runApp().
+  ///
+  /// ```dart
+  /// void main() {
+  ///   WindConfig.initialize();
+  ///   runApp(MyApp());
+  /// }
+  /// ```
+  ///
+  /// After initialization, you can use utility classes in your components:
+  ///
+  /// ```dart
+  /// WContainer(
+  ///   className: 'p-4 bg-primary-500 rounded-lg shadow-md',
+  ///   child: WText(
+  ///     'Styled with WindConfig',
+  ///     className: 'text-white font-semibold',
+  ///   ),
+  /// )
+  /// ```
   static void initialize() {
     // 初始化Wind配置
     Wind.initialize(

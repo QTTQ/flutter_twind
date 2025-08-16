@@ -4,26 +4,129 @@ import '../utils/universal_style_parser.dart';
 
 // ==================== 布局组件 ====================
 
-/// Wind样式的容器组件
+/// A container widget with TailwindCSS-like styling support.
+///
+/// [WContainer] is a versatile layout component that wraps Flutter's [Container]
+/// with utility-first styling capabilities. It supports className-based styling
+/// similar to TailwindCSS, making it easy to apply consistent design patterns.
+///
+/// ## Supported Style Classes
+///
+/// ### Spacing
+/// - `p-{size}`: padding (p-1, p-2, p-4, p-6, p-8)
+/// - `m-{size}`: margin (m-1, m-2, m-4, m-6, m-8)
+/// - `px-{size}`, `py-{size}`: horizontal/vertical padding
+/// - `mx-{size}`, `my-{size}`: horizontal/vertical margin
+///
+/// ### Colors
+/// - `bg-{color}`: background color (bg-white, bg-blue-500, bg-gray-100)
+///
+/// ### Border Radius
+/// - `rounded`: small border radius
+/// - `rounded-lg`: large border radius
+/// - `rounded-full`: fully rounded
+///
+/// ### Shadows
+/// - `shadow-sm`: small shadow
+/// - `shadow-md`: medium shadow
+/// - `shadow-lg`: large shadow
+///
+/// ## Example
+///
+/// ```dart
+/// WContainer(
+///   className: 'p-6 m-4 bg-white rounded-lg shadow-md',
+///   child: Text('Card content'),
+/// )
+/// ```
+///
+/// This creates a container with:
+/// - 24px padding on all sides
+/// - 16px margin on all sides
+/// - White background
+/// - Large border radius
+/// - Medium shadow
 class WContainer extends StatelessWidget {
+  /// The widget to display inside the container.
   final Widget? child;
+  
+  /// TailwindCSS-like class names for styling.
+  /// 
+  /// Supports spacing, colors, border radius, and shadow utilities.
+  /// Multiple classes can be separated by spaces.
+  /// 
+  /// Example: 'p-4 bg-white rounded-lg shadow-md'
   final String? className;
+  
+  /// The width of the container.
+  /// 
+  /// If null, the width will be determined by the className or default behavior.
   final double? width;
+  
+  /// The height of the container.
+  /// 
+  /// If null, the height will be determined by the className or default behavior.
   final double? height;
+  
+  /// The padding inside the container.
+  /// 
+  /// If provided, this will override any padding specified in [className].
   final EdgeInsetsGeometry? padding;
+  
+  /// The margin outside the container.
+  /// 
+  /// If provided, this will override any margin specified in [className].
   final EdgeInsetsGeometry? margin;
+  
+  /// The background color of the container.
+  /// 
+  /// If provided, this will override any background color specified in [className].
   final Color? backgroundColor;
+  
+  /// The border radius of the container.
+  /// 
+  /// If provided, this will override any border radius specified in [className].
   final BorderRadius? borderRadius;
+  
+  /// The box shadows of the container.
+  /// 
+  /// If provided, this will override any shadows specified in [className].
   final List<BoxShadow>? boxShadow;
+  
+  /// The border of the container.
+  /// 
+  /// If provided, this will override any border specified in [className].
   final Border? border;
+  
+  /// How to align the child within the container.
   final AlignmentGeometry? alignment;
+  
+  /// The clip behavior for the container.
   final Clip clipBehavior;
+  
+  /// Additional constraints to apply to the child.
   final BoxConstraints? constraints;
+  
+  /// The transformation matrix to apply to the container.
   final Matrix4? transform;
+  
+  /// The alignment of the origin for the transformation.
   final AlignmentGeometry? transformAlignment;
+  
+  /// A decoration to paint in front of the child.
   final Decoration? foregroundDecoration;
+  
+  /// A decoration to paint behind the child.
+  /// 
+  /// If provided, this will override the decoration created from [className],
+  /// [backgroundColor], [borderRadius], [boxShadow], and [border].
   final Decoration? decoration;
 
+  /// Creates a Wind-styled container.
+  /// 
+  /// The [className] parameter allows you to specify TailwindCSS-like utility
+  /// classes for styling. Other parameters can be used to override specific
+  /// styling properties.
   const WContainer({
     super.key,
     this.child,
@@ -420,24 +523,121 @@ class WCard extends StatelessWidget {
   }
 }
 
-/// Wind样式的文本组件
+/// A text widget with TailwindCSS-like styling support.
+///
+/// [WText] extends Flutter's [Text] widget with utility-first styling
+/// capabilities. It supports className-based styling for typography,
+/// colors, and text alignment.
+///
+/// ## Supported Style Classes
+///
+/// ### Font Sizes
+/// - `text-xs`: 12px
+/// - `text-sm`: 14px
+/// - `text-base`: 16px (default)
+/// - `text-lg`: 18px
+/// - `text-xl`: 20px
+/// - `text-2xl`: 24px
+///
+/// ### Font Weights
+/// - `font-thin`: FontWeight.w100
+/// - `font-light`: FontWeight.w300
+/// - `font-normal`: FontWeight.w400
+/// - `font-medium`: FontWeight.w500
+/// - `font-semibold`: FontWeight.w600
+/// - `font-bold`: FontWeight.w700
+/// - `font-extrabold`: FontWeight.w800
+/// - `font-black`: FontWeight.w900
+///
+/// ### Text Colors
+/// - `text-{color}`: text color (text-gray-900, text-blue-500, text-red-500)
+///
+/// ### Text Alignment
+/// - `text-left`: left alignment
+/// - `text-center`: center alignment
+/// - `text-right`: right alignment
+/// - `text-justify`: justify alignment
+///
+/// ## Example
+///
+/// ```dart
+/// WText(
+///   'Hello World',
+///   className: 'text-xl font-bold text-blue-600 text-center',
+/// )
+/// ```
+///
+/// This creates text with:
+/// - 20px font size
+/// - Bold font weight
+/// - Blue color
+/// - Center alignment
 class WText extends StatelessWidget {
+  /// The text to display.
   final String text;
+  
+  /// TailwindCSS-like class names for styling.
+  /// 
+  /// Supports typography, colors, and alignment utilities.
+  /// Multiple classes can be separated by spaces.
+  /// 
+  /// Example: 'text-lg font-bold text-gray-900 text-center'
   final String? className;
+  
+  /// The text style to apply.
+  /// 
+  /// If provided, this will be merged with styles from [className].
   final TextStyle? style;
+  
+  /// The color of the text.
+  /// 
+  /// If provided, this will override any color specified in [className].
   final Color? color;
+  
+  /// The font size of the text.
+  /// 
+  /// If provided, this will override any font size specified in [className].
   final double? fontSize;
+  
+  /// The font weight of the text.
+  /// 
+  /// If provided, this will override any font weight specified in [className].
   final FontWeight? fontWeight;
+  
+  /// How the text should be aligned horizontally.
+  /// 
+  /// If provided, this will override any alignment specified in [className].
   final TextAlign? textAlign;
+  
+  /// The maximum number of lines for the text to span.
   final int? maxLines;
+  
+  /// How visual overflow should be handled.
   final TextOverflow? overflow;
+  
+  /// The amount of space between each letter.
   final double? letterSpacing;
+  
+  /// The amount of space between each word.
   final double? wordSpacing;
+  
+  /// The height of this text span, as a multiple of the font size.
   final double? height;
+  
+  /// The decoration to paint near the text.
   final TextDecoration? decoration;
+  
+  /// The color in which to paint the text decoration.
   final Color? decorationColor;
+  
+  /// The style in which to paint the text decoration.
   final TextDecorationStyle? decorationStyle;
 
+  /// Creates a Wind-styled text widget.
+  /// 
+  /// The [text] parameter is required and specifies the text to display.
+  /// The [className] parameter allows you to specify TailwindCSS-like utility
+  /// classes for styling.
   const WText(
     this.text, {
     super.key,

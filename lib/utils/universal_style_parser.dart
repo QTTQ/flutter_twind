@@ -177,15 +177,48 @@ class UniversalStyleParser {
         }
       }
       
-      // 解析字体大小
+      // 解析字体大小和文字对齐
       else if (cls.startsWith('text-')) {
         String textPart = cls.substring(5);
         if (!_isColor(textPart)) {
-          double? fontSize = _parseFontSize(textPart);
-          if (fontSize != null) {
-            styles['fontSize'] = fontSize;
+          // 检查是否为对齐样式
+          switch (textPart) {
+            case 'left':
+              styles['textAlign'] = TextAlign.left;
+              break;
+            case 'center':
+              styles['textAlign'] = TextAlign.center;
+              break;
+            case 'right':
+              styles['textAlign'] = TextAlign.right;
+              break;
+            case 'justify':
+              styles['textAlign'] = TextAlign.justify;
+              break;
+            case 'start':
+              styles['textAlign'] = TextAlign.start;
+              break;
+            case 'end':
+              styles['textAlign'] = TextAlign.end;
+              break;
+            default:
+              // 如果不是对齐样式，则尝试解析字体大小
+              double? fontSize = _parseFontSize(textPart);
+              if (fontSize != null) {
+                styles['fontSize'] = fontSize;
+              }
           }
         }
+      }
+      
+      // 解析基础 flex 类名
+      else if (cls == 'flex') {
+        styles['display'] = 'flex';
+      }
+      
+      // 解析容器居中对齐
+      else if (cls == 'center') {
+        styles['alignment'] = Alignment.center;
       }
       
       // 解析字体粗细
