@@ -67,24 +67,44 @@ class UniversalStyleParser {
           styles['color'] = color;
         }
       }
-      // 解析边框颜色
+      // 解析边框颜色和宽度
       else if (cls.startsWith('border-') && !cls.startsWith('border-t-') && 
                !cls.startsWith('border-r-') && !cls.startsWith('border-b-') && 
                !cls.startsWith('border-l-')) {
         String borderPart = cls.substring(7);
-        if (_isColor(borderPart)) {
-          Color? color = _parseColor(borderPart);
-          if (color != null) {
-            styles['borderColor'] = color;
+        
+        // 先尝试解析颜色
+        Color? color = _parseColor(borderPart);
+        if (color != null) {
+          styles['borderColor'] = color;
+          // 如果没有设置边框宽度，默认设置为1
+          if (!styles.containsKey('borderWidth')) {
+            styles['borderWidth'] = 1.0;
           }
         } else {
-          // 解析边框宽度
+          // 如果不是颜色，尝试解析边框宽度
           double? width = double.tryParse(borderPart);
           if (width != null) {
             styles['borderWidth'] = width;
           }
         }
       }
+      // 解析基础边框
+      else if (cls == 'border') {
+        styles['borderWidth'] = 1.0;
+        if (!styles.containsKey('borderColor')) {
+          styles['borderColor'] = Colors.grey;
+        }
+      }
+    }
+    
+    // 在解析完所有样式后，如果有边框颜色和宽度，构建 Border 对象
+    if (styles.containsKey('borderColor') && styles.containsKey('borderWidth')) {
+      styles['border'] = Border.all(
+        color: styles['borderColor'],
+        width: styles['borderWidth'],
+      );
+    }
       
       // 解析内边距
       else if (cls.startsWith('p-')) {
@@ -757,18 +777,35 @@ class UniversalStyleParser {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
     
+    Color? borderColor;
+    double? borderWidth;
+    
     for (String cls in classes) {
-      if (cls.startsWith('border')) {
-        if (cls == 'border') {
-          styles['border'] = Border.all(color: Colors.grey, width: 1);
-        } else if (cls.startsWith('border-')) {
-          String borderPart = cls.substring(7);
+      if (cls == 'border') {
+        borderWidth = 1.0;
+        borderColor = borderColor ?? Colors.grey;
+      } else if (cls.startsWith('border-')) {
+        String borderPart = cls.substring(7);
+        
+        // 尝试解析颜色
+        Color? color = _parseColor(borderPart);
+        if (color != null) {
+          borderColor = color;
+          borderWidth = borderWidth ?? 1.0;
+        } else {
+          // 尝试解析宽度
           double? width = double.tryParse(borderPart);
           if (width != null) {
-            styles['border'] = Border.all(color: Colors.grey, width: width);
+            borderWidth = width;
+            borderColor = borderColor ?? Colors.grey;
           }
         }
       }
+    }
+    
+    // 如果有边框设置，创建 Border 对象
+    if (borderWidth != null && borderColor != null) {
+      styles['border'] = Border.all(color: borderColor, width: borderWidth);
     }
     
     return styles;
