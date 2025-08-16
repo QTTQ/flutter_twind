@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Wind UI library configuration class.
-/// 
+///
 /// This class provides centralized configuration for the Wind UI library,
 /// including colors, spacing, border radius, and shadows.
 class Wind {
@@ -9,9 +9,9 @@ class Wind {
   static Map<String, double> _spacing = {};
   static Map<String, double> _borderRadius = {};
   static Map<String, List<BoxShadow>> _shadows = {};
-  
+
   /// Initialize Wind configuration with custom settings.
-  /// 
+  ///
   /// [breakpoints] - Screen size breakpoints for responsive design
   /// [colors] - Color palette for the theme
   /// [spacing] - Spacing scale for margins and padding
@@ -29,9 +29,9 @@ class Wind {
     _borderRadius = borderRadius;
     _shadows = shadows;
   }
-  
+
   /// Get a color by name from the configured color palette.
-  /// 
+  ///
   /// Returns the color if found, otherwise returns null.
   static Color? getColor(String name) => _colors[name];
   static double? getSpacing(String name) => _spacing[name];
@@ -40,28 +40,22 @@ class Wind {
 }
 
 /// Wind UI configuration helper class.
-/// 
+///
 /// Provides a convenient way to initialize Wind UI with default settings.
 class WindConfig {
   /// Initialize Wind UI with default configuration.
-  /// 
+  ///
   /// This method sets up the default theme including:
   /// - Color palette with primary, secondary, and utility colors
   /// - Spacing scale from 0 to 64
   /// - Border radius options
   /// - Box shadow definitions
-  /// 
+  ///
   /// Call this method once in your app's main function before runApp().
   static void initialize() {
     // 初始化Wind配置
     Wind.initialize(
-      breakpoints: {
-        'sm': 640,
-        'md': 768,
-        'lg': 1024,
-        'xl': 1280,
-        '2xl': 1536,
-      },
+      breakpoints: {'sm': 640, 'md': 768, 'lg': 1024, 'xl': 1280, '2xl': 1536},
       colors: {
         // 主色调
         'primary': const Color(0xFF007AFF),
@@ -75,7 +69,7 @@ class WindConfig {
         'primary-700': const Color(0xFF004999),
         'primary-800': const Color(0xFF003166),
         'primary-900': const Color(0xFF001833),
-        
+
         // 次要色调 - 珊瑚红
         'secondary': const Color(0xFFFF6B6B),
         'secondary-50': const Color(0xFFFFEBEB),
@@ -88,7 +82,7 @@ class WindConfig {
         'secondary-700': const Color(0xFFCC2B2B),
         'secondary-800': const Color(0xFFB21919),
         'secondary-900': const Color(0xFF990606),
-        
+
         // 灰色系
         'gray-50': const Color(0xFFF9FAFB),
         'gray-100': const Color(0xFFF3F4F6).withValues(alpha: 0.8),
@@ -100,13 +94,52 @@ class WindConfig {
         'gray-700': const Color(0xFF374151),
         'gray-800': const Color(0xFF1F2937),
         'gray-900': const Color(0xFF111827),
-        
+
         // 功能色
         'success': const Color(0xFF10B981),
         'warning': const Color(0xFFF59E0B),
         'error': const Color(0xFFEF4444),
         'info': const Color(0xFF3B82F6),
-        
+
+        // 添加完整的蓝色系
+        'blue': const Color(0xFF3B82F6),
+        'blue-50': const Color(0xFFEFF6FF),
+        'blue-100': const Color(0xFFDBEAFE),
+        'blue-200': const Color(0xFFBFDBFE),
+        'blue-300': const Color(0xFF93C5FD),
+        'blue-400': const Color(0xFF60A5FA),
+        'blue-500': const Color(0xFF3B82F6),
+        'blue-600': const Color(0xFF2563EB),
+        'blue-700': const Color(0xFF1D4ED8),
+        'blue-800': const Color(0xFF1E40AF),
+        'blue-900': const Color(0xFF1E3A8A),
+
+        // 添加完整的红色系
+        'red': const Color(0xFFEF4444),
+        'red-50': const Color(0xFFFEF2F2),
+        'red-100': const Color(0xFFFEE2E2),
+        'red-200': const Color(0xFFFECACA),
+        'red-300': const Color(0xFFFCA5A5),
+        'red-400': const Color(0xFFF87171),
+        'red-500': const Color(0xFFEF4444),
+        'red-600': const Color(0xFFDC2626),
+        'red-700': const Color(0xFFB91C1C),
+        'red-800': const Color(0xFF991B1B),
+        'red-900': const Color(0xFF7F1D1D),
+
+        // 添加完整的绿色系
+        'green': const Color(0xFF10B981),
+        'green-50': const Color(0xFFECFDF5),
+        'green-100': const Color(0xFFD1FAE5),
+        'green-200': const Color(0xFFA7F3D0),
+        'green-300': const Color(0xFF6EE7B7),
+        'green-400': const Color(0xFF34D399),
+        'green-500': const Color(0xFF10B981),
+        'green-600': const Color(0xFF059669),
+        'green-700': const Color(0xFF047857),
+        'green-800': const Color(0xFF065F46),
+        'green-900': const Color(0xFF064E3B),
+
         // 背景色
         'white': const Color(0xFFFFFFFF),
         'black': const Color(0xFF000000),

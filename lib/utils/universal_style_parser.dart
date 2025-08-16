@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'wind_config.dart';
 
+/// Universal style parser for Wind UI components.
+/// 
+/// This class provides comprehensive style parsing capabilities including:
+/// - Color parsing (hex, rgb, rgba, hsl, hsla, named colors)
+/// - Spacing and sizing
+/// - Typography
+/// - Responsive design
+/// - Component-specific styles
 class UniversalStyleParser {
-  // 通用解析逻辑
+  /// Parse className string and return style properties.
+  /// 
+  /// [className] - Space-separated class names
+  /// [componentType] - Type of component for specific parsing
+  /// [context] - Build context for responsive design
+  /// [customParser] - Optional custom parsing rules
   static Map<String, dynamic> parseClassName(
     String className, 
     String componentType, 
@@ -22,7 +36,7 @@ class UniversalStyleParser {
     return styles;
   }
   
-  // 通用样式解析（颜色、间距、尺寸等）
+  /// Parse common styles (colors, spacing, sizing, etc.)
   static Map<String, dynamic> _parseCommonStyles(String className, BuildContext context) {
     Map<String, dynamic> styles = {};
     
@@ -37,17 +51,42 @@ class UniversalStyleParser {
       cls = cls.trim();
       if (cls.isEmpty) continue;
       
-      // 解析颜色
+      // 解析背景颜色
       if (cls.startsWith('bg-')) {
-        styles['backgroundColor'] = _parseColor(cls.substring(3));
-      } else if (cls.startsWith('text-')) {
+        String colorPart = cls.substring(3);
+        Color? color = _parseColor(colorPart);
+        if (color != null) {
+          styles['backgroundColor'] = color;
+        }
+      } 
+      // 解析文字颜色
+      else if (cls.startsWith('text-')) {
         String colorPart = cls.substring(5);
-        if (_isColor(colorPart)) {
-          styles['color'] = _parseColor(colorPart);
+        Color? color = _parseColor(colorPart);
+        if (color != null) {
+          styles['color'] = color;
+        }
+      }
+      // 解析边框颜色
+      else if (cls.startsWith('border-') && !cls.startsWith('border-t-') && 
+               !cls.startsWith('border-r-') && !cls.startsWith('border-b-') && 
+               !cls.startsWith('border-l-')) {
+        String borderPart = cls.substring(7);
+        if (_isColor(borderPart)) {
+          Color? color = _parseColor(borderPart);
+          if (color != null) {
+            styles['borderColor'] = color;
+          }
+        } else {
+          // 解析边框宽度
+          double? width = double.tryParse(borderPart);
+          if (width != null) {
+            styles['borderWidth'] = width;
+          }
         }
       }
       
-      // 解析间距
+      // 解析内边距
       else if (cls.startsWith('p-')) {
         double? padding = _parseSpacing(cls.substring(2));
         if (padding != null) {
@@ -56,52 +95,96 @@ class UniversalStyleParser {
       } else if (cls.startsWith('px-')) {
         double? padding = _parseSpacing(cls.substring(3));
         if (padding != null) {
-          styles['paddingHorizontal'] = EdgeInsets.symmetric(horizontal: padding);
+          styles['paddingHorizontal'] = padding;
         }
       } else if (cls.startsWith('py-')) {
         double? padding = _parseSpacing(cls.substring(3));
         if (padding != null) {
-          styles['paddingVertical'] = EdgeInsets.symmetric(vertical: padding);
+          styles['paddingVertical'] = padding;
         }
-      } else if (cls.startsWith('m-')) {
+      } else if (cls.startsWith('pt-')) {
+        double? padding = _parseSpacing(cls.substring(3));
+        if (padding != null) {
+          styles['paddingTop'] = padding;
+        }
+      } else if (cls.startsWith('pr-')) {
+        double? padding = _parseSpacing(cls.substring(3));
+        if (padding != null) {
+          styles['paddingRight'] = padding;
+        }
+      } else if (cls.startsWith('pb-')) {
+        double? padding = _parseSpacing(cls.substring(3));
+        if (padding != null) {
+          styles['paddingBottom'] = padding;
+        }
+      } else if (cls.startsWith('pl-')) {
+        double? padding = _parseSpacing(cls.substring(3));
+        if (padding != null) {
+          styles['paddingLeft'] = padding;
+        }
+      }
+      
+      // 解析外边距
+      else if (cls.startsWith('m-')) {
         double? margin = _parseSpacing(cls.substring(2));
         if (margin != null) {
           styles['margin'] = EdgeInsets.all(margin);
         }
+      } else if (cls.startsWith('mx-')) {
+        double? margin = _parseSpacing(cls.substring(3));
+        if (margin != null) {
+          styles['marginHorizontal'] = margin;
+        }
+      } else if (cls.startsWith('my-')) {
+        double? margin = _parseSpacing(cls.substring(3));
+        if (margin != null) {
+          styles['marginVertical'] = margin;
+        }
+      } else if (cls.startsWith('mt-')) {
+        double? margin = _parseSpacing(cls.substring(3));
+        if (margin != null) {
+          styles['marginTop'] = margin;
+        }
+      } else if (cls.startsWith('mr-')) {
+        double? margin = _parseSpacing(cls.substring(3));
+        if (margin != null) {
+          styles['marginRight'] = margin;
+        }
+      } else if (cls.startsWith('mb-')) {
+        double? margin = _parseSpacing(cls.substring(3));
+        if (margin != null) {
+          styles['marginBottom'] = margin;
+        }
+      } else if (cls.startsWith('ml-')) {
+        double? margin = _parseSpacing(cls.substring(3));
+        if (margin != null) {
+          styles['marginLeft'] = margin;
+        }
       }
       
-      // 解析尺寸
+      // 解析宽度
       else if (cls.startsWith('w-')) {
         double? width = _parseSize(cls.substring(2));
         if (width != null) {
           styles['width'] = width;
         }
-      } else if (cls.startsWith('h-')) {
+      }
+      // 解析高度
+      else if (cls.startsWith('h-')) {
         double? height = _parseSize(cls.substring(2));
         if (height != null) {
           styles['height'] = height;
         }
       }
       
-      // 解析圆角
-      else if (cls.startsWith('rounded')) {
-        if (cls == 'rounded') {
-          styles['borderRadius'] = BorderRadius.circular(4.0);
-        } else if (cls.startsWith('rounded-')) {
-          String radiusPart = cls.substring(8);
-          double? radius = _parseSpacing(radiusPart);
-          if (radius != null) {
-            styles['borderRadius'] = BorderRadius.circular(radius);
-          }
-        }
-      }
-      
       // 解析字体大小
       else if (cls.startsWith('text-')) {
-        String sizePart = cls.substring(5);
-        double? fontSize = _parseFontSize(sizePart);
-        if (fontSize != null) {
-          styles['fontSize'] = fontSize;
+        String textPart = cls.substring(5);
+        if (!_isColor(textPart)) {
+          double? fontSize = _parseFontSize(textPart);
+          if (fontSize != null) {
+            styles['fontSize'] = fontSize;
+          }
         }
       }
       
@@ -113,30 +196,493 @@ class UniversalStyleParser {
         }
       }
       
-      // 解析对齐方式
-      else if (cls == 'text-center') {
-        styles['textAlign'] = TextAlign.center;
-      } else if (cls == 'text-left') {
-        styles['textAlign'] = TextAlign.left;
-      } else if (cls == 'text-right') {
-        styles['textAlign'] = TextAlign.right;
+      // 解析圆角
+      else if (cls.startsWith('rounded')) {
+        if (cls == 'rounded') {
+          styles['borderRadius'] = BorderRadius.circular(4);
+        } else if (cls.startsWith('rounded-')) {
+          String radiusPart = cls.substring(8);
+          double? radius = _parseSpacing(radiusPart);
+          if (radius != null) {
+            styles['borderRadius'] = BorderRadius.circular(radius);
+          } else if (radiusPart == 'full') {
+            styles['borderRadius'] = BorderRadius.circular(9999);
+          }
+        }
       }
       
       // 解析阴影
       else if (cls.startsWith('shadow')) {
-        styles['boxShadow'] = _parseShadow(cls);
+        List<BoxShadow>? shadow = _parseShadow(cls);
+        if (shadow != null) {
+          styles['boxShadow'] = shadow;
+        }
       }
       
-      // 解析动画
-      else if (cls.startsWith('animate-')) {
-        styles.addAll(_parseAnimation(cls));
+      // 解析透明度
+      else if (cls.startsWith('opacity-')) {
+        double? opacity = double.tryParse(cls.substring(8));
+        if (opacity != null) {
+          styles['opacity'] = opacity / 100;
+        }
+      }
+      
+      // 解析 Flex 属性
+      else if (cls.startsWith('flex-')) {
+        String flexPart = cls.substring(5);
+        if (flexPart == 'row') {
+          styles['direction'] = Axis.horizontal;
+        } else if (flexPart == 'col') {
+          styles['direction'] = Axis.vertical;
+        } else if (flexPart == 'wrap') {
+          styles['wrap'] = true;
+        } else {
+          int? flex = int.tryParse(flexPart);
+          if (flex != null) {
+            styles['flex'] = flex;
+          }
+        }
+      }
+      
+      // 解析对齐方式
+      else if (cls.startsWith('justify-')) {
+        String justifyPart = cls.substring(8);
+        switch (justifyPart) {
+          case 'start':
+            styles['mainAxisAlignment'] = MainAxisAlignment.start;
+            break;
+          case 'center':
+            styles['mainAxisAlignment'] = MainAxisAlignment.center;
+            break;
+          case 'end':
+            styles['mainAxisAlignment'] = MainAxisAlignment.end;
+            break;
+          case 'between':
+            styles['mainAxisAlignment'] = MainAxisAlignment.spaceBetween;
+            break;
+          case 'around':
+            styles['mainAxisAlignment'] = MainAxisAlignment.spaceAround;
+            break;
+          case 'evenly':
+            styles['mainAxisAlignment'] = MainAxisAlignment.spaceEvenly;
+            break;
+        }
+      } else if (cls.startsWith('items-')) {
+        String itemsPart = cls.substring(6);
+        switch (itemsPart) {
+          case 'start':
+            styles['crossAxisAlignment'] = CrossAxisAlignment.start;
+            break;
+          case 'center':
+            styles['crossAxisAlignment'] = CrossAxisAlignment.center;
+            break;
+          case 'end':
+            styles['crossAxisAlignment'] = CrossAxisAlignment.end;
+            break;
+          case 'stretch':
+            styles['crossAxisAlignment'] = CrossAxisAlignment.stretch;
+            break;
+        }
       }
     }
     
     return styles;
   }
   
-  // 组件特定样式解析
+  /// Filter responsive classes based on screen size
+  static List<String> _filterResponsiveClasses(List<String> classes, BuildContext context) {
+    List<String> filteredClasses = [];
+    double screenWidth = MediaQuery.of(context).size.width;
+    
+    for (String cls in classes) {
+      if (cls.contains(':')) {
+        List<String> parts = cls.split(':');
+        if (parts.length == 2) {
+          String breakpoint = parts[0];
+          String actualClass = parts[1];
+          
+          if (_shouldApplyBreakpoint(breakpoint, screenWidth)) {
+            filteredClasses.add(actualClass);
+          }
+        }
+      } else {
+        filteredClasses.add(cls);
+      }
+    }
+    
+    return filteredClasses;
+  }
+  
+  /// Check if breakpoint should be applied
+  static bool _shouldApplyBreakpoint(String breakpoint, double screenWidth) {
+    switch (breakpoint) {
+      case 'sm':
+        return screenWidth >= 640;
+      case 'md':
+        return screenWidth >= 768;
+      case 'lg':
+        return screenWidth >= 1024;
+      case 'xl':
+        return screenWidth >= 1280;
+      case '2xl':
+        return screenWidth >= 1536;
+      default:
+        return true;
+    }
+  }
+  
+  /// Parse color from various formats
+  static Color? _parseColor(String colorName) {
+    // 1. 检查是否为方括号包裹的自定义值
+    if (colorName.startsWith('[') && colorName.endsWith(']')) {
+      String customValue = colorName.substring(1, colorName.length - 1);
+      
+      // 解析十六进制颜色
+      if (customValue.startsWith('#')) {
+        return _parseHexColor(customValue);
+      }
+      
+      // 解析 RGB/RGBA 颜色
+      if (customValue.startsWith('rgb(') || customValue.startsWith('rgba(')) {
+        return _parseRgbColor(customValue);
+      }
+      
+      // 解析 HSL/HSLA 颜色
+      if (customValue.startsWith('hsl(') || customValue.startsWith('hsla(')) {
+        return _parseHslColor(customValue);
+      }
+      
+      return null;
+    }
+    
+    // 2. 尝试从 Wind 配置中获取颜色
+    Color? windColor = Wind.getColor(colorName);
+    if (windColor != null) {
+      return windColor;
+    }
+    
+    // 3. 回退到基础颜色映射
+    switch (colorName) {
+      case 'red':
+        return Colors.red;
+      case 'blue':
+        return Colors.blue;
+      case 'green':
+        return Colors.green;
+      case 'yellow':
+        return Colors.yellow;
+      case 'purple':
+        return Colors.purple;
+      case 'pink':
+        return Colors.pink;
+      case 'indigo':
+        return Colors.indigo;
+      case 'gray':
+      case 'grey':
+        return Colors.grey;
+      case 'black':
+        return Colors.black;
+      case 'white':
+        return Colors.white;
+      case 'transparent':
+        return Colors.transparent;
+      default:
+        return null;
+    }
+  }
+  
+  /// Parse hexadecimal color
+  static Color? _parseHexColor(String hex) {
+    try {
+      // 移除 # 符号
+      String hexCode = hex.replaceFirst('#', '');
+      
+      // 处理 3 位十六进制颜色（如 #fff）
+      if (hexCode.length == 3) {
+        hexCode = hexCode.split('').map((char) => char + char).join();
+      }
+      
+      // 处理 6 位十六进制颜色（如 #ffffff）
+      if (hexCode.length == 6) {
+        hexCode = 'FF' + hexCode; // 添加 alpha 通道
+      }
+      
+      // 处理 8 位十六进制颜色（如 #ffffffff）
+      if (hexCode.length == 8) {
+        int value = int.parse(hexCode, radix: 16);
+        return Color(value);
+      }
+      
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  /// Parse RGB/RGBA color
+  static Color? _parseRgbColor(String rgb) {
+    try {
+      // 移除所有空格
+      String cleanRgb = rgb.replaceAll(' ', '');
+      
+      // 解析 rgb(255, 255, 255) 格式
+      RegExp rgbRegex = RegExp(r'rgb\((\d+),(\d+),(\d+)\)');
+      Match? match = rgbRegex.firstMatch(cleanRgb);
+      
+      if (match != null) {
+        int r = int.parse(match.group(1)!);
+        int g = int.parse(match.group(2)!);
+        int b = int.parse(match.group(3)!);
+        
+        // 确保 RGB 值在有效范围内 (0-255)
+        r = r.clamp(0, 255);
+        g = g.clamp(0, 255);
+        b = b.clamp(0, 255);
+        
+        return Color.fromRGBO(r, g, b, 1.0);
+      }
+      
+      // 解析 rgba(255, 255, 255, 0.5) 格式
+      RegExp rgbaRegex = RegExp(r'rgba\((\d+),(\d+),(\d+),([0-9]*\.?[0-9]+)\)');
+      Match? rgbaMatch = rgbaRegex.firstMatch(cleanRgb);
+      
+      if (rgbaMatch != null) {
+        int r = int.parse(rgbaMatch.group(1)!);
+        int g = int.parse(rgbaMatch.group(2)!);
+        int b = int.parse(rgbaMatch.group(3)!);
+        double a = double.parse(rgbaMatch.group(4)!);
+        
+        // 确保值在有效范围内
+        r = r.clamp(0, 255);
+        g = g.clamp(0, 255);
+        b = b.clamp(0, 255);
+        a = a.clamp(0.0, 1.0);
+        
+        return Color.fromRGBO(r, g, b, a);
+      }
+      
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  /// Parse HSL/HSLA color
+  static Color? _parseHslColor(String hsl) {
+    try {
+      String cleanHsl = hsl.replaceAll(' ', '').replaceAll('%', '');
+      
+      // 解析 hsl(360, 100, 50) 格式
+      RegExp hslRegex = RegExp(r'hsl\((\d+),(\d+),(\d+)\)');
+      Match? match = hslRegex.firstMatch(cleanHsl);
+      
+      if (match != null) {
+        double h = double.parse(match.group(1)!) / 360.0;
+        double s = double.parse(match.group(2)!) / 100.0;
+        double l = double.parse(match.group(3)!) / 100.0;
+        
+        return HSLColor.fromAHSL(1.0, h * 360, s, l).toColor();
+      }
+      
+      // 解析 hsla(360, 100, 50, 0.5) 格式
+      RegExp hslaRegex = RegExp(r'hsla\((\d+),(\d+),(\d+),([0-9]*\.?[0-9]+)\)');
+      Match? hslaMatch = hslaRegex.firstMatch(cleanHsl);
+      
+      if (hslaMatch != null) {
+        double h = double.parse(hslaMatch.group(1)!) / 360.0;
+        double s = double.parse(hslaMatch.group(2)!) / 100.0;
+        double l = double.parse(hslaMatch.group(3)!) / 100.0;
+        double a = double.parse(hslaMatch.group(4)!);
+        
+        return HSLColor.fromAHSL(a, h * 360, s, l).toColor();
+      }
+      
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  /// Check if value is a color
+  static bool _isColor(String value) {
+    // 检查是否为方括号包裹的自定义值
+    if (value.startsWith('[') && value.endsWith(']')) {
+      String customValue = value.substring(1, value.length - 1);
+      return customValue.startsWith('#') || 
+             customValue.startsWith('rgb(') || 
+             customValue.startsWith('rgba(') ||
+             customValue.startsWith('hsl(') ||
+             customValue.startsWith('hsla(');
+    }
+    
+    // 检查是否在 Wind 配置中
+    if (Wind.getColor(value) != null) {
+      return true;
+    }
+    
+    // 检查基础颜色
+    List<String> basicColors = [
+      'red', 'blue', 'green', 'yellow', 'purple', 'pink', 
+      'indigo', 'gray', 'grey', 'black', 'white', 'transparent'
+    ];
+    return basicColors.contains(value);
+  }
+  
+  /// Parse spacing values
+  static double? _parseSpacing(String value) {
+    switch (value) {
+      case '0':
+        return 0;
+      case '1':
+        return 4;
+      case '2':
+        return 8;
+      case '3':
+        return 12;
+      case '4':
+        return 16;
+      case '5':
+        return 20;
+      case '6':
+        return 24;
+      case '8':
+        return 32;
+      case '10':
+        return 40;
+      case '12':
+        return 48;
+      case '16':
+        return 64;
+      case '20':
+        return 80;
+      case '24':
+        return 96;
+      case '32':
+        return 128;
+      case '40':
+        return 160;
+      case '48':
+        return 192;
+      case '56':
+        return 224;
+      case '64':
+        return 256;
+      default:
+        return double.tryParse(value);
+    }
+  }
+  
+  /// Parse size values
+  static double? _parseSize(String value) {
+    if (value == 'full') return double.infinity;
+    if (value == 'screen') return double.infinity;
+    return _parseSpacing(value);
+  }
+  
+  /// Parse font size
+  static double? _parseFontSize(String value) {
+    switch (value) {
+      case 'xs':
+        return 12;
+      case 'sm':
+        return 14;
+      case 'base':
+        return 16;
+      case 'lg':
+        return 18;
+      case 'xl':
+        return 20;
+      case '2xl':
+        return 24;
+      case '3xl':
+        return 30;
+      case '4xl':
+        return 36;
+      case '5xl':
+        return 48;
+      case '6xl':
+        return 60;
+      default:
+        return null;
+    }
+  }
+  
+  /// Parse font weight
+  static FontWeight? _parseFontWeight(String value) {
+    switch (value) {
+      case 'thin':
+        return FontWeight.w100;
+      case 'light':
+        return FontWeight.w300;
+      case 'normal':
+        return FontWeight.w400;
+      case 'medium':
+        return FontWeight.w500;
+      case 'semibold':
+        return FontWeight.w600;
+      case 'bold':
+        return FontWeight.w700;
+      case 'extrabold':
+        return FontWeight.w800;
+      case 'black':
+        return FontWeight.w900;
+      default:
+        return null;
+    }
+  }
+  
+  /// Parse box shadow
+  static List<BoxShadow>? _parseShadow(String value) {
+    switch (value) {
+      case 'shadow':
+      case 'shadow-md':
+        return [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ];
+      case 'shadow-sm':
+        return [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ];
+      case 'shadow-lg':
+        return [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ];
+      case 'shadow-xl':
+        return [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
+        ];
+      case 'shadow-2xl':
+        return [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.25),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
+          ),
+        ];
+      case 'shadow-none':
+        return [];
+      default:
+        return null;
+    }
+  }
+  
+  /// Parse component-specific styles
   static Map<String, dynamic> _parseComponentSpecificStyles(String className, String componentType) {
     switch (componentType) {
       case 'Container':
@@ -168,236 +714,7 @@ class UniversalStyleParser {
     }
   }
   
-  // 过滤响应式类名
-  static List<String> _filterResponsiveClasses(List<String> classes, BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    List<String> filteredClasses = [];
-    
-    for (String cls in classes) {
-      if (cls.contains(':')) {
-        List<String> parts = cls.split(':');
-        if (parts.length == 2) {
-          String breakpoint = parts[0];
-          String actualClass = parts[1];
-          
-          if (_shouldApplyBreakpoint(breakpoint, screenWidth)) {
-            filteredClasses.add(actualClass);
-          }
-        }
-      } else {
-        filteredClasses.add(cls);
-      }
-    }
-    
-    return filteredClasses;
-  }
-  
-  // 判断是否应用断点
-  static bool _shouldApplyBreakpoint(String breakpoint, double screenWidth) {
-    switch (breakpoint) {
-      case 'sm':
-        return screenWidth >= 640;
-      case 'md':
-        return screenWidth >= 768;
-      case 'lg':
-        return screenWidth >= 1024;
-      case 'xl':
-        return screenWidth >= 1280;
-      case '2xl':
-        return screenWidth >= 1536;
-      default:
-        return true;
-    }
-  }
-  
-  // 解析颜色
-  static Color? _parseColor(String colorName) {
-    switch (colorName) {
-      case 'red':
-        return Colors.red;
-      case 'blue':
-        return Colors.blue;
-      case 'green':
-        return Colors.green;
-      case 'yellow':
-        return Colors.yellow;
-      case 'purple':
-        return Colors.purple;
-      case 'pink':
-        return Colors.pink;
-      case 'indigo':
-        return Colors.indigo;
-      case 'gray':
-        return Colors.grey;
-      case 'black':
-        return Colors.black;
-      case 'white':
-        return Colors.white;
-      case 'transparent':
-        return Colors.transparent;
-      default:
-        return null;
-    }
-  }
-  
-  // 判断是否为颜色
-  static bool _isColor(String value) {
-    List<String> colors = ['red', 'blue', 'green', 'yellow', 'purple', 'pink', 'indigo', 'gray', 'black', 'white', 'transparent'];
-    return colors.contains(value);
-  }
-  
-  // 解析间距
-  static double? _parseSpacing(String value) {
-    switch (value) {
-      case '0':
-        return 0;
-      case '1':
-        return 4;
-      case '2':
-        return 8;
-      case '3':
-        return 12;
-      case '4':
-        return 16;
-      case '5':
-        return 20;
-      case '6':
-        return 24;
-      case '8':
-        return 32;
-      case '10':
-        return 40;
-      case '12':
-        return 48;
-      case '16':
-        return 64;
-      case '20':
-        return 80;
-      case '24':
-        return 96;
-      default:
-        return double.tryParse(value);
-    }
-  }
-  
-  // 解析尺寸
-  static double? _parseSize(String value) {
-    if (value == 'full') return double.infinity;
-    if (value == 'screen') return double.infinity;
-    return _parseSpacing(value);
-  }
-  
-  // 解析字体大小
-  static double? _parseFontSize(String value) {
-    switch (value) {
-      case 'xs':
-        return 12;
-      case 'sm':
-        return 14;
-      case 'base':
-        return 16;
-      case 'lg':
-        return 18;
-      case 'xl':
-        return 20;
-      case '2xl':
-        return 24;
-      case '3xl':
-        return 30;
-      case '4xl':
-        return 36;
-      case '5xl':
-        return 48;
-      case '6xl':
-        return 60;
-      default:
-        return null;
-    }
-  }
-  
-  // 解析字体粗细
-  static FontWeight? _parseFontWeight(String value) {
-    switch (value) {
-      case 'thin':
-        return FontWeight.w100;
-      case 'light':
-        return FontWeight.w300;
-      case 'normal':
-        return FontWeight.w400;
-      case 'medium':
-        return FontWeight.w500;
-      case 'semibold':
-        return FontWeight.w600;
-      case 'bold':
-        return FontWeight.w700;
-      case 'extrabold':
-        return FontWeight.w800;
-      case 'black':
-        return FontWeight.w900;
-      default:
-        return null;
-    }
-  }
-  
-  // 解析阴影
-  static List<BoxShadow>? _parseShadow(String value) {
-    switch (value) {
-      case 'shadow':
-      case 'shadow-md':
-        return [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ];
-      case 'shadow-lg':
-        return [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ];
-      case 'shadow-xl':
-        return [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ];
-      default:
-        return null;
-    }
-  }
-  
-  // 解析动画
-  static Map<String, dynamic> _parseAnimation(String className) {
-    Map<String, dynamic> animationStyles = {};
-    
-    if (className.startsWith('animate-')) {
-      String animationType = className.substring(8);
-      switch (animationType) {
-        case 'pulse':
-          animationStyles['animation'] = 'pulse';
-          break;
-        case 'bounce':
-          animationStyles['animation'] = 'bounce';
-          break;
-        case 'spin':
-          animationStyles['animation'] = 'spin';
-          break;
-        case 'ping':
-          animationStyles['animation'] = 'ping';
-          break;
-      }
-    }
-    
-    return animationStyles;
-  }
-  
-  // Container 特定样式
+  /// Container specific styles
   static Map<String, dynamic> _parseContainerStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -419,7 +736,7 @@ class UniversalStyleParser {
     return styles;
   }
   
-  // Text 特定样式
+  /// Text specific styles
   static Map<String, dynamic> _parseTextStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -431,13 +748,19 @@ class UniversalStyleParser {
         styles['decoration'] = TextDecoration.underline;
       } else if (cls == 'line-through') {
         styles['decoration'] = TextDecoration.lineThrough;
+      } else if (cls == 'uppercase') {
+        styles['textTransform'] = 'uppercase';
+      } else if (cls == 'lowercase') {
+        styles['textTransform'] = 'lowercase';
+      } else if (cls == 'capitalize') {
+        styles['textTransform'] = 'capitalize';
       }
     }
     
     return styles;
   }
   
-  // Button 特定样式
+  /// Button specific styles
   static Map<String, dynamic> _parseButtonStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -449,13 +772,17 @@ class UniversalStyleParser {
       } else if (cls == 'btn-secondary') {
         styles['backgroundColor'] = Colors.grey;
         styles['foregroundColor'] = Colors.white;
+      } else if (cls == 'btn-outline') {
+        styles['side'] = const BorderSide(color: Colors.blue);
+        styles['backgroundColor'] = Colors.transparent;
+        styles['foregroundColor'] = Colors.blue;
       }
     }
     
     return styles;
   }
   
-  // Card 特定样式
+  /// Card specific styles
   static Map<String, dynamic> _parseCardStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -472,7 +799,7 @@ class UniversalStyleParser {
     return styles;
   }
   
-  // List 特定样式
+  /// List specific styles
   static Map<String, dynamic> _parseListStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -488,7 +815,7 @@ class UniversalStyleParser {
     return styles;
   }
   
-  // ListTile 特定样式
+  /// ListTile specific styles
   static Map<String, dynamic> _parseListTileStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -502,7 +829,7 @@ class UniversalStyleParser {
     return styles;
   }
   
-  // AppBar 特定样式
+  /// AppBar specific styles
   static Map<String, dynamic> _parseAppBarStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -516,7 +843,7 @@ class UniversalStyleParser {
     return styles;
   }
   
-  // TextField 特定样式
+  /// TextField specific styles
   static Map<String, dynamic> _parseTextFieldStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -524,13 +851,15 @@ class UniversalStyleParser {
     for (String cls in classes) {
       if (cls == 'outlined') {
         styles['border'] = const OutlineInputBorder();
+      } else if (cls == 'filled') {
+        styles['filled'] = true;
       }
     }
     
     return styles;
   }
   
-  // Icon 特定样式
+  /// Icon specific styles
   static Map<String, dynamic> _parseIconStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -547,7 +876,7 @@ class UniversalStyleParser {
     return styles;
   }
   
-  // Image 特定样式
+  /// Image specific styles
   static Map<String, dynamic> _parseImageStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -559,13 +888,17 @@ class UniversalStyleParser {
         styles['fit'] = BoxFit.contain;
       } else if (cls == 'object-fill') {
         styles['fit'] = BoxFit.fill;
+      } else if (cls == 'object-fit-width') {
+        styles['fit'] = BoxFit.fitWidth;
+      } else if (cls == 'object-fit-height') {
+        styles['fit'] = BoxFit.fitHeight;
       }
     }
     
     return styles;
   }
   
-  // Stack 特定样式
+  /// Stack specific styles
   static Map<String, dynamic> _parseStackStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
@@ -577,13 +910,17 @@ class UniversalStyleParser {
         styles['alignment'] = Alignment.topCenter;
       } else if (cls == 'stack-bottom') {
         styles['alignment'] = Alignment.bottomCenter;
+      } else if (cls == 'stack-left') {
+        styles['alignment'] = Alignment.centerLeft;
+      } else if (cls == 'stack-right') {
+        styles['alignment'] = Alignment.centerRight;
       }
     }
     
     return styles;
   }
   
-  // Positioned 特定样式
+  /// Positioned specific styles
   static Map<String, dynamic> _parsePositionedStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
