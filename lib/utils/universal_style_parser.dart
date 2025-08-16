@@ -180,34 +180,39 @@ class UniversalStyleParser {
       // 解析字体大小和文字对齐
       else if (cls.startsWith('text-')) {
         String textPart = cls.substring(5);
-        if (!_isColor(textPart)) {
-          // 检查是否为对齐样式
-          switch (textPart) {
-            case 'left':
-              styles['textAlign'] = TextAlign.left;
-              break;
-            case 'center':
-              styles['textAlign'] = TextAlign.center;
-              break;
-            case 'right':
-              styles['textAlign'] = TextAlign.right;
-              break;
-            case 'justify':
-              styles['textAlign'] = TextAlign.justify;
-              break;
-            case 'start':
-              styles['textAlign'] = TextAlign.start;
-              break;
-            case 'end':
-              styles['textAlign'] = TextAlign.end;
-              break;
-            default:
-              // 如果不是对齐样式，则尝试解析字体大小
+        
+        // 首先检查是否为对齐样式
+        switch (textPart) {
+          case 'left':
+            styles['textAlign'] = TextAlign.left;
+            break;
+          case 'center':
+            styles['textAlign'] = TextAlign.center;
+            break;
+          case 'right':
+            styles['textAlign'] = TextAlign.right;
+            break;
+          case 'justify':
+            styles['textAlign'] = TextAlign.justify;
+            break;
+          case 'start':
+            styles['textAlign'] = TextAlign.start;
+            break;
+          case 'end':
+            styles['textAlign'] = TextAlign.end;
+            break;
+          default:
+            // 如果不是对齐样式，尝试解析颜色
+            Color? color = _parseColor(textPart);
+            if (color != null) {
+              styles['color'] = color;
+            } else {
+              // 如果不是颜色，尝试解析字体大小
               double? fontSize = _parseFontSize(textPart);
               if (fontSize != null) {
                 styles['fontSize'] = fontSize;
               }
-          }
+            }
         }
       }
       
