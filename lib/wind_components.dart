@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/wind_config.dart';
-import '../utils/universal_style_parser.dart';
+import 'utils/wind_config.dart';
+import 'utils/universal_style_parser.dart';
 
 // ==================== 布局组件 ====================
 
@@ -156,6 +156,18 @@ class WContainer extends StatelessWidget {
       context,
     );
 
+    Widget? containerChild = child;
+
+    // 如果设置了 flex 相关样式，需要用 Flex 包裹子组件
+    if (parsedStyles.containsKey('display') && parsedStyles['display'] == 'flex') {
+      containerChild = Flex(
+        direction: parsedStyles['direction'] ?? Axis.horizontal,
+        mainAxisAlignment: parsedStyles['mainAxisAlignment'] ?? MainAxisAlignment.start,
+        crossAxisAlignment: parsedStyles['crossAxisAlignment'] ?? CrossAxisAlignment.center,
+        children: child != null ? [child!] : [],
+      );
+    }
+
     return Container(
       width: width ?? parsedStyles['width'],
       height: height ?? parsedStyles['height'],
@@ -174,7 +186,7 @@ class WContainer extends StatelessWidget {
             boxShadow: boxShadow ?? parsedStyles['boxShadow'],
             border: border ?? parsedStyles['border'],
           ),
-      child: child,
+      child: containerChild,
     );
   }
 }
@@ -664,7 +676,7 @@ class WText extends StatelessWidget {
       context,
     );
 
-    return Text(
+    Widget textWidget = Text(
       text,
       style: (style ?? const TextStyle()).copyWith(
         color: color ?? parsedStyles['color'] ?? wColor('gray-900'),
@@ -681,6 +693,18 @@ class WText extends StatelessWidget {
       maxLines: maxLines,
       overflow: overflow,
     );
+
+    // 如果设置了 text-center、text-left、text-right 等对齐样式，
+    // 需要让文本占据整个可用宽度才能看到对齐效果
+    final hasTextAlign = parsedStyles['textAlign'] != null || textAlign != null;
+    if (hasTextAlign) {
+      return SizedBox(
+        width: double.infinity,
+        child: textWidget,
+      );
+    }
+
+    return textWidget;
   }
 }
 

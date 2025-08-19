@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'wind_config.dart';
 
 /// Universal style parser for Wind UI components.
-/// 
+///
 /// This class provides comprehensive style parsing capabilities including:
 /// - Color parsing (hex, rgb, rgba, hsl, hsla, named colors)
 /// - Spacing and sizing
@@ -11,46 +11,49 @@ import 'wind_config.dart';
 /// - Component-specific styles
 class UniversalStyleParser {
   /// Parse className string and return style properties.
-  /// 
+  ///
   /// [className] - Space-separated class names
   /// [componentType] - Type of component for specific parsing
   /// [context] - Build context for responsive design
   /// [customParser] - Optional custom parsing rules
   static Map<String, dynamic> parseClassName(
-    String className, 
-    String componentType, 
-    BuildContext context,
-    {Map<String, dynamic>? customParser}
-  ) {
+    String className,
+    String componentType,
+    BuildContext context, {
+    Map<String, dynamic>? customParser,
+  }) {
     // 1. 先执行通用解析（响应式、基础样式、动画等）
     var styles = _parseCommonStyles(className, context);
-    
+
     // 2. 执行组件特定解析
     styles.addAll(_parseComponentSpecificStyles(className, componentType));
-    
+
     // 3. 如果组件提供了自定义解析器，则执行
     if (customParser != null) {
       styles.addAll(customParser);
     }
-    
+
     return styles;
   }
-  
+
   /// Parse common styles (colors, spacing, sizing, etc.)
-  static Map<String, dynamic> _parseCommonStyles(String className, BuildContext context) {
+  static Map<String, dynamic> _parseCommonStyles(
+    String className,
+    BuildContext context,
+  ) {
     Map<String, dynamic> styles = {};
-    
+
     if (className.isEmpty) return styles;
-    
+
     List<String> classes = className.split(' ');
-    
+
     // 过滤响应式类名
     List<String> filteredClasses = _filterResponsiveClasses(classes, context);
-    
+
     for (String cls in filteredClasses) {
       cls = cls.trim();
       if (cls.isEmpty) continue;
-      
+
       // 解析背景颜色
       if (cls.startsWith('bg-')) {
         String colorPart = cls.substring(3);
@@ -58,7 +61,7 @@ class UniversalStyleParser {
         if (color != null) {
           styles['backgroundColor'] = color;
         }
-      } 
+      }
       // 解析文字颜色
       else if (cls.startsWith('text-')) {
         String colorPart = cls.substring(5);
@@ -68,11 +71,13 @@ class UniversalStyleParser {
         }
       }
       // 解析边框颜色和宽度
-      else if (cls.startsWith('border-') && !cls.startsWith('border-t-') && 
-               !cls.startsWith('border-r-') && !cls.startsWith('border-b-') && 
-               !cls.startsWith('border-l-')) {
+      else if (cls.startsWith('border-') &&
+          !cls.startsWith('border-t-') &&
+          !cls.startsWith('border-r-') &&
+          !cls.startsWith('border-b-') &&
+          !cls.startsWith('border-l-')) {
         String borderPart = cls.substring(7);
-        
+
         // 先尝试解析颜色
         Color? color = _parseColor(borderPart);
         if (color != null) {
@@ -96,7 +101,6 @@ class UniversalStyleParser {
           styles['borderColor'] = Colors.grey;
         }
       }
-      
       // 解析内边距
       else if (cls.startsWith('p-')) {
         double? padding = _parseSpacing(cls.substring(2));
@@ -134,7 +138,6 @@ class UniversalStyleParser {
           styles['paddingLeft'] = padding;
         }
       }
-      
       // 解析外边距
       else if (cls.startsWith('m-')) {
         double? margin = _parseSpacing(cls.substring(2));
@@ -172,7 +175,6 @@ class UniversalStyleParser {
           styles['marginLeft'] = margin;
         }
       }
-      
       // 解析宽度
       else if (cls.startsWith('w-')) {
         double? width = _parseSize(cls.substring(2));
@@ -187,11 +189,10 @@ class UniversalStyleParser {
           styles['height'] = height;
         }
       }
-      
       // 解析字体大小和文字对齐
       else if (cls.startsWith('text-')) {
         String textPart = cls.substring(5);
-        
+
         // 首先检查是否为对齐样式
         switch (textPart) {
           case 'left':
@@ -213,30 +214,27 @@ class UniversalStyleParser {
             styles['textAlign'] = TextAlign.end;
             break;
           default:
-            // 如果不是对齐样式，尝试解析颜色
-            Color? color = _parseColor(textPart);
-            if (color != null) {
-              styles['color'] = color;
+            // 如果不是对齐样式，先尝试解析字体大小
+            double? fontSize = _parseFontSize(textPart);
+            if (fontSize != null) {
+              styles['fontSize'] = fontSize;
             } else {
-              // 如果不是颜色，尝试解析字体大小
-              double? fontSize = _parseFontSize(textPart);
-              if (fontSize != null) {
-                styles['fontSize'] = fontSize;
+              // 如果不是字体大小，尝试解析颜色
+              Color? color = _parseColor(textPart);
+              if (color != null) {
+                styles['color'] = color;
               }
             }
         }
       }
-      
       // 解析基础 flex 类名
       else if (cls == 'flex') {
         styles['display'] = 'flex';
       }
-      
       // 解析容器居中对齐
       else if (cls == 'center') {
         styles['alignment'] = Alignment.center;
       }
-      
       // 解析字体粗细
       else if (cls.startsWith('font-')) {
         FontWeight? fontWeight = _parseFontWeight(cls.substring(5));
@@ -244,7 +242,6 @@ class UniversalStyleParser {
           styles['fontWeight'] = fontWeight;
         }
       }
-      
       // 解析圆角
       else if (cls.startsWith('rounded')) {
         if (cls == 'rounded') {
@@ -259,7 +256,6 @@ class UniversalStyleParser {
           }
         }
       }
-      
       // 解析阴影
       else if (cls.startsWith('shadow')) {
         List<BoxShadow>? shadow = _parseShadow(cls);
@@ -267,7 +263,6 @@ class UniversalStyleParser {
           styles['boxShadow'] = shadow;
         }
       }
-      
       // 解析透明度
       else if (cls.startsWith('opacity-')) {
         double? opacity = double.tryParse(cls.substring(8));
@@ -275,7 +270,6 @@ class UniversalStyleParser {
           styles['opacity'] = opacity / 100;
         }
       }
-      
       // 解析 Flex 属性
       else if (cls.startsWith('flex-')) {
         String flexPart = cls.substring(5);
@@ -292,7 +286,6 @@ class UniversalStyleParser {
           }
         }
       }
-      
       // 解析对齐方式
       else if (cls.startsWith('justify-')) {
         String justifyPart = cls.substring(8);
@@ -334,30 +327,34 @@ class UniversalStyleParser {
         }
       }
     }
-    
+
     // 在解析完所有样式后，如果有边框颜色和宽度，构建 Border 对象
-    if (styles.containsKey('borderColor') && styles.containsKey('borderWidth')) {
+    if (styles.containsKey('borderColor') &&
+        styles.containsKey('borderWidth')) {
       styles['border'] = Border.all(
         color: styles['borderColor'],
         width: styles['borderWidth'],
       );
     }
-    
+
     return styles;
   }
-  
+
   /// Filter responsive classes based on screen size
-  static List<String> _filterResponsiveClasses(List<String> classes, BuildContext context) {
+  static List<String> _filterResponsiveClasses(
+    List<String> classes,
+    BuildContext context,
+  ) {
     List<String> filteredClasses = [];
     double screenWidth = MediaQuery.of(context).size.width;
-    
+
     for (String cls in classes) {
       if (cls.contains(':')) {
         List<String> parts = cls.split(':');
         if (parts.length == 2) {
           String breakpoint = parts[0];
           String actualClass = parts[1];
-          
+
           if (_shouldApplyBreakpoint(breakpoint, screenWidth)) {
             filteredClasses.add(actualClass);
           }
@@ -366,10 +363,10 @@ class UniversalStyleParser {
         filteredClasses.add(cls);
       }
     }
-    
+
     return filteredClasses;
   }
-  
+
   /// Check if breakpoint should be applied
   static bool _shouldApplyBreakpoint(String breakpoint, double screenWidth) {
     switch (breakpoint) {
@@ -387,37 +384,37 @@ class UniversalStyleParser {
         return true;
     }
   }
-  
+
   /// Parse color from various formats
   static Color? _parseColor(String colorName) {
     // 1. 检查是否为方括号包裹的自定义值
     if (colorName.startsWith('[') && colorName.endsWith(']')) {
       String customValue = colorName.substring(1, colorName.length - 1);
-      
+
       // 解析十六进制颜色
       if (customValue.startsWith('#')) {
         return _parseHexColor(customValue);
       }
-      
+
       // 解析 RGB/RGBA 颜色
       if (customValue.startsWith('rgb(') || customValue.startsWith('rgba(')) {
         return _parseRgbColor(customValue);
       }
-      
+
       // 解析 HSL/HSLA 颜色
       if (customValue.startsWith('hsl(') || customValue.startsWith('hsla(')) {
         return _parseHslColor(customValue);
       }
-      
+
       return null;
     }
-    
+
     // 2. 尝试从 Wind 配置中获取颜色
     Color? windColor = Wind.getColor(colorName);
     if (windColor != null) {
       return windColor;
     }
-    
+
     // 3. 回退到基础颜色映射
     switch (colorName) {
       case 'red':
@@ -447,144 +444,154 @@ class UniversalStyleParser {
         return null;
     }
   }
-  
+
   /// Parse hexadecimal color
   static Color? _parseHexColor(String hex) {
     try {
       // 移除 # 符号
       String hexCode = hex.replaceFirst('#', '');
-      
+
       // 处理 3 位十六进制颜色（如 #fff）
       if (hexCode.length == 3) {
         hexCode = hexCode.split('').map((char) => char + char).join();
       }
-      
+
       // 处理 6 位十六进制颜色（如 #ffffff）
       if (hexCode.length == 6) {
         hexCode = 'FF' + hexCode; // 添加 alpha 通道
       }
-      
+
       // 处理 8 位十六进制颜色（如 #ffffffff）
       if (hexCode.length == 8) {
         int value = int.parse(hexCode, radix: 16);
         return Color(value);
       }
-      
+
       return null;
     } catch (e) {
       return null;
     }
   }
-  
+
   /// Parse RGB/RGBA color
   static Color? _parseRgbColor(String rgb) {
     try {
       // 移除所有空格
       String cleanRgb = rgb.replaceAll(' ', '');
-      
+
       // 解析 rgb(255, 255, 255) 格式
       RegExp rgbRegex = RegExp(r'rgb\((\d+),(\d+),(\d+)\)');
       Match? match = rgbRegex.firstMatch(cleanRgb);
-      
+
       if (match != null) {
         int r = int.parse(match.group(1)!);
         int g = int.parse(match.group(2)!);
         int b = int.parse(match.group(3)!);
-        
+
         // 确保 RGB 值在有效范围内 (0-255)
         r = r.clamp(0, 255);
         g = g.clamp(0, 255);
         b = b.clamp(0, 255);
-        
+
         return Color.fromRGBO(r, g, b, 1.0);
       }
-      
+
       // 解析 rgba(255, 255, 255, 0.5) 格式
       RegExp rgbaRegex = RegExp(r'rgba\((\d+),(\d+),(\d+),([0-9]*\.?[0-9]+)\)');
       Match? rgbaMatch = rgbaRegex.firstMatch(cleanRgb);
-      
+
       if (rgbaMatch != null) {
         int r = int.parse(rgbaMatch.group(1)!);
         int g = int.parse(rgbaMatch.group(2)!);
         int b = int.parse(rgbaMatch.group(3)!);
         double a = double.parse(rgbaMatch.group(4)!);
-        
+
         // 确保值在有效范围内
         r = r.clamp(0, 255);
         g = g.clamp(0, 255);
         b = b.clamp(0, 255);
         a = a.clamp(0.0, 1.0);
-        
+
         return Color.fromRGBO(r, g, b, a);
       }
-      
+
       return null;
     } catch (e) {
       return null;
     }
   }
-  
+
   /// Parse HSL/HSLA color
   static Color? _parseHslColor(String hsl) {
     try {
       String cleanHsl = hsl.replaceAll(' ', '').replaceAll('%', '');
-      
+
       // 解析 hsl(360, 100, 50) 格式
       RegExp hslRegex = RegExp(r'hsl\((\d+),(\d+),(\d+)\)');
       Match? match = hslRegex.firstMatch(cleanHsl);
-      
+
       if (match != null) {
         double h = double.parse(match.group(1)!) / 360.0;
         double s = double.parse(match.group(2)!) / 100.0;
         double l = double.parse(match.group(3)!) / 100.0;
-        
+
         return HSLColor.fromAHSL(1.0, h * 360, s, l).toColor();
       }
-      
+
       // 解析 hsla(360, 100, 50, 0.5) 格式
       RegExp hslaRegex = RegExp(r'hsla\((\d+),(\d+),(\d+),([0-9]*\.?[0-9]+)\)');
       Match? hslaMatch = hslaRegex.firstMatch(cleanHsl);
-      
+
       if (hslaMatch != null) {
         double h = double.parse(hslaMatch.group(1)!) / 360.0;
         double s = double.parse(hslaMatch.group(2)!) / 100.0;
         double l = double.parse(hslaMatch.group(3)!) / 100.0;
         double a = double.parse(hslaMatch.group(4)!);
-        
+
         return HSLColor.fromAHSL(a, h * 360, s, l).toColor();
       }
-      
+
       return null;
     } catch (e) {
       return null;
     }
   }
-  
+
   /// Check if value is a color
   static bool _isColor(String value) {
     // 检查是否为方括号包裹的自定义值
     if (value.startsWith('[') && value.endsWith(']')) {
       String customValue = value.substring(1, value.length - 1);
-      return customValue.startsWith('#') || 
-             customValue.startsWith('rgb(') || 
-             customValue.startsWith('rgba(') ||
-             customValue.startsWith('hsl(') ||
-             customValue.startsWith('hsla(');
+      return customValue.startsWith('#') ||
+          customValue.startsWith('rgb(') ||
+          customValue.startsWith('rgba(') ||
+          customValue.startsWith('hsl(') ||
+          customValue.startsWith('hsla(');
     }
-    
+
     // 检查是否在 Wind 配置中
     if (Wind.getColor(value) != null) {
       return true;
     }
-    
+
     // 检查基础颜色
     List<String> basicColors = [
-      'red', 'blue', 'green', 'yellow', 'purple', 'pink', 
-      'indigo', 'gray', 'grey', 'black', 'white', 'transparent'
+      'red',
+      'blue',
+      'green',
+      'yellow',
+      'purple',
+      'pink',
+      'indigo',
+      'gray',
+      'grey',
+      'black',
+      'white',
+      'transparent',
     ];
     return basicColors.contains(value);
   }
-  
+
   /// Parse spacing values
   static double? _parseSpacing(String value) {
     switch (value) {
@@ -628,14 +635,14 @@ class UniversalStyleParser {
         return double.tryParse(value);
     }
   }
-  
+
   /// Parse size values
   static double? _parseSize(String value) {
     if (value == 'full') return double.infinity;
     if (value == 'screen') return double.infinity;
     return _parseSpacing(value);
   }
-  
+
   /// Parse font size
   static double? _parseFontSize(String value) {
     switch (value) {
@@ -663,7 +670,7 @@ class UniversalStyleParser {
         return null;
     }
   }
-  
+
   /// Parse font weight
   static FontWeight? _parseFontWeight(String value) {
     switch (value) {
@@ -687,7 +694,7 @@ class UniversalStyleParser {
         return null;
     }
   }
-  
+
   /// Parse box shadow
   static List<BoxShadow>? _parseShadow(String value) {
     switch (value) {
@@ -738,9 +745,12 @@ class UniversalStyleParser {
         return null;
     }
   }
-  
+
   /// Parse component-specific styles
-  static Map<String, dynamic> _parseComponentSpecificStyles(String className, String componentType) {
+  static Map<String, dynamic> _parseComponentSpecificStyles(
+    String className,
+    String componentType,
+  ) {
     switch (componentType) {
       case 'Container':
         return _parseContainerStyles(className);
@@ -770,22 +780,22 @@ class UniversalStyleParser {
         return {};
     }
   }
-  
+
   /// Container specific styles
   static Map<String, dynamic> _parseContainerStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     Color? borderColor;
     double? borderWidth;
-    
+
     for (String cls in classes) {
       if (cls == 'border') {
         borderWidth = 1.0;
         borderColor = borderColor ?? Colors.grey;
       } else if (cls.startsWith('border-')) {
         String borderPart = cls.substring(7);
-        
+
         // 尝试解析颜色
         Color? color = _parseColor(borderPart);
         if (color != null) {
@@ -801,20 +811,20 @@ class UniversalStyleParser {
         }
       }
     }
-    
+
     // 如果有边框设置，创建 Border 对象
     if (borderWidth != null && borderColor != null) {
       styles['border'] = Border.all(color: borderColor, width: borderWidth);
     }
-    
+
     return styles;
   }
-  
+
   /// Text specific styles
   static Map<String, dynamic> _parseTextStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls == 'italic') {
         styles['fontStyle'] = FontStyle.italic;
@@ -830,15 +840,15 @@ class UniversalStyleParser {
         styles['textTransform'] = 'capitalize';
       }
     }
-    
+
     return styles;
   }
-  
+
   /// Button specific styles
   static Map<String, dynamic> _parseButtonStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls == 'btn-primary') {
         styles['backgroundColor'] = Colors.blue;
@@ -852,15 +862,15 @@ class UniversalStyleParser {
         styles['foregroundColor'] = Colors.blue;
       }
     }
-    
+
     return styles;
   }
-  
+
   /// Card specific styles
   static Map<String, dynamic> _parseCardStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls.startsWith('elevation-')) {
         double? elevation = double.tryParse(cls.substring(10));
@@ -869,15 +879,15 @@ class UniversalStyleParser {
         }
       }
     }
-    
+
     return styles;
   }
-  
+
   /// List specific styles
   static Map<String, dynamic> _parseListStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls == 'list-horizontal') {
         styles['scrollDirection'] = Axis.horizontal;
@@ -885,43 +895,43 @@ class UniversalStyleParser {
         styles['scrollDirection'] = Axis.vertical;
       }
     }
-    
+
     return styles;
   }
-  
+
   /// ListTile specific styles
   static Map<String, dynamic> _parseListTileStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls == 'dense') {
         styles['dense'] = true;
       }
     }
-    
+
     return styles;
   }
-  
+
   /// AppBar specific styles
   static Map<String, dynamic> _parseAppBarStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls == 'center-title') {
         styles['centerTitle'] = true;
       }
     }
-    
+
     return styles;
   }
-  
+
   /// TextField specific styles
   static Map<String, dynamic> _parseTextFieldStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls == 'outlined') {
         styles['border'] = const OutlineInputBorder();
@@ -929,15 +939,15 @@ class UniversalStyleParser {
         styles['filled'] = true;
       }
     }
-    
+
     return styles;
   }
-  
+
   /// Icon specific styles
   static Map<String, dynamic> _parseIconStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls.startsWith('icon-')) {
         double? size = _parseSpacing(cls.substring(5));
@@ -946,15 +956,15 @@ class UniversalStyleParser {
         }
       }
     }
-    
+
     return styles;
   }
-  
+
   /// Image specific styles
   static Map<String, dynamic> _parseImageStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls == 'object-cover') {
         styles['fit'] = BoxFit.cover;
@@ -968,15 +978,15 @@ class UniversalStyleParser {
         styles['fit'] = BoxFit.fitHeight;
       }
     }
-    
+
     return styles;
   }
-  
+
   /// Stack specific styles
   static Map<String, dynamic> _parseStackStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls == 'stack-center') {
         styles['alignment'] = Alignment.center;
@@ -990,15 +1000,15 @@ class UniversalStyleParser {
         styles['alignment'] = Alignment.centerRight;
       }
     }
-    
+
     return styles;
   }
-  
+
   /// Positioned specific styles
   static Map<String, dynamic> _parsePositionedStyles(String className) {
     Map<String, dynamic> styles = {};
     List<String> classes = className.split(' ');
-    
+
     for (String cls in classes) {
       if (cls.startsWith('top-')) {
         double? top = _parseSpacing(cls.substring(4));
@@ -1022,7 +1032,7 @@ class UniversalStyleParser {
         }
       }
     }
-    
+
     return styles;
   }
 }
