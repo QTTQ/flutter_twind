@@ -488,7 +488,7 @@ class UniversalStyleParser {
         int g = int.parse(match.group(2)!);
         int b = int.parse(match.group(3)!);
 
-        // 确保 RGB 值在有效范围内 (0-255)
+        // 确保 RGB 值在有效范围内 (0.2.6)
         r = r.clamp(0, 255);
         g = g.clamp(0, 255);
         b = b.clamp(0, 255);

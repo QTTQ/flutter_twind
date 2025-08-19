@@ -249,7 +249,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ```yaml
 dependencies:
-  flutter_twind: ^0.2.5
+  flutter_twind: ^0.2.6
 ```
 
 然后运行：
