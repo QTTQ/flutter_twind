@@ -557,40 +557,6 @@ class UniversalStyleParser {
     }
   }
 
-  /// Check if value is a color
-  static bool _isColor(String value) {
-    // 检查是否为方括号包裹的自定义值
-    if (value.startsWith('[') && value.endsWith(']')) {
-      String customValue = value.substring(1, value.length - 1);
-      return customValue.startsWith('#') ||
-          customValue.startsWith('rgb(') ||
-          customValue.startsWith('rgba(') ||
-          customValue.startsWith('hsl(') ||
-          customValue.startsWith('hsla(');
-    }
-
-    // 检查是否在 Wind 配置中
-    if (Wind.getColor(value) != null) {
-      return true;
-    }
-
-    // 检查基础颜色
-    List<String> basicColors = [
-      'red',
-      'blue',
-      'green',
-      'yellow',
-      'purple',
-      'pink',
-      'indigo',
-      'gray',
-      'grey',
-      'black',
-      'white',
-      'transparent',
-    ];
-    return basicColors.contains(value);
-  }
 
   /// Parse spacing values
   static double? _parseSpacing(String value) {
