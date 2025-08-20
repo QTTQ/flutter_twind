@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.8] - 2025-08-20
+
+### Added
+- HSL color support
+- HSL color parser
+- HSL color formatter
+
+### Fixed
+- Fixed HSL color parser not working with alpha values
+- Fixed HSL color formatter not working with alpha values
+
 ## [0.2.7] - 2025-08-20
 
 ### Added
