@@ -143,11 +143,12 @@ class WindConfig {
         'secondary-900': const Color(0xFF990606),
 
         // 灰色系
+        'gray': const Color(0xFF6B7280),
         'gray-50': const Color(0xFFF9FAFB),
-        'gray-100': const Color(0xFFF3F4F6).withValues(alpha: 0.8),
-        'gray-200': const Color(0xFFE5E7EB).withValues(alpha: 0.9),
-        'gray-300': const Color(0xFFD1D5DB).withValues(alpha: 0.95),
-        'gray-400': const Color(0xFF9CA3AF).withValues(alpha: 1.0),
+        'gray-100': const Color(0xFFF3F4F6),
+        'gray-200': const Color(0xFFE5E7EB),
+        'gray-300': const Color(0xFFD1D5DB),
+        'gray-400': const Color(0xFF9CA3AF),
         'gray-500': const Color(0xFF6B7280),
         'gray-600': const Color(0xFF4B5563),
         'gray-700': const Color(0xFF374151),
