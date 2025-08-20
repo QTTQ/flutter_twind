@@ -123,7 +123,6 @@ class HSLColorTestPage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-            
             // 半透明蓝色
             Container(
               padding: const EdgeInsets.all(16),
