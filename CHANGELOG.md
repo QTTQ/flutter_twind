@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.6] - 2025-08-20
+## [0.2.7] - 2025-08-20
 
 ### Added
 - Complete TailwindCSS-like style parser
