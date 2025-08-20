@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'lib/flutter_twind.dart';
 
+/// Main entry point for the border and text styling test application
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
+/// Test application for demonstrating border and text styling capabilities
 class MyApp extends StatelessWidget {
+  /// Creates a new MyApp instance
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

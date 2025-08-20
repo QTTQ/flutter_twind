@@ -445,7 +445,9 @@ class UniversalStyleParser {
     }
   }
 
-  /// Parse hexadecimal color
+  /// Parse hexadecimal color values like #fff, #ffffff, #ffffffff
+  /// 
+  /// Supports 3, 6, and 8 digit hex colors with automatic alpha channel handling.
   static Color? _parseHexColor(String hex) {
     try {
       // 移除 # 符号
@@ -458,7 +460,7 @@ class UniversalStyleParser {
 
       // 处理 6 位十六进制颜色（如 #ffffff）
       if (hexCode.length == 6) {
-        hexCode = 'FF' + hexCode; // 添加 alpha 通道
+        hexCode = 'FF$hexCode'; // 添加 alpha 通道
       }
 
       // 处理 8 位十六进制颜色（如 #ffffffff）
@@ -531,11 +533,11 @@ class UniversalStyleParser {
       Match? match = hslRegex.firstMatch(cleanHsl);
 
       if (match != null) {
-        double h = double.parse(match.group(1)!) / 360.0;
+        double h = double.parse(match.group(1)!);
         double s = double.parse(match.group(2)!) / 100.0;
         double l = double.parse(match.group(3)!) / 100.0;
 
-        return HSLColor.fromAHSL(1.0, h * 360, s, l).toColor();
+        return _hslToColor(h, s, l, 1.0);
       }
 
       // 解析 hsla(360, 100, 50, 0.5) 格式
@@ -543,18 +545,53 @@ class UniversalStyleParser {
       Match? hslaMatch = hslaRegex.firstMatch(cleanHsl);
 
       if (hslaMatch != null) {
-        double h = double.parse(hslaMatch.group(1)!) / 360.0;
+        double h = double.parse(hslaMatch.group(1)!);
         double s = double.parse(hslaMatch.group(2)!) / 100.0;
         double l = double.parse(hslaMatch.group(3)!) / 100.0;
         double a = double.parse(hslaMatch.group(4)!);
 
-        return HSLColor.fromAHSL(a, h * 360, s, l).toColor();
+        return _hslToColor(h, s, l, a);
       }
 
       return null;
     } catch (e) {
       return null;
     }
+  }
+
+  /// Convert HSL values to Color
+  static Color _hslToColor(double h, double s, double l, double a) {
+    h = h % 360;
+    s = s.clamp(0.0, 1.0);
+    l = l.clamp(0.0, 1.0);
+    a = a.clamp(0.0, 1.0);
+
+    double c = (1 - (2 * l - 1).abs()) * s;
+    double x = c * (1 - ((h / 60) % 2 - 1).abs());
+    double m = l - c / 2;
+
+    double r = 0, g = 0, b = 0;
+
+    if (h >= 0 && h < 60) {
+      r = c; g = x; b = 0;
+    } else if (h >= 60 && h < 120) {
+      r = x; g = c; b = 0;
+    } else if (h >= 120 && h < 180) {
+      r = 0; g = c; b = x;
+    } else if (h >= 180 && h < 240) {
+      r = 0; g = x; b = c;
+    } else if (h >= 240 && h < 300) {
+      r = x; g = 0; b = c;
+    } else if (h >= 300 && h < 360) {
+      r = c; g = 0; b = x;
+    }
+
+    int red = ((r + m) * 255).round().clamp(0, 255);
+    int green = ((g + m) * 255).round().clamp(0, 255);
+    int blue = ((b + m) * 255).round().clamp(0, 255);
+    int alpha = (a * 255).round().clamp(0, 255);
+
+    return Color.fromARGB(alpha, red, green, blue);
   }
 
 
@@ -668,7 +705,7 @@ class UniversalStyleParser {
       case 'shadow-md':
         return [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -676,7 +713,7 @@ class UniversalStyleParser {
       case 'shadow-sm':
         return [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 2,
             offset: const Offset(0, 1),
           ),
@@ -684,7 +721,7 @@ class UniversalStyleParser {
       case 'shadow-lg':
         return [
           BoxShadow(
-            color: Colors.black.withOpacity(0.15),
+            color: Colors.black.withValues(alpha: 0.15),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -692,7 +729,7 @@ class UniversalStyleParser {
       case 'shadow-xl':
         return [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -700,7 +737,7 @@ class UniversalStyleParser {
       case 'shadow-2xl':
         return [
           BoxShadow(
-            color: Colors.black.withOpacity(0.25),
+            color: Colors.black.withValues(alpha: 0.25),
             blurRadius: 24,
             offset: const Offset(0, 12),
           ),
