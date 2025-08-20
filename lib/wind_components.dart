@@ -734,13 +734,76 @@ class WIcon extends StatelessWidget {
       context,
     );
 
-    return Icon(
+    // 解析字体大小 - 支持 text-lg 等样式
+    double iconSize = size ?? parsedStyles['size'] ?? parsedStyles['fontSize'] ?? 24.0;
+    
+    // 解析颜色 - 支持 text-red-900 等样式
+    Color iconColor = color ?? parsedStyles['color'] ?? wColor('gray-700');
+
+    Widget iconWidget = Icon(
       icon,
-      size: size ?? parsedStyles['size'] ?? 24.0,
-      color: color ?? parsedStyles['color'] ?? wColor('gray-700'),
+      size: iconSize,
+      color: iconColor,
       semanticLabel: semanticLabel,
       textDirection: textDirection,
     );
+
+    // 如果有边距样式，需要用Container包裹
+    EdgeInsets? margin;
+    EdgeInsets? padding;
+    
+    // 处理各种边距样式
+    if (parsedStyles.containsKey('margin')) {
+      margin = parsedStyles['margin'];
+    } else {
+      double? marginLeft = parsedStyles['marginLeft'];
+      double? marginRight = parsedStyles['marginRight'];
+      double? marginTop = parsedStyles['marginTop'];
+      double? marginBottom = parsedStyles['marginBottom'];
+      double? marginHorizontal = parsedStyles['marginHorizontal'];
+      double? marginVertical = parsedStyles['marginVertical'];
+      
+      if (marginLeft != null || marginRight != null || marginTop != null || marginBottom != null || marginHorizontal != null || marginVertical != null) {
+        margin = EdgeInsets.only(
+          left: marginLeft ?? marginHorizontal ?? 0,
+          right: marginRight ?? marginHorizontal ?? 0,
+          top: marginTop ?? marginVertical ?? 0,
+          bottom: marginBottom ?? marginVertical ?? 0,
+        );
+      }
+    }
+    
+    // 处理各种内边距样式
+    if (parsedStyles.containsKey('padding')) {
+      padding = parsedStyles['padding'];
+    } else {
+      double? paddingLeft = parsedStyles['paddingLeft'];
+      double? paddingRight = parsedStyles['paddingRight'];
+      double? paddingTop = parsedStyles['paddingTop'];
+      double? paddingBottom = parsedStyles['paddingBottom'];
+      double? paddingHorizontal = parsedStyles['paddingHorizontal'];
+      double? paddingVertical = parsedStyles['paddingVertical'];
+      
+      if (paddingLeft != null || paddingRight != null || paddingTop != null || paddingBottom != null || paddingHorizontal != null || paddingVertical != null) {
+        padding = EdgeInsets.only(
+          left: paddingLeft ?? paddingHorizontal ?? 0,
+          right: paddingRight ?? paddingHorizontal ?? 0,
+          top: paddingTop ?? paddingVertical ?? 0,
+          bottom: paddingBottom ?? paddingVertical ?? 0,
+        );
+      }
+    }
+
+    // 如果有边距或内边距，用Container包裹
+    if (margin != null || padding != null) {
+      iconWidget = Container(
+        margin: margin,
+        padding: padding,
+        child: iconWidget,
+      );
+    }
+
+    return iconWidget;
   }
 }
 
