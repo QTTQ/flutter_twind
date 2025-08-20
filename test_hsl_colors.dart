@@ -365,7 +365,7 @@ class HSLColorTestPage extends StatelessWidget {
                   ),
                   const Text('• HSL 格式：hsl(色相, 饱和度%, 亮度%)'),
                   const Text('• HSLA 格式：hsla(色相, 饱和度%, 亮度%, 透明度)'),
-                  const Text('• 色相范围：0-360度'),
+                  const Text('• 色相范围：0.3.1度'),
                   const Text('• 饱和度范围：0-100%'),
                   const Text('• 亮度范围：0-100%'),
                   const Text('• 透明度范围：0.0-1.0'),

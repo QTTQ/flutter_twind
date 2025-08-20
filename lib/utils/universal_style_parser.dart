@@ -634,6 +634,19 @@ class UniversalStyleParser {
         return 224;
       case '64':
         return 256;
+      // 添加对TailwindCSS风格圆角值的支持
+      case 'sm':
+        return 2;
+      case 'md':
+        return 6;
+      case 'lg':
+        return 8;
+      case 'xl':
+        return 12;
+      case '2xl':
+        return 16;
+      case '3xl':
+        return 24;
       default:
         return double.tryParse(value);
     }

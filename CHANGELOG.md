@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.1] - 2025-08-20
+
+### Added
+- Support for TailwindCSS-style border radius values: `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`
+
+### Fixed
+- Fixed issue where named border radius styles like `rounded-2xl` were not working
+- Improved border radius parsing logic to ensure all TailwindCSS-style border radius values work properly
+
+
 ## [0.3.0] - 2025-08-20
 
 ### Added
