@@ -1,6 +1,8 @@
 # Changelog
 
-## [0.2.8] - 2025-08-20
+## [0.2.9] - 2025-08-20
+
+
 
 ### Added
 - HSL color support
@@ -11,7 +13,7 @@
 - Fixed HSL color parser not working with alpha values
 - Fixed HSL color formatter not working with alpha values
 
-## [0.2.8] - 2025-08-20
+## [0.2.9] - 2025-08-20
 
 ### Added
 - Complete TailwindCSS-like style parser
