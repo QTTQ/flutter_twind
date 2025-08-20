@@ -1,1 +1,57 @@
+# macOS
 .DS_Store
+
+# Build directories
+build/
+example/build/
+.dart_tool/
+
+# iOS platform files
+example/ios/
+example/macos/
+
+# Web platform files (if not needed)
+example/web/
+
+# Test files (keep only if needed for package testing)
+example_test.dart
+test_border_text.dart
+test_hsl_colors.dart
+test_hsl_simple.dart
+wind_components_demo.dart
+
+# Lock files
+example/pubspec.lock
+pubspec.lock
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+.codebuddy/
+.metadata
+
+# Temporary files
+*.tmp
+*.temp
+
+# Log files
+*.log
+
+# Coverage files
+coverage/
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# Flutter/Dart specific
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Git files
+.git/
