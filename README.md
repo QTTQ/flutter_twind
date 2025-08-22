@@ -28,7 +28,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_twind: ^1.0.0
+  flutter_twind: ^0.3.3
 ```
 
 Then run:
@@ -249,7 +249,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ```yaml
 dependencies:
-  flutter_twind: ^0.3.2
+  flutter_twind: ^0.3.3
 ```
 
 然后运行：

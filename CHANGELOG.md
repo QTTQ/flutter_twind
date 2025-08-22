@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.2] - 2025-08-20
+## [0.3.3] - 2025-08-20
 
 ### Added
 - Support for TailwindCSS-style border radius values: `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`
