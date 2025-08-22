@@ -1,5 +1,55 @@
 # Changelog
 
+## [0.3.4] - 2024-12-22
+
+### Added
+- **Arbitrary Value Support**: Full support for Tailwind CSS arbitrary values
+  - Colors: `bg-[#ff0000]`, `text-[rgb(255,0,0)]`, `border-[hsl(0,100%,50%)]`
+  - Sizes: `w-[200px]`, `h-[50px]`, `p-[1rem]`, `m-[2em]`
+  - Opacity: `opacity-[0.6]`
+- **Extended Color Palette**: Added missing color series
+  - Purple: `purple-50` to `purple-900`
+  - Yellow: `yellow-50` to `yellow-900`
+  - Orange: `orange-50` to `orange-900`
+  - Pink: `pink-50` to `pink-900`
+  - Indigo: `indigo-50` to `indigo-900`
+  - Teal: `teal-50` to `teal-900`
+  - Cyan: `cyan-50` to `cyan-900`
+  - Lime: `lime-50` to `lime-900`
+  - Rose: `rose-50` to `rose-900`
+  - Emerald: `emerald-50` to `emerald-900`
+- **Gap Support**: Implemented gap spacing for WColumn and WRow components
+  - Predefined gaps: `gap-1`, `gap-2`, `gap-4`, `gap-6`, `gap-8`
+  - Arbitrary gaps: `gap-[30px]`, `gap-[2rem]`
+- **Enhanced Border Support**: 
+  - Border widths: `border`, `border-2`, `border-4`, `border-8`
+  - Arbitrary border colors: `border-[#ff0000]`
+- **Text Decoration Support**:
+  - Decorations: `underline`, `line-through`, `no-underline`
+  - Text transform: `uppercase`, `lowercase`, `capitalize`
+  - Text overflow: `overflow-ellipsis`, `line-clamp-2`
+- **Opacity Support**: 
+  - Predefined: `opacity-0`, `opacity-25`, `opacity-50`, `opacity-75`, `opacity-100`
+  - Arbitrary: `opacity-[0.6]`
+- **Comprehensive Test Suite**: Complete demo app with all features tested
+
+### Enhanced
+- **Color Parser**: Improved arbitrary value parsing for all color formats
+- **Size Parser**: Enhanced support for px, rem, em units in arbitrary values
+- **Hot Reload**: Better hot reload support for all new features
+- **Component System**: WColumn and WRow now properly handle gap spacing
+
+### Fixed
+- Color parsing issues with extended color palette
+- Gap spacing not working in layout components
+- Arbitrary value parsing edge cases
+- Hot reload consistency across all features
+
+### Changed
+- Optimized style parsing performance for arbitrary values
+- Better error handling for invalid arbitrary values
+- Improved component rendering with gap support
+
 ## [0.3.3] - 2025-08-20
 
 ### Added

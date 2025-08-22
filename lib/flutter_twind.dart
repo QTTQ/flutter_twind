@@ -37,4 +37,4 @@ library flutter_twind;
 
 export 'wind_components.dart';
 export 'utils/wind_config.dart';
-export 'utils/universal_style_parser.dart';
+export 'utils/smart_style_parser.dart';

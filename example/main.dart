@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_twind/flutter_twind.dart';
 
 void main() {
+  // 初始化WindConfig
+  WindConfig.initialize();
   runApp(const FlutterTwindExampleApp());
 }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'utils/wind_config.dart';
-import 'utils/universal_style_parser.dart';
+import 'utils/smart_style_parser.dart';
 
 // ==================== 布局组件 ====================
 
@@ -150,7 +150,7 @@ class WContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '',
       'Container',
       context,
@@ -168,6 +168,28 @@ class WContainer extends StatelessWidget {
       );
     }
 
+    // 构建装饰
+    Decoration? finalDecoration = decoration;
+    if (finalDecoration == null) {
+      if (parsedStyles.containsKey('gradient')) {
+        // 使用渐变背景
+        finalDecoration = BoxDecoration(
+          gradient: parsedStyles['gradient'],
+          borderRadius: borderRadius ?? parsedStyles['borderRadius'],
+          boxShadow: boxShadow ?? parsedStyles['boxShadow'],
+          border: border ?? parsedStyles['border'],
+        );
+      } else {
+        // 使用纯色背景
+        finalDecoration = BoxDecoration(
+          color: backgroundColor ?? parsedStyles['backgroundColor'],
+          borderRadius: borderRadius ?? parsedStyles['borderRadius'],
+          boxShadow: boxShadow ?? parsedStyles['boxShadow'],
+          border: border ?? parsedStyles['border'],
+        );
+      }
+    }
+
     return Container(
       width: width ?? parsedStyles['width'],
       height: height ?? parsedStyles['height'],
@@ -179,13 +201,7 @@ class WContainer extends StatelessWidget {
       transform: transform,
       transformAlignment: transformAlignment,
       foregroundDecoration: foregroundDecoration,
-      decoration: decoration ??
-          BoxDecoration(
-            color: backgroundColor ?? parsedStyles['backgroundColor'],
-            borderRadius: borderRadius ?? parsedStyles['borderRadius'],
-            boxShadow: boxShadow ?? parsedStyles['boxShadow'],
-            border: border ?? parsedStyles['border'],
-          ),
+      decoration: finalDecoration,
       child: containerChild,
     );
   }
@@ -224,7 +240,7 @@ class WFlex extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Flex',
       context,
     );
@@ -287,10 +303,23 @@ class WRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Row',
       context,
     );
+
+    // 处理 gap 间距
+    List<Widget> gappedChildren = children;
+    final gap = parsedStyles['gap'];
+    if (gap != null && gap > 0 && children.isNotEmpty) {
+      gappedChildren = [];
+      for (int i = 0; i < children.length; i++) {
+        gappedChildren.add(children[i]);
+        if (i < children.length - 1) {
+          gappedChildren.add(SizedBox(width: gap, height: 0));
+        }
+      }
+    }
 
     Widget rowWidget = Row(
       mainAxisAlignment: parsedStyles['mainAxisAlignment'] ?? mainAxisAlignment,
@@ -299,7 +328,7 @@ class WRow extends StatelessWidget {
       textDirection: textDirection,
       verticalDirection: verticalDirection,
       textBaseline: textBaseline,
-      children: children,
+      children: gappedChildren,
     );
 
     if (padding != null ||
@@ -349,10 +378,23 @@ class WColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Column',
       context,
     );
+
+    // 处理 gap 间距
+    List<Widget> gappedChildren = children;
+    final gap = parsedStyles['gap'];
+    if (gap != null && gap > 0 && children.isNotEmpty) {
+      gappedChildren = [];
+      for (int i = 0; i < children.length; i++) {
+        gappedChildren.add(children[i]);
+        if (i < children.length - 1) {
+          gappedChildren.add(SizedBox(height: gap, width: 0));
+        }
+      }
+    }
 
     Widget columnWidget = Column(
       mainAxisAlignment: parsedStyles['mainAxisAlignment'] ?? mainAxisAlignment,
@@ -361,7 +403,7 @@ class WColumn extends StatelessWidget {
       textDirection: textDirection,
       verticalDirection: verticalDirection,
       textBaseline: textBaseline,
-      children: children,
+      children: gappedChildren,
     );
 
     if (padding != null ||
@@ -407,7 +449,7 @@ class WStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Stack',
       context,
     );
@@ -461,7 +503,7 @@ class WPositioned extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Positioned',
       context,
     );
@@ -509,21 +551,36 @@ class WCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Card',
       context,
     );
+
+    // 构建装饰
+    Decoration decoration;
+    if (parsedStyles.containsKey('gradient')) {
+      // 使用渐变背景
+      decoration = BoxDecoration(
+        gradient: parsedStyles['gradient'],
+        boxShadow: boxShadow ?? parsedStyles['boxShadow'] ?? wShadow('md'),
+        borderRadius: borderRadius ?? parsedStyles['borderRadius'] ?? BorderRadius.circular(wBorderRadius('lg')),
+        border: border ?? parsedStyles['border'],
+      );
+    } else {
+      // 使用纯色背景
+      decoration = BoxDecoration(
+        color: backgroundColor ?? parsedStyles['backgroundColor'] ?? wColor('white'),
+        boxShadow: boxShadow ?? parsedStyles['boxShadow'] ?? wShadow('md'),
+        borderRadius: borderRadius ?? parsedStyles['borderRadius'] ?? BorderRadius.circular(wBorderRadius('lg')),
+        border: border ?? parsedStyles['border'],
+      );
+    }
 
     return Container(
       padding: padding ?? parsedStyles['padding'] ?? EdgeInsets.all(wSpacing('4')),
       margin: margin ?? parsedStyles['margin'] ?? EdgeInsets.all(wSpacing('2')),
       clipBehavior: clipBehavior,
-      decoration: BoxDecoration(
-        color: backgroundColor ?? parsedStyles['backgroundColor'] ?? wColor('white'),
-        boxShadow: boxShadow ?? parsedStyles['boxShadow'] ?? wShadow('md'),
-        borderRadius: borderRadius ?? parsedStyles['borderRadius'] ?? BorderRadius.circular(wBorderRadius('lg')),
-        border: border ?? parsedStyles['border'],
-      ),
+      decoration: decoration,
       child: onTap != null
           ? InkWell(
               onTap: onTap,
@@ -671,15 +728,34 @@ class WText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Text',
       context,
     );
 
+    // 处理文本变换
+    String transformedText = text;
+    if (parsedStyles.containsKey('textTransform')) {
+      switch (parsedStyles['textTransform']) {
+        case 'uppercase':
+          transformedText = text.toUpperCase();
+          break;
+        case 'lowercase':
+          transformedText = text.toLowerCase();
+          break;
+        case 'capitalize':
+          transformedText = text.split(' ').map((word) {
+            if (word.isEmpty) return word;
+            return word[0].toUpperCase() + word.substring(1).toLowerCase();
+          }).join(' ');
+          break;
+      }
+    }
+
     Widget textWidget = Text(
-      text,
+      transformedText,
       style: (style ?? const TextStyle()).copyWith(
-        color: color ?? parsedStyles['color'] ?? wColor('gray-900'),
+        color: color ?? parsedStyles['color'],
         fontSize: fontSize ?? parsedStyles['fontSize'],
         fontWeight: fontWeight ?? parsedStyles['fontWeight'],
         letterSpacing: letterSpacing ?? parsedStyles['letterSpacing'],
@@ -690,16 +766,71 @@ class WText extends StatelessWidget {
         decorationStyle: decorationStyle ?? parsedStyles['decorationStyle'],
       ),
       textAlign: textAlign ?? parsedStyles['textAlign'],
-      maxLines: maxLines,
-      overflow: overflow,
+      maxLines: maxLines ?? parsedStyles['maxLines'],
+      overflow: overflow ?? parsedStyles['overflow'],
     );
 
-    // 如果设置了 text-center、text-left、text-right 等对齐样式，
-    // 需要让文本占据整个可用宽度才能看到对齐效果
-    final hasTextAlign = parsedStyles['textAlign'] != null || textAlign != null;
-    if (hasTextAlign) {
-      return SizedBox(
-        width: double.infinity,
+    // 处理透明度
+    if (parsedStyles.containsKey('opacity')) {
+      textWidget = Opacity(
+        opacity: parsedStyles['opacity'],
+        child: textWidget,
+      );
+    }
+
+    // 处理边距
+    EdgeInsets? margin;
+    EdgeInsets? padding;
+    
+    // 处理各种边距样式
+    if (parsedStyles.containsKey('margin')) {
+      margin = parsedStyles['margin'];
+    } else {
+      double? marginLeft = parsedStyles['marginLeft'];
+      double? marginRight = parsedStyles['marginRight'];
+      double? marginTop = parsedStyles['marginTop'];
+      double? marginBottom = parsedStyles['marginBottom'];
+      double? marginHorizontal = parsedStyles['marginHorizontal'];
+      double? marginVertical = parsedStyles['marginVertical'];
+      
+      if (marginLeft != null || marginRight != null || marginTop != null || marginBottom != null || marginHorizontal != null || marginVertical != null) {
+        margin = EdgeInsets.only(
+          left: marginLeft ?? marginHorizontal ?? 0,
+          right: marginRight ?? marginHorizontal ?? 0,
+          top: marginTop ?? marginVertical ?? 0,
+          bottom: marginBottom ?? marginVertical ?? 0,
+        );
+      }
+    }
+    
+    // 处理各种内边距样式
+    if (parsedStyles.containsKey('padding')) {
+      padding = parsedStyles['padding'];
+    } else {
+      double? paddingLeft = parsedStyles['paddingLeft'];
+      double? paddingRight = parsedStyles['paddingRight'];
+      double? paddingTop = parsedStyles['paddingTop'];
+      double? paddingBottom = parsedStyles['paddingBottom'];
+      double? paddingHorizontal = parsedStyles['paddingHorizontal'];
+      double? paddingVertical = parsedStyles['paddingVertical'];
+      
+      if (paddingLeft != null || paddingRight != null || paddingTop != null || paddingBottom != null || paddingHorizontal != null || paddingVertical != null) {
+        padding = EdgeInsets.only(
+          left: paddingLeft ?? paddingHorizontal ?? 0,
+          right: paddingRight ?? paddingHorizontal ?? 0,
+          top: paddingTop ?? paddingVertical ?? 0,
+          bottom: paddingBottom ?? paddingVertical ?? 0,
+        );
+      }
+    }
+
+    // 如果有边距、内边距或尺寸约束，用Container包裹
+    if (margin != null || padding != null || parsedStyles.containsKey('width') || parsedStyles.containsKey('height')) {
+      textWidget = Container(
+        width: parsedStyles['width'] == double.infinity ? null : parsedStyles['width']?.toDouble(),
+        height: parsedStyles['height'] == double.infinity ? null : parsedStyles['height']?.toDouble(),
+        margin: margin,
+        padding: padding,
         child: textWidget,
       );
     }
@@ -729,7 +860,7 @@ class WIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Icon',
       context,
     );
@@ -842,7 +973,7 @@ class WImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Image',
       context,
     );
@@ -900,7 +1031,7 @@ class WAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Avatar',
       context,
     );
@@ -938,7 +1069,7 @@ class WDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Divider',
       context,
     );
@@ -991,7 +1122,7 @@ class WButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isEnabled = !isDisabled && !isLoading && onPressed != null;
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Button',
       context,
     );
@@ -1119,7 +1250,7 @@ class WInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Input',
       context,
     );
@@ -1206,7 +1337,7 @@ class WList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'List',
       context,
     );
@@ -1296,7 +1427,7 @@ class WListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'ListTile',
       context,
     );
@@ -1383,7 +1514,7 @@ class WAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'AppBar',
       context,
     );
@@ -1471,7 +1602,7 @@ class WBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Badge',
       context,
     );
@@ -1553,7 +1684,7 @@ class WDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parsedStyles = UniversalStyleParser.parseClassName(
+    final parsedStyles = SmartStyleParser.parseClassName(
       className ?? '', 'Dialog',
       context,
     );
