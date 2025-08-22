@@ -10,6 +10,51 @@ class SmartStyleParser {
   // 生产环境缓存
   static final Map<String, Map<String, dynamic>> _cache = {};
   
+  // 自定义颜色系统
+  static final Map<String, Map<String, Color>> _customColors = {};
+  
+  /// 初始化方法，允许用户添加自定义色系
+  /// 
+  /// [customColors] - 自定义颜色映射
+  /// 例如: {
+  ///   'brand': {
+  ///     '50': Color(0xFFF0F9FF),
+  ///     '100': Color(0xFFE0F2FE),
+  ///     '500': Color(0xFF0EA5E9),
+  ///     '900': Color(0xFF0C4A6E),
+  ///   }
+  /// }
+  static void initialize({Map<String, Map<String, Color>>? customColors}) {
+    if (customColors != null) {
+      _customColors.clear();
+      _customColors.addAll(customColors);
+    }
+  }
+  
+  /// 添加单个色系
+  /// 
+  /// [colorName] - 颜色名称，如 'brand'
+  /// [colorShades] - 颜色色阶映射，如 {'50': Color(0xFFF0F9FF), '500': Color(0xFF0EA5E9)}
+  static void addColorSystem(String colorName, Map<String, Color> colorShades) {
+    _customColors[colorName] = colorShades;
+  }
+  
+  /// 获取自定义颜色
+  static Color? getCustomColor(String colorName) {
+    // 检查是否包含色阶，如 brand-500
+    if (colorName.contains('-')) {
+      List<String> parts = colorName.split('-');
+      if (parts.length == 2) {
+        String baseName = parts[0];
+        String shade = parts[1];
+        return _customColors[baseName]?[shade];
+      }
+    }
+    
+    // 检查基础颜色名
+    return _customColors[colorName]?['500'] ?? _customColors[colorName]?.values.first;
+  }
+  
   /// Parse className string and return style properties.
   ///
   /// [className] - Space-separated class names
@@ -231,7 +276,7 @@ class SmartStyleParser {
     }
     // 边框
     else if (cls == 'border') {
-      styles['border'] = Border.all(color: wColor('gray-300') ?? Colors.grey, width: 1.0);
+      styles['border'] = Border.all(color: wColor('gray-300'), width: 1.0);
     }
     else if (cls.startsWith('border-')) {
       String borderPart = cls.substring(7);
@@ -239,7 +284,7 @@ class SmartStyleParser {
       // 边框宽度 border-2, border-4
       if (RegExp(r'^\d+$').hasMatch(borderPart)) {
         double width = double.tryParse(borderPart) ?? 1.0;
-        styles['border'] = Border.all(color: wColor('gray-300') ?? Colors.grey, width: width);
+        styles['border'] = Border.all(color: wColor('gray-300'), width: width);
       }
       // 边框颜色 border-red-500, border-[#ff0000]
       else {
@@ -431,6 +476,36 @@ class SmartStyleParser {
       return _parseArbitraryColor(colorValue);
     }
     
+    // 处理透明度修饰符 white/70, red-500/50
+    if (colorName.contains('/')) {
+      List<String> parts = colorName.split('/');
+      if (parts.length == 2) {
+        String baseColorName = parts[0];
+        String opacityStr = parts[1];
+        
+        // 解析透明度值
+        double? opacity = _parseOpacityValue(opacityStr);
+        if (opacity == null) return null;
+        
+        // 获取基础颜色
+        Color? baseColor = _parseBaseColor(baseColorName);
+        if (baseColor == null) return null;
+        
+        // 应用透明度
+        return baseColor.withValues(alpha: opacity);
+      }
+    }
+    
+    // 解析基础颜色（不带透明度）
+    return _parseBaseColor(colorName);
+  }
+  
+  /// 解析基础颜色（不带透明度修饰符）
+  static Color? _parseBaseColor(String colorName) {
+    // 检查自定义颜色系统
+    Color? customColor = getCustomColor(colorName);
+    if (customColor != null) return customColor;
+    
     // 从Wind配置获取颜色
     Color? windColor = Wind.getColor(colorName);
     if (windColor != null) return windColor;
@@ -449,6 +524,25 @@ class SmartStyleParser {
       case 'transparent': return Colors.transparent;
       default: return null;
     }
+  }
+  
+  /// 解析透明度值
+  static double? _parseOpacityValue(String opacityStr) {
+    // 处理百分比 70 -> 0.7
+    if (RegExp(r'^\d+$').hasMatch(opacityStr)) {
+      int percentage = int.tryParse(opacityStr) ?? 0;
+      if (percentage >= 0 && percentage <= 100) {
+        return percentage / 100.0;
+      }
+    }
+    
+    // 处理小数 0.7
+    double? opacity = double.tryParse(opacityStr);
+    if (opacity != null && opacity >= 0.0 && opacity <= 1.0) {
+      return opacity;
+    }
+    
+    return null;
   }
   
   /// 解析任意值颜色

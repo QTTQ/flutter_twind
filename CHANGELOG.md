@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.4] - 2024-12-22
+## [0.3.5] - 2024-12-22
 
 ### Added
 - **Arbitrary Value Support**: Full support for Tailwind CSS arbitrary values

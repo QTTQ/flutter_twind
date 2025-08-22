@@ -4,6 +4,37 @@ import 'package:flutter_twind/flutter_twind.dart';
 void main() {
   // 初始化WindConfig
   WindConfig.initialize();
+
+  // 初始化SmartStyleParser，添加自定义色系
+  // SmartStyleParser.initialize(customColors: {
+  //   'brand': {
+  //     '50': const Color(0xFFF0F9FF),
+  //     '100': const Color(0xFFE0F2FE),
+  //     '200': const Color(0xFFBAE6FD),
+  //     '300': const Color(0xFF7DD3FC),
+  //     '400': const Color(0xFF38BDF8),
+  //     '500': const Color(0xFF0EA5E9),
+  //     '600': const Color(0xFF0284C7),
+  //     '700': const Color(0xFF0369A1),
+  //     '800': const Color(0xFF075985),
+  //     '900': const Color(0xFF0C4A6E),
+  //   },
+  //   'accent': {
+  //     '50': const Color(0xFFFDF2F8),
+  //     '100': const Color(0xFFFCE7F3),
+  //     '200': const Color(0xFFFBCFE8),
+  //     '300': const Color(0xFFF9A8D4),
+  //     '400': const Color(0xFFF472B6),
+  //     '500': const Color(0xFFEC4899),
+  //     '600': const Color(0xFFDB2777),
+  //     '700': const Color(0xFFBE185D),
+  //     '800': const Color(0xFF9D174D),
+  //     '900': const Color(0xFF831843),
+  //   },
+  // });
+
+  SmartStyleParser.initialize();
+
   runApp(const FlutterTwindCompleteTestApp());
 }
 
@@ -37,8 +68,8 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WAppBar(
-        title: const WText(
+      appBar: const WAppBar(
+        title: WText(
           'Flutter Twind 完整测试',
           className: 'text-white font-bold text-lg',
         ),
@@ -64,6 +95,78 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '🎨 颜色系统测试',
               [
+                const WText('🆕 透明度修饰符测试 (NEW!)',
+                    className: 'font-bold mb-4 text-purple-600'),
+                const WText('基础颜色 + 透明度', className: 'font-semibold mb-2'),
+                WRow(
+                  className: 'gap-2',
+                  children: [
+                    _colorBox('bg-yellow/10 border', 'yellow/10'),
+                    _colorBox('bg-yellow/30 border', 'yellow/30'),
+                    _colorBox('bg-yellow/50 border', 'yellow/50'),
+                    _colorBox('bg-yellow/70 border', 'yellow/70'),
+                    _colorBox('bg-yellow/90 border', 'yellow/90'),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                WRow(
+                  className: 'gap-2',
+                  children: [
+                    _colorBox('bg-black/10', 'black/10'),
+                    _colorBox('bg-black/30', 'black/30'),
+                    _colorBox('bg-black/50', 'black/50'),
+                    _colorBox('bg-black/70', 'black/70'),
+                    _colorBox('bg-black/90', 'black/90'),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                WRow(
+                  className: 'gap-2',
+                  children: [
+                    _colorBox('bg-red-500/20', 'red-500/20'),
+                    _colorBox('bg-blue-500/40', 'blue-500/40'),
+                    _colorBox('bg-green-500/60', 'green-500/60'),
+                    _colorBox('bg-purple-500/80', 'purple-500/80'),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const WText('🆕 自定义色系测试 (NEW!)',
+                    className: 'font-bold mb-4 text-purple-600'),
+                const WText('Brand 色系', className: 'font-semibold mb-2'),
+                WRow(
+                  className: 'gap-2',
+                  children: [
+                    _colorBox('bg-brand-100', 'brand-100'),
+                    _colorBox('bg-brand-300', 'brand-300'),
+                    _colorBox('bg-brand-500', 'brand-500'),
+                    _colorBox('bg-brand-700', 'brand-700'),
+                    _colorBox('bg-brand-900', 'brand-900'),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                const WText('Accent 色系', className: 'font-semibold mb-2'),
+                WRow(
+                  className: 'gap-2',
+                  children: [
+                    _colorBox('bg-accent-100', 'accent-100'),
+                    _colorBox('bg-accent-300', 'accent-300'),
+                    _colorBox('bg-accent-500', 'accent-500'),
+                    _colorBox('bg-accent-700', 'accent-700'),
+                    _colorBox('bg-accent-900', 'accent-900'),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                const WText('自定义色系 + 透明度', className: 'font-semibold mb-2'),
+                WRow(
+                  className: 'gap-2',
+                  children: [
+                    _colorBox('bg-brand-500/20', 'brand-500/20'),
+                    _colorBox('bg-brand-500/50', 'brand-500/50'),
+                    _colorBox('bg-accent-500/30', 'accent-500/30'),
+                    _colorBox('bg-accent-500/70', 'accent-500/70'),
+                  ],
+                ),
+                const SizedBox(height: 16),
                 const WText('主色系 (Primary)', className: 'font-semibold mb-2'),
                 WRow(
                   className: 'gap-2',
@@ -76,7 +179,6 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                
                 const WText('蓝色系 (Blue)', className: 'font-semibold mb-2'),
                 WRow(
                   className: 'gap-2',
@@ -89,7 +191,6 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                
                 const WText('红色系 (Red)', className: 'font-semibold mb-2'),
                 WRow(
                   className: 'gap-2',
@@ -102,7 +203,6 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                
                 const WText('绿色系 (Green)', className: 'font-semibold mb-2'),
                 WRow(
                   className: 'gap-2',
@@ -115,7 +215,6 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                
                 const WText('灰色系 (Gray)', className: 'font-semibold mb-2'),
                 WRow(
                   className: 'gap-2',
@@ -128,7 +227,6 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                
                 const WText('基础颜色', className: 'font-semibold mb-2'),
                 WRow(
                   className: 'gap-2',
@@ -139,9 +237,10 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                
-                const WText('任意值颜色 (Arbitrary Values)', className: 'font-semibold mb-2 text-purple-600'),
-                const WText('十六进制颜色', className: 'text-sm font-medium mb-2 text-gray-600'),
+                const WText('任意值颜色 (Arbitrary Values)',
+                    className: 'font-semibold mb-2 text-purple-600'),
+                const WText('十六进制颜色',
+                    className: 'text-sm font-medium mb-2 text-gray-600'),
                 WRow(
                   className: 'gap-2',
                   children: [
@@ -153,8 +252,8 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                
-                const WText('RGB 颜色', className: 'text-sm font-medium mb-2 text-gray-600'),
+                const WText('RGB 颜色',
+                    className: 'text-sm font-medium mb-2 text-gray-600'),
                 WRow(
                   className: 'gap-2',
                   children: [
@@ -164,19 +263,22 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                
-                const WText('RGBA 半透明颜色', className: 'text-sm font-medium mb-2 text-gray-600'),
+                const WText('RGBA 半透明颜色',
+                    className: 'text-sm font-medium mb-2 text-gray-600'),
                 WRow(
                   className: 'gap-2',
                   children: [
-                    _colorBox('bg-[rgba(255,107,107,0.5)] border', 'rgba(255,107,107,0.5)'),
-                    _colorBox('bg-[rgba(78,205,196,0.7)] border', 'rgba(78,205,196,0.7)'),
-                    _colorBox('bg-[rgba(108,92,231,0.3)] border', 'rgba(108,92,231,0.3)'),
+                    _colorBox('bg-[rgba(255,107,107,0.5)] border',
+                        'rgba(255,107,107,0.5)'),
+                    _colorBox('bg-[rgba(78,205,196,0.7)] border',
+                        'rgba(78,205,196,0.7)'),
+                    _colorBox('bg-[rgba(108,92,231,0.3)] border',
+                        'rgba(108,92,231,0.3)'),
                   ],
                 ),
                 const SizedBox(height: 8),
-                
-                const WText('HSL 颜色', className: 'text-sm font-medium mb-2 text-gray-600'),
+                const WText('HSL 颜色',
+                    className: 'text-sm font-medium mb-2 text-gray-600'),
                 WRow(
                   className: 'gap-2',
                   children: [
@@ -186,14 +288,17 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                
-                const WText('HSLA 半透明颜色', className: 'text-sm font-medium mb-2 text-gray-600'),
+                const WText('HSLA 半透明颜色',
+                    className: 'text-sm font-medium mb-2 text-gray-600'),
                 WRow(
                   className: 'gap-2',
                   children: [
-                    _colorBox('bg-[hsla(348,100%,61%,0.6)] border', 'hsla(348,100%,61%,0.6)'),
-                    _colorBox('bg-[hsla(174,64%,55%,0.8)] border', 'hsla(174,64%,55%,0.8)'),
-                    _colorBox('bg-[hsla(258,89%,66%,0.4)] border', 'hsla(258,89%,66%,0.4)'),
+                    _colorBox('bg-[hsla(348,100%,61%,0.6)] border',
+                        'hsla(348,100%,61%,0.6)'),
+                    _colorBox('bg-[hsla(174,64%,55%,0.8)] border',
+                        'hsla(174,64%,55%,0.8)'),
+                    _colorBox('bg-[hsla(258,89%,66%,0.4)] border',
+                        'hsla(258,89%,66%,0.4)'),
                   ],
                 ),
               ],
@@ -203,19 +308,56 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '📝 文字颜色测试',
               [
+                const WText('🆕 文字透明度测试 (NEW!)',
+                    className: 'font-bold mb-4 text-purple-600'),
+                const WText('黑色文字透明度变化', className: 'font-semibold mb-2'),
+                const WText('黑色文字 100%',
+                    className: 'text-black font-bold text-lg mb-1'),
+                const WText('黑色文字 70%',
+                    className: 'text-black/70 font-bold text-lg mb-1'),
+                const WText('黑色文字 50%',
+                    className: 'text-black/50 font-bold text-lg mb-1'),
+                const WText('黑色文字 30%',
+                    className: 'text-black/30 font-bold text-lg mb-1'),
+                const WText('黑色文字 10%',
+                    className: 'text-black/10 font-bold text-lg mb-4'),
+                const WText('彩色文字透明度', className: 'font-semibold mb-2'),
+                const WText('红色文字 red-500/80',
+                    className: 'text-red-500/80 font-bold text-lg mb-1'),
+                const WText('蓝色文字 blue-600/60',
+                    className: 'text-blue-600/60 font-bold text-lg mb-1'),
+                const WText('绿色文字 green-500/70',
+                    className: 'text-green-500/70 font-bold text-lg mb-1'),
+                const WText('紫色文字 purple-600/50',
+                    className: 'text-purple-600/50 font-bold text-lg mb-4'),
+                const WText('自定义色系文字', className: 'font-semibold mb-2'),
+                const WText('Brand 色系文字',
+                    className: 'text-brand-500 font-bold text-lg mb-1'),
+                const WText('Brand 色系文字 50%',
+                    className: 'text-brand-500/50 font-bold text-lg mb-1'),
+                const WText('Accent 色系文字',
+                    className: 'text-accent-500 font-bold text-lg mb-1'),
+                const WText('Accent 色系文字 70%',
+                    className: 'text-accent-500/70 font-bold text-lg mb-4'),
+                const WText('传统文字颜色', className: 'font-semibold mb-2'),
                 const WText('红色文字', className: 'text-red-500 font-bold'),
                 const WText('蓝色文字', className: 'text-blue-600 font-semibold'),
                 const WText('绿色文字', className: 'text-green-500 font-medium'),
                 const WText('灰色文字', className: 'text-gray-700'),
                 const WText('主色文字', className: 'text-primary font-bold'),
                 const SizedBox(height: 12),
-                
-                const WText('任意值文字颜色', className: 'font-semibold mb-2 text-purple-600'),
-                const WText('十六进制文字颜色 #ff0000', className: 'text-[#ff0000] font-bold'),
-                const WText('RGB文字颜色 rgb(52,152,219)', className: 'text-[rgb(52,152,219)] font-bold'),
-                const WText('HSL文字颜色 hsl(142,71%,45%)', className: 'text-[hsl(142,71%,45%)] font-bold'),
-                const WText('RGBA半透明文字 rgba(155,89,182,0.8)', className: 'text-[rgba(155,89,182,0.8)] font-bold text-lg'),
-                const WText('深灰色文字 #333333', className: 'text-[#333333] font-medium'),
+                const WText('任意值文字颜色',
+                    className: 'font-semibold mb-2 text-purple-600'),
+                const WText('十六进制文字颜色 #ff0000',
+                    className: 'text-[#ff0000] font-bold'),
+                const WText('RGB文字颜色 rgb(52,152,219)',
+                    className: 'text-[rgb(52,152,219)] font-bold'),
+                const WText('HSL文字颜色 hsl(142,71%,45%)',
+                    className: 'text-[hsl(142,71%,45%)] font-bold'),
+                const WText('RGBA半透明文字 rgba(155,89,182,0.8)',
+                    className: 'text-[rgba(155,89,182,0.8)] font-bold text-lg'),
+                const WText('深灰色文字 #333333',
+                    className: 'text-[#333333] font-medium'),
               ],
             ),
 
@@ -223,26 +365,35 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '🔲 边框颜色任意值测试',
               [
-                const WText('任意值边框颜色', className: 'font-semibold mb-4 text-purple-600'),
+                const WText('任意值边框颜色',
+                    className: 'font-semibold mb-4 text-purple-600'),
                 WContainer(
                   className: 'p-4 border-2 border-[#00ff00] rounded-lg mb-3',
-                  child: const WText('十六进制边框 #00ff00', className: 'text-center font-medium'),
+                  child: const WText('十六进制边框 #00ff00',
+                      className: 'text-center font-medium'),
                 ),
                 WContainer(
-                  className: 'p-4 border-2 border-[rgb(52,152,219)] rounded-lg mb-3',
-                  child: const WText('RGB边框 rgb(52,152,219)', className: 'text-center font-medium'),
+                  className:
+                      'p-4 border-2 border-[rgb(52,152,219)] rounded-lg mb-3',
+                  child: const WText('RGB边框 rgb(52,152,219)',
+                      className: 'text-center font-medium'),
                 ),
                 WContainer(
-                  className: 'p-4 border-2 border-[hsl(142,71%,45%)] rounded-lg mb-3',
-                  child: const WText('HSL边框 hsl(142,71%,45%)', className: 'text-center font-medium'),
+                  className:
+                      'p-4 border-2 border-[hsl(142,71%,45%)] rounded-lg mb-3',
+                  child: const WText('HSL边框 hsl(142,71%,45%)',
+                      className: 'text-center font-medium'),
                 ),
                 WContainer(
-                  className: 'p-4 border-2 border-[rgba(155,89,182,0.6)] rounded-lg mb-3',
-                  child: const WText('RGBA半透明边框 rgba(155,89,182,0.6)', className: 'text-center font-medium'),
+                  className:
+                      'p-4 border-2 border-[rgba(155,89,182,0.6)] rounded-lg mb-3',
+                  child: const WText('RGBA半透明边框 rgba(155,89,182,0.6)',
+                      className: 'text-center font-medium'),
                 ),
                 WContainer(
                   className: 'p-4 border-4 border-[#f39c12] rounded-xl',
-                  child: const WText('粗边框 #f39c12', className: 'text-center font-bold'),
+                  child: const WText('粗边框 #f39c12',
+                      className: 'text-center font-bold'),
                 ),
               ],
             ),
@@ -260,7 +411,6 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                
                 const WText('WRow 行布局', className: 'font-semibold mb-2'),
                 WRow(
                   className: 'gap-4',
@@ -268,29 +418,32 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                     Expanded(
                       child: WContainer(
                         className: 'p-3 bg-red-100 rounded',
-                        child: const WText('Item 1', className: 'text-red-700 text-center'),
+                        child: const WText('Item 1',
+                            className: 'text-red-700 text-center'),
                       ),
                     ),
                     Expanded(
                       child: WContainer(
                         className: 'p-3 bg-green-100 rounded',
-                        child: const WText('Item 2', className: 'text-green-700 text-center'),
+                        child: const WText('Item 2',
+                            className: 'text-green-700 text-center'),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                
                 const WText('WColumn 列布局', className: 'font-semibold mb-2'),
                 WColumn(
                   children: [
                     WContainer(
                       className: 'p-2 bg-yellow-100 rounded mb-2',
-                      child: const WText('Column Item 1', className: 'text-yellow-700'),
+                      child: const WText('Column Item 1',
+                          className: 'text-yellow-700'),
                     ),
                     WContainer(
                       className: 'p-2 bg-purple-100 rounded',
-                      child: const WText('Column Item 2', className: 'text-purple-700'),
+                      child: const WText('Column Item 2',
+                          className: 'text-purple-700'),
                     ),
                   ],
                 ),
@@ -355,23 +508,27 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   className: 'p-8 bg-yellow-100 mb-4',
                   child: const WText('p-8 内边距', className: 'text-yellow-700'),
                 ),
-                
-                const WText('任意值间距测试', className: 'font-semibold mb-2 text-purple-600'),
+                const WText('任意值间距测试',
+                    className: 'font-semibold mb-2 text-purple-600'),
                 WContainer(
                   className: 'p-[10px] bg-orange-100 mb-2',
-                  child: const WText('p-[10px] 任意值内边距', className: 'text-orange-700'),
+                  child: const WText('p-[10px] 任意值内边距',
+                      className: 'text-orange-700'),
                 ),
                 WContainer(
                   className: 'p-[1.5rem] bg-pink-100 mb-2',
-                  child: const WText('p-[1.5rem] rem单位内边距', className: 'text-pink-700'),
+                  child: const WText('p-[1.5rem] rem单位内边距',
+                      className: 'text-pink-700'),
                 ),
                 WContainer(
                   className: 'p-[2em] bg-indigo-100 mb-2',
-                  child: const WText('p-[2em] em单位内边距', className: 'text-indigo-700'),
+                  child: const WText('p-[2em] em单位内边距',
+                      className: 'text-indigo-700'),
                 ),
                 WContainer(
                   className: 'mb-[20px] p-4 bg-teal-100',
-                  child: const WText('mb-[20px] 任意值外边距', className: 'text-teal-700'),
+                  child: const WText('mb-[20px] 任意值外边距',
+                      className: 'text-teal-700'),
                 ),
               ],
             ),
@@ -380,22 +537,31 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '📐 任意值尺寸测试',
               [
-                const WText('任意值宽度和高度', className: 'font-semibold mb-4 text-purple-600'),
+                const WText('任意值宽度和高度',
+                    className: 'font-semibold mb-4 text-purple-600'),
                 WContainer(
-                  className: 'w-[200px] h-[50px] bg-blue-200 rounded-lg mb-3 flex justify-center items-center',
-                  child: const WText('w-[200px] h-[50px]', className: 'text-blue-800 font-medium'),
+                  className:
+                      'w-[200px] h-[50px] bg-blue-200 rounded-lg mb-3 flex justify-center items-center',
+                  child: const WText('w-[200px] h-[50px]',
+                      className: 'text-blue-800 font-medium'),
                 ),
                 WContainer(
-                  className: 'w-[150px] h-[80px] bg-green-200 rounded-lg mb-3 flex justify-center items-center',
-                  child: const WText('w-[150px] h-[80px]', className: 'text-green-800 font-medium'),
+                  className:
+                      'w-[150px] h-[80px] bg-green-200 rounded-lg mb-3 flex justify-center items-center',
+                  child: const WText('w-[150px] h-[80px]',
+                      className: 'text-green-800 font-medium'),
                 ),
                 WContainer(
-                  className: 'w-[10rem] h-[3rem] bg-red-200 rounded-lg mb-3 flex justify-center items-center',
-                  child: const WText('w-[10rem] h-[3rem]', className: 'text-red-800 font-medium'),
+                  className:
+                      'w-[10rem] h-[3rem] bg-red-200 rounded-lg mb-3 flex justify-center items-center',
+                  child: const WText('w-[10rem] h-[3rem]',
+                      className: 'text-red-800 font-medium'),
                 ),
                 WContainer(
-                  className: 'w-[8em] h-[4em] bg-purple-200 rounded-lg flex justify-center items-center',
-                  child: const WText('w-[8em] h-[4em]', className: 'text-purple-800 font-medium'),
+                  className:
+                      'w-[8em] h-[4em] bg-purple-200 rounded-lg flex justify-center items-center',
+                  child: const WText('w-[8em] h-[4em]',
+                      className: 'text-purple-800 font-medium'),
                 ),
               ],
             ),
@@ -404,7 +570,8 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '🔄 Gap 间距测试',
               [
-                const WText('预定义 Gap 间距', className: 'font-semibold mb-4 text-purple-600'),
+                const WText('预定义 Gap 间距',
+                    className: 'font-semibold mb-4 text-purple-600'),
                 const WText('gap-2 (8px)', className: 'font-medium mb-2'),
                 WRow(
                   className: 'gap-2',
@@ -424,18 +591,19 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                
                 const WText('gap-4 (16px)', className: 'font-medium mb-2'),
                 WRow(
                   className: 'gap-4',
                   children: [
                     WContainer(
                       className: 'p-3 bg-purple-200 rounded',
-                      child: const WText('Item A', className: 'text-purple-800'),
+                      child:
+                          const WText('Item A', className: 'text-purple-800'),
                     ),
                     WContainer(
                       className: 'p-3 bg-yellow-200 rounded',
-                      child: const WText('Item B', className: 'text-yellow-800'),
+                      child:
+                          const WText('Item B', className: 'text-yellow-800'),
                     ),
                     WContainer(
                       className: 'p-3 bg-pink-200 rounded',
@@ -444,55 +612,63 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                
-                const WText('gap-6 (24px) - 列布局', className: 'font-medium mb-2'),
+                const WText('gap-6 (24px) - 列布局',
+                    className: 'font-medium mb-2'),
                 WColumn(
                   className: 'gap-6',
                   children: [
                     WContainer(
                       className: 'p-4 bg-indigo-200 rounded-lg',
-                      child: const WText('Column Item 1', className: 'text-indigo-800 text-center'),
+                      child: const WText('Column Item 1',
+                          className: 'text-indigo-800 text-center'),
                     ),
                     WContainer(
                       className: 'p-4 bg-teal-200 rounded-lg',
-                      child: const WText('Column Item 2', className: 'text-teal-800 text-center'),
+                      child: const WText('Column Item 2',
+                          className: 'text-teal-800 text-center'),
                     ),
                     WContainer(
                       className: 'p-4 bg-orange-200 rounded-lg',
-                      child: const WText('Column Item 3', className: 'text-orange-800 text-center'),
+                      child: const WText('Column Item 3',
+                          className: 'text-orange-800 text-center'),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                
-                const WText('任意值 Gap 间距', className: 'font-semibold mb-4 text-purple-600'),
-                const WText('gap-[30px] - 任意值间距', className: 'font-medium mb-2'),
+                const WText('任意值 Gap 间距',
+                    className: 'font-semibold mb-4 text-purple-600'),
+                const WText('gap-[30px] - 任意值间距',
+                    className: 'font-medium mb-2'),
                 WRow(
                   className: 'gap-[30px]',
                   children: [
                     WContainer(
                       className: 'p-3 bg-cyan-200 rounded',
-                      child: const WText('30px Gap', className: 'text-cyan-800'),
+                      child:
+                          const WText('30px Gap', className: 'text-cyan-800'),
                     ),
                     WContainer(
                       className: 'p-3 bg-lime-200 rounded',
-                      child: const WText('30px Gap', className: 'text-lime-800'),
+                      child:
+                          const WText('30px Gap', className: 'text-lime-800'),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                
-                const WText('gap-[2rem] - rem单位间距', className: 'font-medium mb-2'),
+                const WText('gap-[2rem] - rem单位间距',
+                    className: 'font-medium mb-2'),
                 WRow(
                   className: 'gap-[2rem]',
                   children: [
                     WContainer(
                       className: 'p-3 bg-rose-200 rounded',
-                      child: const WText('2rem Gap', className: 'text-rose-800'),
+                      child:
+                          const WText('2rem Gap', className: 'text-rose-800'),
                     ),
                     WContainer(
                       className: 'p-3 bg-emerald-200 rounded',
-                      child: const WText('2rem Gap', className: 'text-emerald-800'),
+                      child: const WText('2rem Gap',
+                          className: 'text-emerald-800'),
                     ),
                   ],
                 ),
@@ -509,13 +685,15 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                     Expanded(
                       child: WContainer(
                         className: 'p-3 bg-blue-200 rounded-sm',
-                        child: const WText('rounded-sm', className: 'text-blue-800 text-center text-sm'),
+                        child: const WText('rounded-sm',
+                            className: 'text-blue-800 text-center text-sm'),
                       ),
                     ),
                     Expanded(
                       child: WContainer(
                         className: 'p-3 bg-green-200 rounded-md',
-                        child: const WText('rounded-md', className: 'text-green-800 text-center text-sm'),
+                        child: const WText('rounded-md',
+                            className: 'text-green-800 text-center text-sm'),
                       ),
                     ),
                   ],
@@ -527,13 +705,15 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                     Expanded(
                       child: WContainer(
                         className: 'p-3 bg-red-200 rounded-lg',
-                        child: const WText('rounded-lg', className: 'text-red-800 text-center text-sm'),
+                        child: const WText('rounded-lg',
+                            className: 'text-red-800 text-center text-sm'),
                       ),
                     ),
                     Expanded(
                       child: WContainer(
                         className: 'p-3 bg-purple-200 rounded-xl',
-                        child: const WText('rounded-xl', className: 'text-purple-800 text-center text-sm'),
+                        child: const WText('rounded-xl',
+                            className: 'text-purple-800 text-center text-sm'),
                       ),
                     ),
                   ],
@@ -541,7 +721,8 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                 const SizedBox(height: 8),
                 WContainer(
                   className: 'p-3 bg-yellow-200 rounded-full',
-                  child: const WText('rounded-full', className: 'text-yellow-800 text-center'),
+                  child: const WText('rounded-full',
+                      className: 'text-yellow-800 text-center'),
                 ),
               ],
             ),
@@ -556,13 +737,15 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                     Expanded(
                       child: WContainer(
                         className: 'p-4 bg-white shadow-sm rounded-lg',
-                        child: const WText('shadow-sm', className: 'text-gray-700 text-center'),
+                        child: const WText('shadow-sm',
+                            className: 'text-gray-700 text-center'),
                       ),
                     ),
                     Expanded(
                       child: WContainer(
                         className: 'p-4 bg-white shadow-md rounded-lg',
-                        child: const WText('shadow-md', className: 'text-gray-700 text-center'),
+                        child: const WText('shadow-md',
+                            className: 'text-gray-700 text-center'),
                       ),
                     ),
                   ],
@@ -574,13 +757,15 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                     Expanded(
                       child: WContainer(
                         className: 'p-4 bg-white shadow-lg rounded-lg',
-                        child: const WText('shadow-lg', className: 'text-gray-700 text-center'),
+                        child: const WText('shadow-lg',
+                            className: 'text-gray-700 text-center'),
                       ),
                     ),
                     Expanded(
                       child: WContainer(
                         className: 'p-4 bg-white shadow-xl rounded-lg',
-                        child: const WText('shadow-xl', className: 'text-gray-700 text-center'),
+                        child: const WText('shadow-xl',
+                            className: 'text-gray-700 text-center'),
                       ),
                     ),
                   ],
@@ -607,8 +792,10 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   className: 'gap-4',
                   children: [
                     const WIcon(Icons.home, className: 'text-lg text-blue-600'),
-                    const WIcon(Icons.star, className: 'text-xl text-yellow-600'),
-                    const WIcon(Icons.favorite, className: 'text-2xl text-red-600'),
+                    const WIcon(Icons.star,
+                        className: 'text-xl text-yellow-600'),
+                    const WIcon(Icons.favorite,
+                        className: 'text-2xl text-red-600'),
                   ],
                 ),
               ],
@@ -660,7 +847,8 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                     ),
                     WButton(
                       text: '次要按钮',
-                      className: 'bg-gray-200 text-gray-700 px-4 py-2 rounded-lg',
+                      className:
+                          'bg-gray-200 text-gray-700 px-4 py-2 rounded-lg',
                       onPressed: () {
                         setState(() {
                           _counter--;
@@ -726,17 +914,20 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                     WBadge(
                       count: _counter,
                       className: 'bg-red-500',
-                      child: const WIcon(Icons.notifications, className: 'text-gray-600'),
+                      child: const WIcon(Icons.notifications,
+                          className: 'text-gray-600'),
                     ),
                     WBadge(
                       count: 5,
                       className: 'bg-blue-500',
-                      child: const WIcon(Icons.message, className: 'text-gray-600'),
+                      child: const WIcon(Icons.message,
+                          className: 'text-gray-600'),
                     ),
                     WBadge(
                       text: 'NEW',
                       className: 'bg-green-500',
-                      child: const WIcon(Icons.star, className: 'text-gray-600'),
+                      child:
+                          const WIcon(Icons.star, className: 'text-gray-600'),
                     ),
                   ],
                 ),
@@ -764,12 +955,14 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                 ),
                 const SizedBox(height: 12),
                 WCard(
-                  className: 'p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg',
+                  className:
+                      'p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg',
                   child: const WColumn(
                     children: [
                       WText(
                         '渐变卡片',
-                        className: 'text-white text-xl font-bold text-center mb-2',
+                        className:
+                            'text-white text-xl font-bold text-center mb-2',
                       ),
                       WText(
                         '支持渐变背景的卡片样式',
@@ -790,26 +983,32 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   className: 'bg-white rounded-lg shadow-sm',
                   children: [
                     WListTile(
-                      leading: const WIcon(Icons.home, className: 'text-blue-500'),
+                      leading:
+                          const WIcon(Icons.home, className: 'text-blue-500'),
                       title: const WText('首页', className: 'font-medium'),
                       subtitle: const WText('返回首页', className: 'text-gray-500'),
-                      trailing: const WIcon(Icons.arrow_forward_ios, className: 'text-gray-400'),
+                      trailing: const WIcon(Icons.arrow_forward_ios,
+                          className: 'text-gray-400'),
                       onTap: () {},
                     ),
                     const WDivider(),
                     WListTile(
-                      leading: const WIcon(Icons.settings, className: 'text-gray-500'),
+                      leading: const WIcon(Icons.settings,
+                          className: 'text-gray-500'),
                       title: const WText('设置', className: 'font-medium'),
                       subtitle: const WText('应用设置', className: 'text-gray-500'),
-                      trailing: const WIcon(Icons.arrow_forward_ios, className: 'text-gray-400'),
+                      trailing: const WIcon(Icons.arrow_forward_ios,
+                          className: 'text-gray-400'),
                       onTap: () {},
                     ),
                     const WDivider(),
                     WListTile(
-                      leading: const WIcon(Icons.info, className: 'text-green-500'),
+                      leading:
+                          const WIcon(Icons.info, className: 'text-green-500'),
                       title: const WText('关于', className: 'font-medium'),
                       subtitle: const WText('应用信息', className: 'text-gray-500'),
-                      trailing: const WIcon(Icons.arrow_forward_ios, className: 'text-gray-400'),
+                      trailing: const WIcon(Icons.arrow_forward_ios,
+                          className: 'text-gray-400'),
                       onTap: () {},
                     ),
                   ],
@@ -826,7 +1025,8 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                   className: 'text-gray-600 text-center mb-4',
                 ),
                 WContainer(
-                  className: 'p-4 bg-blue-100 sm:bg-green-100 md:bg-yellow-100 lg:bg-red-100 xl:bg-purple-100 rounded-lg',
+                  className:
+                      'p-4 bg-blue-100 sm:bg-green-100 md:bg-yellow-100 lg:bg-red-100 xl:bg-purple-100 rounded-lg',
                   child: const WText(
                     '响应式容器：小屏蓝色，sm绿色，md黄色，lg红色，xl紫色',
                     className: 'text-center font-medium',
@@ -835,7 +1035,8 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                 const SizedBox(height: 8),
                 const WText(
                   '响应式文字',
-                  className: 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-center font-bold',
+                  className:
+                      'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-center font-bold',
                 ),
               ],
             ),
@@ -844,22 +1045,26 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '🔲 边框测试',
               [
-                const WText('基础边框', className: 'font-semibold mb-4 text-purple-600'),
+                const WText('基础边框',
+                    className: 'font-semibold mb-4 text-purple-600'),
                 WContainer(
                   className: 'p-4 border rounded-lg mb-3',
                   child: const WText('border - 默认边框', className: 'text-center'),
                 ),
                 WContainer(
                   className: 'p-4 border-2 border-blue-500 rounded-lg mb-3',
-                  child: const WText('border-2 border-blue-500', className: 'text-center text-blue-700'),
+                  child: const WText('border-2 border-blue-500',
+                      className: 'text-center text-blue-700'),
                 ),
                 WContainer(
                   className: 'p-4 border-4 border-red-500 rounded-lg mb-3',
-                  child: const WText('border-4 border-red-500', className: 'text-center text-red-700'),
+                  child: const WText('border-4 border-red-500',
+                      className: 'text-center text-red-700'),
                 ),
                 WContainer(
                   className: 'p-4 border border-[#ff6b6b] rounded-lg',
-                  child: const WText('border-[#ff6b6b] 任意值边框', className: 'text-center'),
+                  child: const WText('border-[#ff6b6b] 任意值边框',
+                      className: 'text-center'),
                 ),
               ],
             ),
@@ -868,32 +1073,38 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '👻 透明度测试',
               [
-                const WText('透明度变化', className: 'font-semibold mb-4 text-purple-600'),
+                const WText('透明度变化',
+                    className: 'font-semibold mb-4 text-purple-600'),
                 WRow(
                   className: 'gap-2',
                   children: [
                     WContainer(
                       className: 'p-3 bg-blue-500 opacity-100 rounded',
-                      child: const WText('100%', className: 'text-white text-center'),
+                      child: const WText('100%',
+                          className: 'text-white text-center'),
                     ),
                     WContainer(
                       className: 'p-3 bg-blue-500 opacity-75 rounded',
-                      child: const WText('75%', className: 'text-white text-center'),
+                      child: const WText('75%',
+                          className: 'text-white text-center'),
                     ),
                     WContainer(
                       className: 'p-3 bg-blue-500 opacity-50 rounded',
-                      child: const WText('50%', className: 'text-white text-center'),
+                      child: const WText('50%',
+                          className: 'text-white text-center'),
                     ),
                     WContainer(
                       className: 'p-3 bg-blue-500 opacity-25 rounded',
-                      child: const WText('25%', className: 'text-white text-center'),
+                      child: const WText('25%',
+                          className: 'text-white text-center'),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
                 WContainer(
                   className: 'p-4 bg-red-500 opacity-[0.6] rounded-lg',
-                  child: const WText('opacity-[0.6] 任意值透明度', className: 'text-white text-center'),
+                  child: const WText('opacity-[0.6] 任意值透明度',
+                      className: 'text-white text-center'),
                 ),
               ],
             ),
@@ -902,18 +1113,19 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '✏️ 文本装饰测试',
               [
-                const WText('文本装饰效果', className: 'font-semibold mb-4 text-purple-600'),
+                const WText('文本装饰效果',
+                    className: 'font-semibold mb-4 text-purple-600'),
                 const WText('普通文本', className: 'mb-2'),
                 const WText('下划线文本', className: 'underline mb-2'),
                 const WText('删除线文本', className: 'line-through mb-2'),
                 const WText('无装饰文本', className: 'no-underline mb-4'),
-                
-                const WText('文本变换', className: 'font-semibold mb-2 text-purple-600'),
+                const WText('文本变换',
+                    className: 'font-semibold mb-2 text-purple-600'),
                 const WText('uppercase text', className: 'uppercase mb-2'),
                 const WText('LOWERCASE TEXT', className: 'lowercase mb-2'),
                 const WText('capitalize text', className: 'capitalize mb-4'),
-                
-                const WText('文本溢出处理', className: 'font-semibold mb-2 text-purple-600'),
+                const WText('文本溢出处理',
+                    className: 'font-semibold mb-2 text-purple-600'),
                 WContainer(
                   className: 'w-[200px] p-2 border rounded',
                   child: const WText(
@@ -938,7 +1150,8 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
               '🔥 热重载测试说明',
               [
                 WContainer(
-                  className: 'p-4 bg-yellow-50 border border-yellow-200 rounded-lg',
+                  className:
+                      'p-4 bg-yellow-50 border border-yellow-200 rounded-lg',
                   child: const WColumn(
                     children: [
                       WText(
@@ -1010,9 +1223,9 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             className: 'text-lg font-semibold text-gray-900 mb-4',
           ),
           ...children.map((child) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: child,
-          )),
+                padding: const EdgeInsets.only(bottom: 8),
+                child: child,
+              )),
         ],
       ),
     );
@@ -1024,7 +1237,8 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
         className: '$className h-12 rounded flex justify-center items-center',
         child: WText(
           label,
-          className: 'text-xs font-medium ${className.contains('white') || className.contains('100') ? 'text-gray-700' : 'text-white'}',
+          className:
+              'text-xs font-medium ${className.contains('white') || className.contains('100') ? 'text-gray-700' : 'text-white'}',
         ),
       ),
     );

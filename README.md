@@ -89,7 +89,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_twind: ^0.3.4
+  flutter_twind: ^0.3.5
 ```
 
 ### Basic Usage
