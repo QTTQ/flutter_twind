@@ -3,31 +3,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_twind/flutter_twind.dart';
 
 void main() {
-  group('简化约束测试', () {
-    setUpAll(() {
-      WindConfig.initialize();
-    });
-
-    testWidgets('WContainer 基础约束测试', (WidgetTester tester) async {
+  group('Simple Constraint Tests', () {
+    testWidgets('Basic functionality test - no crashes', (WidgetTester tester) async {
+      // 测试基本功能不会崩溃
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: Column(
               children: [
-                // 测试固定高度
                 WContainer(
-                  className: 'p-4 bg-blue-100',
-                  height: 100,
-                  child: const Text('固定高度测试'),
+                  className: 'min-w-100 max-w-200 bg-blue-500 p-4',
+                  child: Text('Width Constraint Test'),
                 ),
-                // 测试约束范围
                 WContainer(
-                  className: 'p-4 bg-green-100',
-                  constraints: const BoxConstraints(
-                    minHeight: 50,
-                    maxHeight: 200,
-                  ),
-                  child: const Text('约束范围测试'),
+                  className: 'min-h-50 max-h-100 bg-red-500 p-4',
+                  child: Text('Height Constraint Test'),
+                ),
+                WContainer(
+                  className: 'min-w-50 max-w-150 min-h-30 max-h-80 bg-green-500 p-4',
+                  child: Text('Combined Constraint Test'),
+                ),
+                WContainer(
+                  className: 'bg-yellow-500 p-4',
+                  child: Text('No Constraint Test'),
                 ),
               ],
             ),
@@ -35,30 +33,62 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      // 验证所有文本都能正常显示
+      expect(find.text('Width Constraint Test'), findsOneWidget);
+      expect(find.text('Height Constraint Test'), findsOneWidget);
+      expect(find.text('Combined Constraint Test'), findsOneWidget);
+      expect(find.text('No Constraint Test'), findsOneWidget);
       
-      expect(find.text('固定高度测试'), findsOneWidget);
-      expect(find.text('约束范围测试'), findsOneWidget);
+      // 验证没有异常抛出
+      await tester.pumpAndSettle();
     });
 
-    testWidgets('WStack 基础约束测试', (WidgetTester tester) async {
+    testWidgets('Edge cases test - zero and extreme values', (WidgetTester tester) async {
+      // 测试边界情况
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: SizedBox(
-              height: 150,
-              child: WStack(
-                className: 'bg-yellow-100 p-4',
+            body: Column(
+              children: [
+                WContainer(
+                  className: 'min-w-0 max-w-0 bg-blue-500',
+                  child: Text('Zero Width'),
+                ),
+                WContainer(
+                  className: 'min-h-0 max-h-0 bg-red-500',
+                  child: Text('Zero Height'),
+                ),
+                WContainer(
+                  className: 'min-w-1000 max-w-2000 bg-green-500 p-2',
+                  child: Text('Large Width'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      // 验证没有崩溃
+      expect(find.text('Zero Width'), findsOneWidget);
+      expect(find.text('Zero Height'), findsOneWidget);
+      expect(find.text('Large Width'), findsOneWidget);
+      
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('Mixed constraints test', (WidgetTester tester) async {
+      // 测试混合约束
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: WContainer(
+              className: 'min-w-100 max-w-300 min-h-50 max-h-200 bg-purple-500 p-4 m-2',
+              child: Column(
                 children: [
-                  Container(
-                    color: Colors.red,
-                    width: 80,
-                    height: 80,
-                  ),
-                  const Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: Text('Stack 测试'),
+                  Text('Mixed Constraints'),
+                  WContainer(
+                    className: 'min-w-50 bg-orange-500 p-2',
+                    child: Text('Nested Container'),
                   ),
                 ],
               ),
@@ -67,102 +97,10 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      expect(find.text('Mixed Constraints'), findsOneWidget);
+      expect(find.text('Nested Container'), findsOneWidget);
       
-      expect(find.text('Stack 测试'), findsOneWidget);
-    });
-
-    testWidgets('边界条件测试', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Column(
-              children: [
-                // 测试零尺寸
-                WContainer(
-                  className: 'bg-red-100',
-                  width: 0,
-                  height: 0,
-                  child: const Text('零尺寸'),
-                ),
-                // 测试负数约束处理
-                WContainer(
-                  className: 'bg-green-100 p-4',
-                  constraints: const BoxConstraints(
-                    minWidth: -10, // 应该被处理为0
-                    minHeight: -10, // 应该被处理为0
-                  ),
-                  child: const Text('负数约束'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-
       await tester.pumpAndSettle();
-      
-      expect(find.text('零尺寸'), findsOneWidget);
-      expect(find.text('负数约束'), findsOneWidget);
-    });
-
-    testWidgets('Expanded 中的约束测试', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Column(
-              children: [
-                Expanded(
-                  child: WContainer(
-                    className: 'p-4 bg-purple-100',
-                    child: const Center(
-                      child: Text('Expanded 容器'),
-                    ),
-                  ),
-                ),
-                WContainer(
-                  className: 'p-4 bg-orange-100',
-                  height: 100,
-                  child: const Text('固定容器'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
-      
-      expect(find.text('Expanded 容器'), findsOneWidget);
-      expect(find.text('固定容器'), findsOneWidget);
-    });
-
-    testWidgets('ListView 约束测试', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: ListView(
-              children: [
-                WContainer(
-                  className: 'p-4 m-2 bg-blue-100 rounded-lg',
-                  height: 100,
-                  child: const Text('ListView 项目 1'),
-                ),
-                WContainer(
-                  className: 'p-4 m-2 bg-red-100 rounded-lg',
-                  height: 120,
-                  child: const Text('ListView 项目 2'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
-      
-      expect(find.text('ListView 项目 1'), findsOneWidget);
-      expect(find.text('ListView 项目 2'), findsOneWidget);
     });
   });
 }

@@ -190,179 +190,131 @@ class WContainer extends StatelessWidget {
       }
     }
 
-    // 构建约束条件
-    BoxConstraints? finalConstraints = constraints;
-    if (parsedStyles['minWidth'] != null || parsedStyles['maxWidth'] != null ||
-        parsedStyles['minHeight'] != null || parsedStyles['maxHeight'] != null) {
-      
-      // 确保约束值在合理范围内，避免溢出
-      double minWidth = parsedStyles['minWidth'] ?? 0.0;
-      double maxWidth = parsedStyles['maxWidth'] ?? double.infinity;
-      double minHeight = parsedStyles['minHeight'] ?? 0.0;
-      double maxHeight = parsedStyles['maxHeight'] ?? double.infinity;
-      
-      // 限制最大值以防止溢出
-      if (maxWidth != double.infinity && maxWidth > 2000) {
-        maxWidth = 2000;
+    // 处理尺寸约束 - 使用 ConstrainedBox 包装而不是直接设置 constraints
+    Widget? constrainedChild = containerChild;
+    
+    // 安全的约束处理 - 只在真正需要时创建约束
+    bool hasConstraints = false;
+    double? minW, maxW, minH, maxH;
+    
+    // 检查并验证宽度约束
+    if (parsedStyles.containsKey('minWidth')) {
+      final value = parsedStyles['minWidth'];
+      if (value is double && value.isFinite && value >= 0) {
+        minW = value;
+        hasConstraints = true;
       }
-      if (maxHeight != double.infinity && maxHeight > 2000) {
-        maxHeight = 2000;
+    }
+    
+    if (parsedStyles.containsKey('maxWidth')) {
+      final value = parsedStyles['maxWidth'];
+      if (value is double && value.isFinite && value > 0) {
+        maxW = value;
+        hasConstraints = true;
       }
-      
-      finalConstraints = BoxConstraints(
-        minWidth: minWidth,
-        maxWidth: maxWidth,
-        minHeight: minHeight,
-        maxHeight: maxHeight,
-      );
-      
-      // 如果已有constraints，则合并
-      if (constraints != null) {
-        finalConstraints = finalConstraints.enforce(constraints!);
+    }
+    
+    // 检查并验证高度约束
+    if (parsedStyles.containsKey('minHeight')) {
+      final value = parsedStyles['minHeight'];
+      if (value is double && value.isFinite && value >= 0) {
+        minH = value;
+        hasConstraints = true;
+      }
+    }
+    
+    if (parsedStyles.containsKey('maxHeight')) {
+      final value = parsedStyles['maxHeight'];
+      if (value is double && value.isFinite && value > 0) {
+        maxH = value;
+        hasConstraints = true;
+      }
+    }
+    
+    // 确保最小值不大于最大值
+    if (minW != null && maxW != null && minW > maxW) {
+      maxW = minW;
+    }
+    if (minH != null && maxH != null && minH > maxH) {
+      maxH = minH;
+    }
+    
+    // 只在有有效约束时才创建 ConstrainedBox
+    if (hasConstraints && constrainedChild != null) {
+      try {
+        constrainedChild = ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: minW ?? 0.0,
+            maxWidth: maxW ?? double.infinity,
+            minHeight: minH ?? 0.0,
+            maxHeight: maxH ?? double.infinity,
+          ),
+          child: constrainedChild,
+        );
+      } catch (e) {
+        // 如果约束创建失败，使用原始子组件
+        constrainedChild = containerChild;
       }
     }
 
-    // 使用智能的 LayoutBuilder，带递归检测
-    return Builder(
-      builder: (context) {
-        // 更可靠的递归检测 - 检查调用栈深度
-        int layoutBuilderDepth = 0;
-        context.visitAncestorElements((element) {
-          if (element.widget is LayoutBuilder) {
-            layoutBuilderDepth++;
-            if (layoutBuilderDepth > 2) { // 允许最多2层嵌套
-              return false;
-            }
-          }
-          return true;
-        });
-        
-        if (layoutBuilderDepth > 2) {
-          // 如果已经在 LayoutBuilder 中，使用简化的约束处理
-          BoxConstraints? safeConstraints = finalConstraints;
-          
-          if (safeConstraints != null) {
-            double minWidth = safeConstraints.minWidth;
-            double maxWidth = safeConstraints.maxWidth;
-            double minHeight = safeConstraints.minHeight;
-            double maxHeight = safeConstraints.maxHeight;
-            
-            // 处理负数约束
-            if (minWidth < 0) minWidth = 0;
-            if (minHeight < 0) minHeight = 0;
-            
-            // 处理极大值约束
-            if (maxWidth > 10000) maxWidth = 10000;
-            if (maxHeight > 10000) maxHeight = 10000;
-            
-            // 确保 min <= max
-            if (minWidth > maxWidth && maxWidth != double.infinity) {
-              minWidth = maxWidth;
-            }
-            if (minHeight > maxHeight && maxHeight != double.infinity) {
-              minHeight = maxHeight;
-            }
-            
-            safeConstraints = BoxConstraints(
-              minWidth: minWidth,
-              maxWidth: maxWidth,
-              minHeight: minHeight,
-              maxHeight: maxHeight,
-            );
-          }
-          
-          return Container(
-            width: width ?? parsedStyles['width'],
-            height: height ?? parsedStyles['height'],
-            padding: padding ?? parsedStyles['padding'],
-            margin: margin ?? parsedStyles['margin'],
-            alignment: alignment ?? parsedStyles['alignment'],
-            clipBehavior: clipBehavior,
-            constraints: safeConstraints,
-            transform: transform,
-            transformAlignment: transformAlignment,
-            foregroundDecoration: foregroundDecoration,
-            decoration: finalDecoration,
-            child: containerChild,
-          );
-        } else {
-          // 使用 LayoutBuilder 来安全处理约束
-          return LayoutBuilder(
-            builder: (context, parentConstraints) {
-              // 确保约束在合理范围内
-              BoxConstraints safeConstraints = finalConstraints ?? const BoxConstraints();
-              
-              // 严格验证约束值，防止无效约束
-              double minWidth = safeConstraints.minWidth;
-              double maxWidth = safeConstraints.maxWidth;
-              double minHeight = safeConstraints.minHeight;
-              double maxHeight = safeConstraints.maxHeight;
-              
-              // 处理负数约束
-              if (minWidth < 0) minWidth = 0;
-              if (minHeight < 0) minHeight = 0;
-              
-              // 处理无限约束
-              if (maxWidth == double.infinity && parentConstraints.maxWidth.isFinite) {
-                maxWidth = parentConstraints.maxWidth;
-              }
-              if (maxHeight == double.infinity && parentConstraints.maxHeight.isFinite) {
-                maxHeight = parentConstraints.maxHeight;
-              }
-              
-              // 处理极大值约束（防止内存溢出）
-              if (maxWidth > 10000) maxWidth = 10000;
-              if (maxHeight > 10000) maxHeight = 10000;
-              
-              // 确保 min <= max
-              if (minWidth > maxWidth && maxWidth != double.infinity) {
-                minWidth = maxWidth;
-              }
-              if (minHeight > maxHeight && maxHeight != double.infinity) {
-                minHeight = maxHeight;
-              }
-              
-              // 创建安全的约束
-              safeConstraints = BoxConstraints(
-                minWidth: minWidth,
-                maxWidth: maxWidth,
-                minHeight: minHeight,
-                maxHeight: maxHeight,
-              );
-              
-              // 获取安全的宽高值
-              double? safeWidth = width ?? parsedStyles['width'];
-              double? safeHeight = height ?? parsedStyles['height'];
-              
-              // 验证宽高值
-              if (safeWidth != null) {
-                if (safeWidth < 0) safeWidth = 0;
-                if (safeWidth > 10000) safeWidth = 10000;
-              }
-              if (safeHeight != null) {
-                if (safeHeight < 0) safeHeight = 0;
-                if (safeHeight > 10000) safeHeight = 10000;
-              }
-              
-              return Container(
-                width: safeWidth,
-                height: safeHeight,
-                padding: padding ?? parsedStyles['padding'],
-                margin: margin ?? parsedStyles['margin'],
-                alignment: alignment ?? parsedStyles['alignment'],
-                clipBehavior: clipBehavior,
-                constraints: safeConstraints,
-                transform: transform,
-                transformAlignment: transformAlignment,
-                foregroundDecoration: foregroundDecoration,
-                decoration: finalDecoration,
-                child: containerChild,
-              );
-            },
-          );
-        }
-      },
+    Widget finalContainer = Container(
+      width: width ?? parsedStyles['width'],
+      height: height ?? parsedStyles['height'],
+      padding: padding ?? parsedStyles['padding'],
+      margin: margin ?? parsedStyles['margin'],
+      alignment: alignment ?? parsedStyles['alignment'],
+      clipBehavior: clipBehavior,
+      transform: transform,
+      transformAlignment: transformAlignment,
+      foregroundDecoration: foregroundDecoration,
+      decoration: finalDecoration,
+      child: constrainedChild,
     );
+
+    // 检查是否需要处理溢出
+    if (parsedStyles.containsKey('overflow') || className?.contains('overflow-') == true) {
+      if (parsedStyles['overflow'] == 'scroll' || className?.contains('overflow-scroll') == true) {
+        // 将子组件包装在 SingleChildScrollView 中
+        Widget scrollableChild = containerChild ?? const SizedBox.shrink();
+        finalContainer = Container(
+          width: width ?? parsedStyles['width'],
+          height: height ?? parsedStyles['height'],
+          padding: padding ?? parsedStyles['padding'],
+          margin: margin ?? parsedStyles['margin'],
+          alignment: alignment ?? parsedStyles['alignment'],
+          clipBehavior: clipBehavior,
+          constraints: constraints,
+          transform: transform,
+          transformAlignment: transformAlignment,
+          foregroundDecoration: foregroundDecoration,
+          decoration: finalDecoration,
+          child: SingleChildScrollView(
+            child: scrollableChild,
+          ),
+        );
+      } else if (parsedStyles['overflow'] == 'hidden' || className?.contains('overflow-hidden') == true) {
+        // 对于 overflow-hidden，使用 ClipRect 裁剪内容
+        Widget clippedChild = containerChild ?? const SizedBox.shrink();
+        finalContainer = Container(
+          width: width ?? parsedStyles['width'],
+          height: height ?? parsedStyles['height'],
+          padding: padding ?? parsedStyles['padding'],
+          margin: margin ?? parsedStyles['margin'],
+          alignment: alignment ?? parsedStyles['alignment'],
+          clipBehavior: Clip.hardEdge,
+          constraints: constraints,
+          transform: transform,
+          transformAlignment: transformAlignment,
+          foregroundDecoration: foregroundDecoration,
+          decoration: finalDecoration,
+          child: ClipRect(
+            child: clippedChild,
+          ),
+        );
+      }
+    }
+
+    return finalContainer;
   }
 }
 
@@ -480,20 +432,36 @@ class WRow extends StatelessWidget {
       }
     }
 
-    // 当有gap时，使用MainAxisSize.min来避免溢出
-    final effectiveMainAxisSize = (gap != null && gap > 0) ? MainAxisSize.min : mainAxisSize;
-    
     Widget rowWidget = Row(
       mainAxisAlignment: parsedStyles['mainAxisAlignment'] ?? mainAxisAlignment,
       crossAxisAlignment: parsedStyles['crossAxisAlignment'] ?? crossAxisAlignment,
-      mainAxisSize: effectiveMainAxisSize,
+      mainAxisSize: mainAxisSize,
       textDirection: textDirection,
       verticalDirection: verticalDirection,
       textBaseline: textBaseline,
       children: gappedChildren,
     );
-    
-    // 移除自动添加SingleChildScrollView的逻辑，让开发者自己控制
+
+    // 检查是否需要处理溢出
+    if (parsedStyles.containsKey('overflow') || className?.contains('overflow-') == true) {
+      if (parsedStyles['overflow'] == 'scroll' || className?.contains('overflow-scroll') == true) {
+        rowWidget = SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: rowWidget,
+        );
+      } else if (parsedStyles['overflow'] == 'hidden' || className?.contains('overflow-hidden') == true) {
+        // 对于 overflow-hidden，使用 ListView 来避免溢出错误
+        rowWidget = SizedBox(
+          height: 50, // 给定固定高度避免布局错误
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: gappedChildren,
+          ),
+        );
+      }
+    }
 
     if (padding != null ||
         margin != null ||
@@ -569,8 +537,22 @@ class WColumn extends StatelessWidget {
       textBaseline: textBaseline,
       children: gappedChildren,
     );
-    
-    // 移除自动添加SingleChildScrollView的逻辑，让开发者自己控制
+
+    // 检查是否需要处理溢出
+    if (parsedStyles.containsKey('overflow') || className?.contains('overflow-') == true) {
+      if (parsedStyles['overflow'] == 'scroll' || className?.contains('overflow-scroll') == true) {
+        columnWidget = SingleChildScrollView(
+          child: columnWidget,
+        );
+      } else if (parsedStyles['overflow'] == 'hidden' || className?.contains('overflow-hidden') == true) {
+        // 对于 overflow-hidden，使用 ListView 来避免溢出错误
+        columnWidget = ListView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          children: gappedChildren,
+        );
+      }
+    }
 
     if (padding != null ||
         margin != null ||
@@ -628,43 +610,30 @@ class WStack extends StatelessWidget {
       children: children,
     );
 
+    // 检查是否需要处理溢出
+    if (parsedStyles.containsKey('overflow') || className?.contains('overflow-') == true) {
+      if (parsedStyles['overflow'] == 'scroll' || className?.contains('overflow-scroll') == true) {
+        stackWidget = SingleChildScrollView(
+          child: stackWidget,
+        );
+      } else if (parsedStyles['overflow'] == 'hidden' || className?.contains('overflow-hidden') == true) {
+        // 对于 Stack 的 overflow-hidden，使用 ClipRect 裁剪内容
+        stackWidget = ClipRect(
+          child: stackWidget,
+        );
+      }
+    }
+
     if (padding != null ||
         margin != null ||
         backgroundColor != null ||
         parsedStyles.isNotEmpty) {
-      // 使用条件性的 LayoutBuilder - 只在需要时使用
-      final needsConstraintHandling = parsedStyles.containsKey('maxWidth') || 
-                                     parsedStyles.containsKey('maxHeight') ||
-                                     parsedStyles.containsKey('minWidth') ||
-                                     parsedStyles.containsKey('minHeight');
-      
-      if (needsConstraintHandling) {
-        // 只有在需要约束处理时才使用 LayoutBuilder
-        stackWidget = LayoutBuilder(
-          builder: (context, constraints) {
-            return Container(
-              padding: padding ?? parsedStyles['padding'],
-              margin: margin ?? parsedStyles['margin'],
-              color: backgroundColor ?? parsedStyles['backgroundColor'],
-              constraints: BoxConstraints(
-                minWidth: parsedStyles['minWidth'] ?? 0.0,
-                maxWidth: parsedStyles['maxWidth'] ?? constraints.maxWidth.isFinite ? constraints.maxWidth : double.infinity,
-                minHeight: parsedStyles['minHeight'] ?? 0.0,
-                maxHeight: parsedStyles['maxHeight'] ?? constraints.maxHeight.isFinite ? constraints.maxHeight : double.infinity,
-              ),
-              child: stackWidget,
-            );
-          },
-        );
-      } else {
-        // 简单情况直接使用 Container
-        stackWidget = Container(
-          padding: padding ?? parsedStyles['padding'],
-          margin: margin ?? parsedStyles['margin'],
-          color: backgroundColor ?? parsedStyles['backgroundColor'],
-          child: stackWidget,
-        );
-      }
+      stackWidget = Container(
+        padding: padding ?? parsedStyles['padding'],
+        margin: margin ?? parsedStyles['margin'],
+        color: backgroundColor ?? parsedStyles['backgroundColor'],
+        child: stackWidget,
+      );
     }
 
     return stackWidget;
@@ -960,7 +929,7 @@ class WText extends StatelessWidget {
       ),
       textAlign: textAlign ?? parsedStyles['textAlign'],
       maxLines: maxLines ?? parsedStyles['maxLines'],
-      overflow: overflow ?? parsedStyles['overflow'],
+      overflow: overflow ?? parsedStyles['textOverflow'] ?? parsedStyles['overflow'],
     );
 
     // 处理透明度
@@ -1171,52 +1140,31 @@ class WImage extends StatelessWidget {
       context,
     );
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // 获取安全的宽高值
-        double? safeWidth = width ?? parsedStyles['width'];
-        double? safeHeight = height ?? parsedStyles['height'];
-        
-        // 如果在 Stack 中且没有指定尺寸，使用父约束
-        if (safeWidth == null && constraints.maxWidth.isFinite) {
-          safeWidth = constraints.maxWidth;
-        }
-        if (safeHeight == null && constraints.maxHeight.isFinite) {
-          safeHeight = constraints.maxHeight;
-        }
-
-        Widget imageWidget = Image(
-          image: image,
-          width: safeWidth,
-          height: safeHeight,
-          fit: fit ?? parsedStyles['fit'] ?? BoxFit.contain,
-          alignment: alignment,
-          repeat: repeat,
-          color: color ?? parsedStyles['color'],
-          colorBlendMode: colorBlendMode,
-          filterQuality: filterQuality,
-        );
-
-        if (borderRadius != null || boxShadow != null || border != null || 
-            parsedStyles.containsKey('borderRadius') || 
-            parsedStyles.containsKey('boxShadow') || 
-            parsedStyles.containsKey('border')) {
-          imageWidget = Container(
-            width: safeWidth,
-            height: safeHeight,
-            decoration: BoxDecoration(
-              borderRadius: borderRadius ?? parsedStyles['borderRadius'],
-              boxShadow: boxShadow ?? parsedStyles['boxShadow'],
-              border: border ?? parsedStyles['border'],
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: imageWidget,
-          );
-        }
-
-        return imageWidget;
-      },
+    Widget imageWidget = Image(
+      image: image,
+      width: width ?? parsedStyles['width'],
+      height: height ?? parsedStyles['height'],
+      fit: fit ?? parsedStyles['fit'],
+      alignment: alignment,
+      repeat: repeat,
+      color: color ?? parsedStyles['color'],
+      colorBlendMode: colorBlendMode,
+      filterQuality: filterQuality,
     );
+
+    if (borderRadius != null || boxShadow != null || border != null || parsedStyles.containsKey('borderRadius') || parsedStyles.containsKey('boxShadow') || parsedStyles.containsKey('border')) {
+      imageWidget = Container(
+        decoration: BoxDecoration(
+          borderRadius: borderRadius ?? parsedStyles['borderRadius'],
+          boxShadow: boxShadow ?? parsedStyles['boxShadow'],
+          border: border ?? parsedStyles['border'],
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: imageWidget,
+      );
+    }
+
+    return imageWidget;
   }
 }
 

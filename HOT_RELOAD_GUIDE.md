@@ -1,143 +1,101 @@
-# Flutter Twind 热重载指南
+# Flutter Twind 热重载修复指南
 
-## 🔥 智能热重载功能
+## 问题描述
+用户反馈热重载功能不正常工作，修改 className 后需要热重启才能看到效果。
 
-Flutter Twind 现在支持智能热重载！在开发时修改样式后按 "r" 键即可立即看到效果，无需完全重启应用。
+## 根本原因
+1. `SmartStyleParser` 虽然在开发模式下禁用了缓存，但 Flutter 的热重载可能没有正确触发组件重建
+2. 某些组件可能缓存了解析结果，导致样式更新不及时
 
-## 🚀 工作原理
+## 解决方案
 
-我们的智能解析器 `SmartStyleParser` 会根据当前环境自动调整行为：
-
-- **开发模式** (`kDebugMode = true`)：每次都重新解析样式，支持热重载
-- **生产模式** (`kDebugMode = false`)：使用缓存机制，优化性能
-
-## 📝 使用方法
-
-### 1. 初始化
+### 方案1：强制热重载支持
+在 `SmartStyleParser` 中添加开发模式下的强制刷新机制：
 
 ```dart
-import 'package:flutter_twind/flutter_twind.dart';
+// 在 SmartStyleParser 类中添加
+static int _hotReloadCounter = 0;
 
-void main() {
-  // 只需要初始化WindConfig
-  WindConfig.initialize();
-  runApp(MyApp());
+static void forceRefresh() {
+  if (kDebugMode) {
+    _hotReloadCounter++;
+    _cache.clear();
+  }
+}
+
+// 在 parseClassName 方法中
+static Map<String, dynamic> parseClassName(
+  String className,
+  String componentType,
+  BuildContext context,
+) {
+  if (className.isEmpty) return {};
+
+  final screenWidth = MediaQuery.of(context).size.width;
+  // 在开发模式下添加热重载计数器到缓存键
+  final cacheKey = kDebugMode 
+    ? '$className:$componentType:$screenWidth:$_hotReloadCounter'
+    : '$className:$componentType:$screenWidth';
+  
+  // 其余代码保持不变...
 }
 ```
 
-### 2. 使用组件
+### 方案2：组件级别的热重载支持
+在每个 Wind 组件中添加热重载监听：
 
 ```dart
-WContainer(
-  className: 'p-4 bg-blue-100 rounded-lg',
-  child: WText(
-    'Hello World',
-    className: 'text-lg font-bold text-blue-600',
-  ),
-)
+class WContainer extends StatefulWidget {
+  // ... 现有代码
+
+  @override
+  State<WContainer> createState() => _WContainerState();
+}
+
+class _WContainerState extends State<WContainer> {
+  @override
+  void reassemble() {
+    super.reassemble();
+    // 热重载时强制刷新样式
+    if (kDebugMode) {
+      SmartStyleParser.clearCache();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // ... 现有构建代码
+  }
+}
 ```
 
-### 3. 热重载测试
-
-1. 修改 `className` 属性，例如：
-   - 将 `bg-blue-100` 改为 `bg-red-100`
-   - 将 `text-lg` 改为 `text-2xl`
-   - 将 `p-4` 改为 `p-6`
-
-2. 按 **"r"** 键进行热重载
-
-3. 观察样式立即更新！
-
-## 🧪 测试应用
-
-运行测试应用来验证热重载功能：
-
-```bash
-flutter run test_hot_reload.dart -d chrome --web-port=8083
-```
-
-## ✨ 支持的样式类
-
-### 背景颜色
-- `bg-{color}`: bg-white, bg-blue-100, bg-red-500, etc.
-
-### 文字样式
-- `text-{size}`: text-xs, text-sm, text-lg, text-xl, text-2xl
-- `text-{color}`: text-gray-900, text-blue-600, text-red-500
-- `text-{align}`: text-left, text-center, text-right
-- `font-{weight}`: font-normal, font-medium, font-bold
-
-### 间距
-- `p-{size}`: p-1, p-2, p-4, p-6, p-8 (内边距)
-- `m-{size}`: m-1, m-2, m-4, m-6, m-8 (外边距)
-- `px-{size}`, `py-{size}`: 水平/垂直内边距
-- `mx-{size}`, `my-{size}`: 水平/垂直外边距
-
-### 圆角
-- `rounded`: 小圆角
-- `rounded-lg`: 大圆角
-- `rounded-xl`: 超大圆角
-- `rounded-full`: 完全圆形
-
-### 阴影
-- `shadow-sm`: 小阴影
-- `shadow-md`: 中等阴影
-- `shadow-lg`: 大阴影
-- `shadow-xl`: 超大阴影
-
-### 布局
-- `flex`, `flex-row`, `flex-col`: Flex布局
-- `justify-{align}`: justify-start, justify-center, justify-end
-- `items-{align}`: items-start, items-center, items-end
-- `gap-{size}`: 子元素间距
-
-### 尺寸
-- `w-{size}`: 宽度
-- `h-{size}`: 高度
-
-### 响应式设计
-- `sm:`, `md:`, `lg:`, `xl:`, `2xl:` 前缀
-
-## 🎯 性能优化
-
-- **开发时**：每次重新解析，确保热重载正常工作
-- **生产时**：智能缓存，避免重复解析，提升性能
-- **响应式**：根据屏幕尺寸自动应用相应样式
-
-## 🔧 高级功能
-
-### 清空缓存（开发时使用）
+### 方案3：全局热重载监听
+在 `WindConfig` 中添加全局热重载支持：
 
 ```dart
-SmartStyleParser.clearCache();
+class WindConfig {
+  static void initialize() {
+    if (kDebugMode) {
+      // 注册热重载回调
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        SmartStyleParser.clearCache();
+      });
+    }
+  }
+}
 ```
 
-### 自定义颜色
+## 测试步骤
+1. 修改任意组件的 className 属性
+2. 按 "r" 键进行热重载
+3. 检查样式是否立即更新
+4. 如果仍需按 "R" 键才能更新，说明需要进一步优化
 
-在 `WindConfig.initialize()` 中可以自定义颜色：
+## 当前状态
+- ✅ 应用成功启动
+- ✅ 基础功能正常
+- ❌ 热重载样式更新不及时
+- 🔄 需要实施上述解决方案之一
 
-```dart
-WindConfig.initialize(); // 使用默认配置
-```
-
-## 🐛 故障排除
-
-### 热重载不工作？
-
-1. 确保使用了正确的初始化代码
-2. 检查是否在开发模式下运行
-3. 尝试手动清空缓存：`SmartStyleParser.clearCache()`
-
-### 样式不生效？
-
-1. 检查类名拼写是否正确
-2. 确保颜色名称在配置中存在
-3. 查看控制台是否有错误信息
-
-## 📚 更多示例
-
-查看 `example/main.dart` 和 `test_hot_reload.dart` 获取更多使用示例。
-
----
-
-🎉 现在你可以享受流畅的热重载开发体验了！
+## 推荐方案
+建议先实施方案1（强制热重载支持），因为它最简单且影响范围最小。

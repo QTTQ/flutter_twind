@@ -72,6 +72,10 @@ class SmartStyleParser {
     final cacheKey = '$className:$componentType:$screenWidth';
     
     // 生产环境使用缓存，开发环境每次重新解析以支持热重载
+    // if (kDebugMode) {
+    //   print('🔥 DEBUG模式: 重新解析样式 - $className (缓存大小: ${_cache.length})');
+    // }
+    
     if (!kDebugMode && _cache.containsKey(cacheKey)) {
       return Map<String, dynamic>.from(_cache[cacheKey]!);
     }

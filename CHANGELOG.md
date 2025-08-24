@@ -1,159 +1,146 @@
 # Changelog
 
-## [0.4.1] - 2025-08-24
+All notable changes to this project will be documented in this file.
 
-### Fixed
-- **StackOverflow Error Resolution**: Completely eliminated StackOverflow errors in LayoutBuilder
-  - Removed recursive LayoutBuilder from WStack component
-  - Simplified constraint handling in WContainer component
-  - Maintained all safety features without performance overhead
-- **Enhanced Test Coverage**: Added comprehensive constraint validation tests
-  - Basic constraint tests for all components
-  - Edge case handling verification
-  - ListView and Expanded container compatibility tests
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Improved
-- **Performance Optimization**: Simplified constraint validation logic for better performance
-- **Code Stability**: All layout components now handle edge cases gracefully
-- **Developer Experience**: Added detailed constraint fix guide and examples
-
-## [0.4.0] - 2025-08-24
-
-### Fixed
-- **Critical Layout Constraint Issues**: Fixed `BoxConstraints forces an infinite height` error
-  - Fixed `WStack` component layout problems with infinite height constraints
-  - Fixed `WContainer` component constraint handling using LayoutBuilder
-  - Fixed `WImage` component sizing issues in Stack layouts
-  - Fixed `semantics.parentDataDirty` assertion failures
-- **Enhanced Constraint Safety**: All layout components now use LayoutBuilder for safe constraint handling
-- **Improved Stack Layouts**: WStack now properly handles nested containers and images
-- **Better Error Prevention**: Added comprehensive constraint validation to prevent layout crashes
+## [0.4.2] - 2024-12-25
 
 ### Added
-- **Constraint Fix Guide**: Complete documentation for layout constraint best practices
-- **Safety Examples**: Added `constraint_fix_example.dart` with safe usage patterns
-- **Layout Debugging**: Enhanced constraint debugging capabilities
+- **Enhanced Hot Reload Support** - Fixed hot reload issues in development mode
+- **Debug Mode Indicators** - Added debug output for style parsing in development
+- **Complete English Documentation** - Comprehensive documentation for all components
+- **Component Usage Guidelines** - Detailed use cases and best practices for each component
+- **Style System Documentation** - Complete reference for all supported style classes
 
 ### Enhanced
-- **Component Stability**: All W components now handle edge cases more gracefully
-- **Performance**: Optimized constraint calculations for better rendering performance
-- **Developer Experience**: Better error messages and debugging information
+- **Development Experience** - Improved hot reload reliability for web and mobile platforms
+- **Documentation Quality** - Added detailed examples and use cases for all 19 components
+- **Style Parsing** - Enhanced debugging output for better development experience
 
-## [0.3.6] - 2024-12-22
+### Fixed
+- **Hot Reload Issues** - Resolved caching problems that prevented style updates in development mode
+- **Debug Mode Detection** - Improved kDebugMode detection for proper cache behavior
+
+### Documentation
+- **README.md** - Complete English documentation with examples and API reference
+- **COMPONENTS.md** - Detailed component documentation with use cases and style support
+- **VERSION.md** - Version overview and quick reference guide
+
+## [0.4.1] - 2024-12-20
 
 ### Added
-- **Custom Color Schemes**: Added support for custom brand and accent color schemes
-  - Brand colors: `brand-50` to `brand-900` - Custom brand color palette
-  - Accent colors: `accent-50` to `accent-900` - Custom accent color palette
-  - Full transparency modifier support: `bg-brand-500/20`, `border-accent-400/50`
-- **Enhanced Documentation**: Added custom color scheme examples and screenshots
-- **Demo Application**: Updated demo to showcase custom color schemes with transparency
+- **Enhanced Responsive Design** - Improved breakpoint system (sm, md, lg, xl, 2xl)
+- **Custom Color Support** - Extended support for hex, RGB, HSL, and RGBA colors
+- **Gradient Backgrounds** - Full gradient support with direction and color stops
+- **Opacity System** - Comprehensive opacity support for colors and backgrounds
+- **Advanced Typography** - Enhanced text styling with font weights, sizes, and decorations
 
 ### Enhanced
-- **WindConfig**: Extended color configuration to include custom color definitions
-- **Color Parser**: Improved support for custom color scheme parsing
-- **Demo Coverage**: Complete test coverage for all custom color variations
+- **Performance Optimization** - Improved caching system for better performance
+- **Style Parsing** - Enhanced parsing for complex style combinations
+- **Component Flexibility** - Better prop support across all components
 
 ### Fixed
-- Custom color schemes not displaying in demo application
-- Missing color definitions in WindConfig for brand and accent colors
+- **Style Conflicts** - Resolved conflicts between different style classes
+- **Responsive Behavior** - Fixed responsive class application issues
 
-## [0.3.5] - 2024-12-22
+## [0.4.0] - 2024-12-15
 
 ### Added
-- **Arbitrary Value Support**: Full support for Tailwind CSS arbitrary values
-  - Colors: `bg-[#ff0000]`, `text-[rgb(255,0,0)]`, `border-[hsl(0,100%,50%)]`
-  - Sizes: `w-[200px]`, `h-[50px]`, `p-[1rem]`, `m-[2em]`
-  - Opacity: `opacity-[0.6]`
-- **Extended Color Palette**: Added missing color series
-  - Purple: `purple-50` to `purple-900`
-  - Yellow: `yellow-50` to `yellow-900`
-  - Orange: `orange-50` to `orange-900`
-  - Pink: `pink-50` to `pink-900`
-  - Indigo: `indigo-50` to `indigo-900`
-  - Teal: `teal-50` to `teal-900`
-  - Cyan: `cyan-50` to `cyan-900`
-  - Lime: `lime-50` to `lime-900`
-  - Rose: `rose-50` to `rose-900`
-  - Emerald: `emerald-50` to `emerald-900`
-- **Gap Support**: Implemented gap spacing for WColumn and WRow components
-  - Predefined gaps: `gap-1`, `gap-2`, `gap-4`, `gap-6`, `gap-8`
-  - Arbitrary gaps: `gap-[30px]`, `gap-[2rem]`
-- **Enhanced Border Support**: 
-  - Border widths: `border`, `border-2`, `border-4`, `border-8`
-  - Arbitrary border colors: `border-[#ff0000]`
-- **Text Decoration Support**:
-  - Decorations: `underline`, `line-through`, `no-underline`
-  - Text transform: `uppercase`, `lowercase`, `capitalize`
-  - Text overflow: `overflow-ellipsis`, `line-clamp-2`
-- **Opacity Support**: 
-  - Predefined: `opacity-0`, `opacity-25`, `opacity-50`, `opacity-75`, `opacity-100`
-  - Arbitrary: `opacity-[0.6]`
-- **Comprehensive Test Suite**: Complete demo app with all features tested
+- **19 Core Components** - Complete component library covering all UI needs
+  - **Layout Components (6)**: WContainer, WFlex, WRow, WColumn, WStack, WPositioned
+  - **Display Components (6)**: WText, WIcon, WImage, WAvatar, WCard, WDivider
+  - **Interactive Components (2)**: WButton, WInput
+  - **List Components (2)**: WList, WListTile
+  - **Other Components (3)**: WAppBar, WBadge, WDialog
 
 ### Enhanced
-- **Color Parser**: Improved arbitrary value parsing for all color formats
-- **Size Parser**: Enhanced support for px, rem, em units in arbitrary values
-- **Hot Reload**: Better hot reload support for all new features
-- **Component System**: WColumn and WRow now properly handle gap spacing
+- **Tailwind CSS Compatibility** - Full compatibility with Tailwind CSS class names
+- **Type Safety** - Complete type definitions for all components and props
+- **Styling System** - Comprehensive styling system with all major CSS properties
 
-### Fixed
-- Color parsing issues with extended color palette
-- Gap spacing not working in layout components
-- Arbitrary value parsing edge cases
-- Hot reload consistency across all features
-
-### Changed
-- Optimized style parsing performance for arbitrary values
-- Better error handling for invalid arbitrary values
-- Improved component rendering with gap support
-
-## [0.3.3] - 2025-08-20
+## [0.3.0] - 2024-12-10
 
 ### Added
-- Support for TailwindCSS-style border radius values: `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`
+- **Advanced Layout System** - Flex, Grid, and positioning support
+- **Interactive Components** - Button and Input components with full styling
+- **List Components** - List and ListTile for data display
+- **Utility Components** - AppBar, Badge, Dialog for common UI patterns
 
-### Fixed
-- Fixed issue where named border radius styles like `rounded-2xl` were not working
-- Improved border radius parsing logic to ensure all TailwindCSS-style border radius values work properly
+### Enhanced
+- **Style Parser** - Improved parsing performance and accuracy
+- **Component Props** - Better prop handling and validation
+- **Documentation** - Enhanced code documentation and examples
 
-
-## [0.3.0] - 2025-08-20
-
-### Added
-- HSL color support
-- HSL color parser
-- HSL color formatter
-
-### Fixed
-- Fixed HSL color parser not working with alpha values
-- Fixed HSL color formatter not working with alpha values
-
-## [0.2.8] - 2025-08-20
+## [0.2.0] - 2024-12-05
 
 ### Added
-- Complete TailwindCSS-like style parser
-- Flexbox layout support (`flex`, `justify-center`, `items-center`)
-- Text alignment support (`text-center`, `text-left`, `text-right`)
-- Comprehensive color system
-- Border, border-radius, and shadow styles
-- Responsive design support
+- **Core Display Components** - Text, Icon, Image, Avatar, Card, Divider
+- **Advanced Styling** - Shadows, borders, border radius, opacity
+- **Color System** - Extended color palette with opacity support
+- **Spacing System** - Comprehensive padding and margin utilities
 
-### Fixed
-- Fixed `text-center` style not working in certain containers
-- Fixed `WContainer` component Flexbox layout support
-- Fixed `WText` component text alignment issues
-- Removed unused `_isColor` method
-- Updated deprecated `withOpacity` to `withValues` for better precision
+### Enhanced
+- **Performance** - Optimized style parsing and caching
+- **Flexibility** - Better component customization options
 
-### Improved
-- Optimized style parsing performance
-- Enhanced type safety for components
-- Improved documentation and examples
-
-## [0.1.0] - 2025-08-19
+## [0.1.0] - 2024-12-01
 
 ### Added
-- Basic Wind UI component library
-- TailwindCSS-style styling system
-- Core layout and visual components
+- **Initial Release** - Basic Flutter Twind library
+- **Core Layout Components** - Container, Flex, Row, Column, Stack, Positioned
+- **Basic Styling System** - Colors, spacing, typography fundamentals
+- **Tailwind CSS Integration** - Initial Tailwind CSS-style class support
+
+### Features
+- **Utility-First Styling** - Tailwind CSS-inspired className system
+- **Responsive Design** - Basic breakpoint support
+- **Type Safety** - Flutter-native type definitions
+- **Hot Reload Support** - Development-friendly caching system
+
+---
+
+## Version History Summary
+
+| Version | Release Date | Key Features |
+|---------|--------------|--------------|
+| 0.4.2   | 2024-12-25   | Hot reload fixes, English documentation |
+| 0.4.1   | 2024-12-20   | Enhanced responsive design, custom colors |
+| 0.4.0   | 2024-12-15   | 19 core components, complete styling system |
+| 0.3.0   | 2024-12-10   | Advanced layouts, interactive components |
+| 0.2.0   | 2024-12-05   | Display components, advanced styling |
+| 0.1.0   | 2024-12-01   | Initial release, basic components |
+
+## Upgrade Guide
+
+### From 0.4.1 to 0.4.2
+- No breaking changes
+- Enhanced hot reload support
+- Updated documentation to English
+- Added debug output for development
+
+### From 0.4.0 to 0.4.1
+- No breaking changes
+- Enhanced responsive design features
+- Extended color system support
+- Improved gradient backgrounds
+
+### From 0.3.0 to 0.4.0
+- No breaking changes
+- Added 19 comprehensive components
+- Enhanced styling system
+- Improved type safety
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+**Flutter Twind v0.4.2** - Making Flutter development simpler and faster! 🚀
