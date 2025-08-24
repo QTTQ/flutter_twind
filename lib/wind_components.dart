@@ -190,6 +190,38 @@ class WContainer extends StatelessWidget {
       }
     }
 
+    // 构建约束条件
+    BoxConstraints? finalConstraints = constraints;
+    if (parsedStyles['minWidth'] != null || parsedStyles['maxWidth'] != null ||
+        parsedStyles['minHeight'] != null || parsedStyles['maxHeight'] != null) {
+      
+      // 确保约束值在合理范围内，避免溢出
+      double minWidth = parsedStyles['minWidth'] ?? 0.0;
+      double maxWidth = parsedStyles['maxWidth'] ?? double.infinity;
+      double minHeight = parsedStyles['minHeight'] ?? 0.0;
+      double maxHeight = parsedStyles['maxHeight'] ?? double.infinity;
+      
+      // 限制最大值以防止溢出
+      if (maxWidth != double.infinity && maxWidth > 2000) {
+        maxWidth = 2000;
+      }
+      if (maxHeight != double.infinity && maxHeight > 2000) {
+        maxHeight = 2000;
+      }
+      
+      finalConstraints = BoxConstraints(
+        minWidth: minWidth,
+        maxWidth: maxWidth,
+        minHeight: minHeight,
+        maxHeight: maxHeight,
+      );
+      
+      // 如果已有constraints，则合并
+      if (constraints != null) {
+        finalConstraints = finalConstraints.enforce(constraints!);
+      }
+    }
+
     return Container(
       width: width ?? parsedStyles['width'],
       height: height ?? parsedStyles['height'],
@@ -197,7 +229,7 @@ class WContainer extends StatelessWidget {
       margin: margin ?? parsedStyles['margin'],
       alignment: alignment ?? parsedStyles['alignment'],
       clipBehavior: clipBehavior,
-      constraints: constraints,
+      constraints: finalConstraints,
       transform: transform,
       transformAlignment: transformAlignment,
       foregroundDecoration: foregroundDecoration,
@@ -321,15 +353,20 @@ class WRow extends StatelessWidget {
       }
     }
 
+    // 当有gap时，使用MainAxisSize.min来避免溢出
+    final effectiveMainAxisSize = (gap != null && gap > 0) ? MainAxisSize.min : mainAxisSize;
+    
     Widget rowWidget = Row(
       mainAxisAlignment: parsedStyles['mainAxisAlignment'] ?? mainAxisAlignment,
       crossAxisAlignment: parsedStyles['crossAxisAlignment'] ?? crossAxisAlignment,
-      mainAxisSize: mainAxisSize,
+      mainAxisSize: effectiveMainAxisSize,
       textDirection: textDirection,
       verticalDirection: verticalDirection,
       textBaseline: textBaseline,
       children: gappedChildren,
     );
+    
+    // 移除自动添加SingleChildScrollView的逻辑，让开发者自己控制
 
     if (padding != null ||
         margin != null ||
@@ -405,6 +442,8 @@ class WColumn extends StatelessWidget {
       textBaseline: textBaseline,
       children: gappedChildren,
     );
+    
+    // 移除自动添加SingleChildScrollView的逻辑，让开发者自己控制
 
     if (padding != null ||
         margin != null ||

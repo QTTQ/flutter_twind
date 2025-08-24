@@ -79,22 +79,30 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     className: 'text-gray-600 font-medium',
                   ),
                 ),
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    Expanded(
-                      child: WContainer(
-                        className: 'h-16 bg-red-100 rounded-lg flex justify-center items-center',
-                        child: const WText('Row Item 1', className: 'text-red-600'),
-                      ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: WContainer(
+                            className: 'h-16 bg-red-100 rounded-lg flex justify-center items-center',
+                            child: const WText('Row Item 1', className: 'text-red-600'),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        SizedBox(
+                          width: 150,
+                          child: WContainer(
+                            className: 'h-16 bg-green-100 rounded-lg flex justify-center items-center',
+                            child: const WText('Row Item 2', className: 'text-green-600'),
+                          ),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: WContainer(
-                        className: 'h-16 bg-green-100 rounded-lg flex justify-center items-center',
-                        child: const WText('Row Item 2', className: 'text-green-600'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -122,28 +130,34 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
             _buildSection(
               'Interactive Components',
               [
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    WButton(
-                      text: 'Primary Button',
-                      className: 'bg-blue-600 text-white px-6 py-3 rounded-lg',
-                      onPressed: () {
-                        setState(() {
-                          _counter++;
-                        });
-                      },
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WButton(
+                          text: 'Primary Button',
+                          className: 'bg-blue-600 text-white px-6 py-3 rounded-lg',
+                          onPressed: () {
+                            setState(() {
+                              _counter++;
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 16),
+                        WButton(
+                          text: 'Secondary',
+                          className: 'bg-gray-200 text-gray-700 px-6 py-3 rounded-lg',
+                          onPressed: () {
+                            setState(() {
+                              _counter--;
+                            });
+                          },
+                        ),
+                      ],
                     ),
-                    WButton(
-                      text: 'Secondary',
-                      className: 'bg-gray-200 text-gray-700 px-6 py-3 rounded-lg',
-                      onPressed: () {
-                        setState(() {
-                          _counter--;
-                        });
-                      },
-                    ),
-                  ],
+                  ),
                 ),
                 WContainer(
                   className: 'p-4 bg-gray-50 rounded-lg',
@@ -178,26 +192,34 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
             _buildSection(
               'Visual Components',
               [
-                WRow(
-                  className: 'gap-4 items-center',
-                  children: [
-                    WBadge(
-                      count: _counter,
-                      className: 'bg-red-500',
-                      child: const WAvatar(
-                        className: 'bg-blue-500',
-                        child: WIcon(Icons.person, className: 'text-white'),
-                      ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        WBadge(
+                          count: _counter,
+                          className: 'bg-red-500',
+                          child: const WAvatar(
+                            className: 'bg-blue-500',
+                            child: WIcon(Icons.person, className: 'text-white'),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        const WAvatar(
+                          className: 'bg-green-500',
+                          child: WText('A', className: 'text-white font-bold'),
+                        ),
+                        const SizedBox(width: 16),
+                        const WAvatar(
+                          className: 'bg-purple-500',
+                          child: WIcon(Icons.star, className: 'text-white'),
+                        ),
+                      ],
                     ),
-                    const WAvatar(
-                      className: 'bg-green-500',
-                      child: WText('A', className: 'text-white font-bold'),
-                    ),
-                    const WAvatar(
-                      className: 'bg-purple-500',
-                      child: WIcon(Icons.star, className: 'text-white'),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),

@@ -63,8 +63,9 @@ WContainer(className: 'opacity-[0.6] bg-red-500')
 
 ## 🎯 Extended Color Palette
 
-Flutter Twind now supports **14 complete color series**:
+Flutter Twind now supports **16 complete color series**, including custom color schemes:
 
+### Standard Color Series
 - **Primary**: `primary-50` to `primary-900`
 - **Blue**: `blue-50` to `blue-900`  
 - **Red**: `red-50` to `red-900`
@@ -81,6 +82,26 @@ Flutter Twind now supports **14 complete color series**:
 - **Emerald**: `emerald-50` to `emerald-900` ✨
 - **Gray**: `gray-50` to `gray-900`
 
+### Custom Color Schemes ✨ NEW
+- **Brand**: `brand-50` to `brand-900` - Custom brand colors
+- **Accent**: `accent-50` to `accent-900` - Custom accent colors
+
+```dart
+// Using custom brand colors
+WContainer(className: 'bg-brand-500 text-white')
+WContainer(className: 'bg-brand-100 border-brand-300')
+
+// Using custom accent colors
+WContainer(className: 'bg-accent-600 text-white')
+WContainer(className: 'bg-accent-50 text-accent-800')
+
+// With transparency modifiers
+WContainer(className: 'bg-brand-500/20 border-accent-400/50')
+```
+
+![Custom Color Schemes Demo](https://github.com/user-attachments/assets/custom-colors-demo.png)
+*Custom brand and accent color schemes with transparency support*
+
 ## 📦 Quick Start
 
 ### Installation
@@ -89,7 +110,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_twind: ^0.3.5
+  flutter_twind: ^0.3.6
 ```
 
 ### Basic Usage

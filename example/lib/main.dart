@@ -98,209 +98,158 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                 const WText('🆕 透明度修饰符测试 (NEW!)',
                     className: 'font-bold mb-4 text-purple-600'),
                 const WText('基础颜色 + 透明度', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-yellow/10 border', 'yellow/10'),
-                    _colorBox('bg-yellow/30 border', 'yellow/30'),
-                    _colorBox('bg-yellow/50 border', 'yellow/50'),
-                    _colorBox('bg-yellow/70 border', 'yellow/70'),
-                    _colorBox('bg-yellow/90 border', 'yellow/90'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-yellow/10 border', 'yellow/10'),
+                  _colorBox('bg-yellow/30 border', 'yellow/30'),
+                  _colorBox('bg-yellow/50 border', 'yellow/50'),
+                  _colorBox('bg-yellow/70 border', 'yellow/70'),
+                  _colorBox('bg-yellow/90 border', 'yellow/90'),
+                ]),
                 const SizedBox(height: 8),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-black/10', 'black/10'),
-                    _colorBox('bg-black/30', 'black/30'),
-                    _colorBox('bg-black/50', 'black/50'),
-                    _colorBox('bg-black/70', 'black/70'),
-                    _colorBox('bg-black/90', 'black/90'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-black/10', 'black/10'),
+                  _colorBox('bg-black/30', 'black/30'),
+                  _colorBox('bg-black/50', 'black/50'),
+                  _colorBox('bg-black/70', 'black/70'),
+                  _colorBox('bg-black/90', 'black/90'),
+                ]),
                 const SizedBox(height: 8),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-red-500/20', 'red-500/20'),
-                    _colorBox('bg-blue-500/40', 'blue-500/40'),
-                    _colorBox('bg-green-500/60', 'green-500/60'),
-                    _colorBox('bg-purple-500/80', 'purple-500/80'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-red-500/20', 'red-500/20'),
+                  _colorBox('bg-blue-500/40', 'blue-500/40'),
+                  _colorBox('bg-green-500/60', 'green-500/60'),
+                  _colorBox('bg-purple-500/80', 'purple-500/80'),
+                ]),
                 const SizedBox(height: 16),
                 const WText('🆕 自定义色系测试 (NEW!)',
                     className: 'font-bold mb-4 text-purple-600'),
                 const WText('Brand 色系', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-brand-100', 'brand-100'),
-                    _colorBox('bg-brand-300', 'brand-300'),
-                    _colorBox('bg-brand-500', 'brand-500'),
-                    _colorBox('bg-brand-700', 'brand-700'),
-                    _colorBox('bg-brand-900', 'brand-900'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-brand-100', 'brand-100'),
+                  _colorBox('bg-brand-300', 'brand-300'),
+                  _colorBox('bg-brand-500', 'brand-500'),
+                  _colorBox('bg-brand-700', 'brand-700'),
+                  _colorBox('bg-brand-900', 'brand-900'),
+                ]),
                 const SizedBox(height: 8),
                 const WText('Accent 色系', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-accent-100', 'accent-100'),
-                    _colorBox('bg-accent-300', 'accent-300'),
-                    _colorBox('bg-accent-500', 'accent-500'),
-                    _colorBox('bg-accent-700', 'accent-700'),
-                    _colorBox('bg-accent-900', 'accent-900'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-accent-100', 'accent-100'),
+                  _colorBox('bg-accent-300', 'accent-300'),
+                  _colorBox('bg-accent-500', 'accent-500'),
+                  _colorBox('bg-accent-700', 'accent-700'),
+                  _colorBox('bg-accent-900', 'accent-900'),
+                ]),
                 const SizedBox(height: 8),
                 const WText('自定义色系 + 透明度', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-brand-500/20', 'brand-500/20'),
-                    _colorBox('bg-brand-500/50', 'brand-500/50'),
-                    _colorBox('bg-accent-500/30', 'accent-500/30'),
-                    _colorBox('bg-accent-500/70', 'accent-500/70'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-brand-500/20', 'brand-500/20'),
+                  _colorBox('bg-brand-500/50', 'brand-500/50'),
+                  _colorBox('bg-accent-500/30', 'accent-500/30'),
+                  _colorBox('bg-accent-500/70', 'accent-500/70'),
+                ]),
                 const SizedBox(height: 16),
                 const WText('主色系 (Primary)', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-primary-100', 'primary-100'),
-                    _colorBox('bg-primary-300', 'primary-300'),
-                    _colorBox('bg-primary-500', 'primary-500'),
-                    _colorBox('bg-primary-700', 'primary-700'),
-                    _colorBox('bg-primary-900', 'primary-900'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-primary-100', 'primary-100'),
+                  _colorBox('bg-primary-300', 'primary-300'),
+                  _colorBox('bg-primary-500', 'primary-500'),
+                  _colorBox('bg-primary-700', 'primary-700'),
+                  _colorBox('bg-primary-900', 'primary-900'),
+                ]),
                 const SizedBox(height: 12),
                 const WText('蓝色系 (Blue)', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-blue-100', 'blue-100'),
-                    _colorBox('bg-blue-300', 'blue-300'),
-                    _colorBox('bg-blue-500', 'blue-500'),
-                    _colorBox('bg-blue-700', 'blue-700'),
-                    _colorBox('bg-blue-900', 'blue-900'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-blue-100', 'blue-100'),
+                  _colorBox('bg-blue-300', 'blue-300'),
+                  _colorBox('bg-blue-500', 'blue-500'),
+                  _colorBox('bg-blue-700', 'blue-700'),
+                  _colorBox('bg-blue-900', 'blue-900'),
+                ]),
                 const SizedBox(height: 12),
                 const WText('红色系 (Red)', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-red-100', 'red-100'),
-                    _colorBox('bg-red-300', 'red-300'),
-                    _colorBox('bg-red-500', 'red-500'),
-                    _colorBox('bg-red-700', 'red-700'),
-                    _colorBox('bg-red-900', 'red-900'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-red-100', 'red-100'),
+                  _colorBox('bg-red-300', 'red-300'),
+                  _colorBox('bg-red-500', 'red-500'),
+                  _colorBox('bg-red-700', 'red-700'),
+                  _colorBox('bg-red-900', 'red-900'),
+                ]),
                 const SizedBox(height: 12),
                 const WText('绿色系 (Green)', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-green-100', 'green-100'),
-                    _colorBox('bg-green-300', 'green-300'),
-                    _colorBox('bg-green-500', 'green-500'),
-                    _colorBox('bg-green-700', 'green-700'),
-                    _colorBox('bg-green-900', 'green-900'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-green-100', 'green-100'),
+                  _colorBox('bg-green-300', 'green-300'),
+                  _colorBox('bg-green-500', 'green-500'),
+                  _colorBox('bg-green-700', 'green-700'),
+                  _colorBox('bg-green-900', 'green-900'),
+                ]),
                 const SizedBox(height: 12),
                 const WText('灰色系 (Gray)', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-gray-100', 'gray-100'),
-                    _colorBox('bg-gray-300', 'gray-300'),
-                    _colorBox('bg-gray-500', 'gray-500'),
-                    _colorBox('bg-gray-700', 'gray-700'),
-                    _colorBox('bg-gray-900', 'gray-900'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-gray-100', 'gray-100'),
+                  _colorBox('bg-gray-300', 'gray-300'),
+                  _colorBox('bg-gray-500', 'gray-500'),
+                  _colorBox('bg-gray-700', 'gray-700'),
+                  _colorBox('bg-gray-900', 'gray-900'),
+                ]),
                 const SizedBox(height: 12),
                 const WText('基础颜色', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-white border', 'white'),
-                    _colorBox('bg-black', 'black'),
-                    _colorBox('bg-transparent border', 'transparent'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-white border', 'white'),
+                  _colorBox('bg-black', 'black'),
+                  _colorBox('bg-transparent border', 'transparent'),
+                ]),
                 const SizedBox(height: 16),
                 const WText('任意值颜色 (Arbitrary Values)',
                     className: 'font-semibold mb-2 text-purple-600'),
                 const WText('十六进制颜色',
                     className: 'text-sm font-medium mb-2 text-gray-600'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-[#00ff00]', '#00ff00'),
-                    _colorBox('bg-[#4ecdc4]', '#4ecdc4'),
-                    _colorBox('bg-[#45b7d1]', '#45b7d1'),
-                    _colorBox('bg-[#f9ca24]', '#f9ca24'),
-                    _colorBox('bg-[#6c5ce7]', '#6c5ce7'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-[#00ff00]', '#00ff00'),
+                  _colorBox('bg-[#4ecdc4]', '#4ecdc4'),
+                  _colorBox('bg-[#45b7d1]', '#45b7d1'),
+                  _colorBox('bg-[#f9ca24]', '#f9ca24'),
+                  _colorBox('bg-[#6c5ce7]', '#6c5ce7'),
+                ]),
                 const SizedBox(height: 8),
                 const WText('RGB 颜色',
                     className: 'text-sm font-medium mb-2 text-gray-600'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-[rgb(255,107,107)]', 'rgb(255,107,107)'),
-                    _colorBox('bg-[rgb(78,205,196)]', 'rgb(78,205,196)'),
-                    _colorBox('bg-[rgb(69,183,209)]', 'rgb(69,183,209)'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-[rgb(255,107,107)]', 'rgb(255,107,107)'),
+                  _colorBox('bg-[rgb(78,205,196)]', 'rgb(78,205,196)'),
+                  _colorBox('bg-[rgb(69,183,209)]', 'rgb(69,183,209)'),
+                ]),
                 const SizedBox(height: 8),
                 const WText('RGBA 半透明颜色',
                     className: 'text-sm font-medium mb-2 text-gray-600'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-[rgba(255,107,107,0.5)] border',
-                        'rgba(255,107,107,0.5)'),
-                    _colorBox('bg-[rgba(78,205,196,0.7)] border',
-                        'rgba(78,205,196,0.7)'),
-                    _colorBox('bg-[rgba(108,92,231,0.3)] border',
-                        'rgba(108,92,231,0.3)'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-[rgba(255,107,107,0.5)] border',
+                      'rgba(255,107,107,0.5)'),
+                  _colorBox('bg-[rgba(78,205,196,0.7)] border',
+                      'rgba(78,205,196,0.7)'),
+                  _colorBox('bg-[rgba(108,92,231,0.3)] border',
+                      'rgba(108,92,231,0.3)'),
+                ]),
                 const SizedBox(height: 8),
                 const WText('HSL 颜色',
                     className: 'text-sm font-medium mb-2 text-gray-600'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-[hsl(348,100%,61%)]', 'hsl(348,100%,61%)'),
-                    _colorBox('bg-[hsl(174,64%,55%)]', 'hsl(174,64%,55%)'),
-                    _colorBox('bg-[hsl(258,89%,66%)]', 'hsl(258,89%,66%)'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-[hsl(348,100%,61%)]', 'hsl(348,100%,61%)'),
+                  _colorBox('bg-[hsl(174,64%,55%)]', 'hsl(174,64%,55%)'),
+                  _colorBox('bg-[hsl(258,89%,66%)]', 'hsl(258,89%,66%)'),
+                ]),
                 const SizedBox(height: 8),
                 const WText('HSLA 半透明颜色',
                     className: 'text-sm font-medium mb-2 text-gray-600'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    _colorBox('bg-[hsla(348,100%,61%,0.6)] border',
-                        'hsla(348,100%,61%,0.6)'),
-                    _colorBox('bg-[hsla(174,64%,55%,0.8)] border',
-                        'hsla(174,64%,55%,0.8)'),
-                    _colorBox('bg-[hsla(258,89%,66%,0.4)] border',
-                        'hsla(258,89%,66%,0.4)'),
-                  ],
-                ),
+                _scrollableColorRow([
+                  _colorBox('bg-[hsla(348,100%,61%,0.6)] border',
+                      'hsla(348,100%,61%,0.6)'),
+                  _colorBox('bg-[hsla(174,64%,55%,0.8)] border',
+                      'hsla(174,64%,55%,0.8)'),
+                  _colorBox('bg-[hsla(258,89%,66%,0.4)] border',
+                      'hsla(258,89%,66%,0.4)'),
+                ]),
               ],
             ),
 
@@ -412,22 +361,19 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                 ),
                 const SizedBox(height: 12),
                 const WText('WRow 行布局', className: 'font-semibold mb-2'),
-                WRow(
-                  className: 'gap-4',
+                Wrap(
+                  spacing: 16.0,
+                  runSpacing: 8.0,
                   children: [
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-3 bg-red-100 rounded',
-                        child: const WText('Item 1',
-                            className: 'text-red-700 text-center'),
-                      ),
+                    WContainer(
+                      className: 'p-3 bg-red-100 rounded px-6',
+                      child: const WText('Item 1',
+                          className: 'text-red-700 text-center'),
                     ),
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-3 bg-green-100 rounded',
-                        child: const WText('Item 2',
-                            className: 'text-green-700 text-center'),
-                      ),
+                    WContainer(
+                      className: 'p-3 bg-green-100 rounded px-6',
+                      child: const WText('Item 2',
+                          className: 'text-green-700 text-center'),
                     ),
                   ],
                 ),
@@ -573,41 +519,43 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                 const WText('预定义 Gap 间距',
                     className: 'font-semibold mb-4 text-purple-600'),
                 const WText('gap-2 (8px)', className: 'font-medium mb-2'),
-                WRow(
-                  className: 'gap-2',
+                Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
                   children: [
                     WContainer(
-                      className: 'p-3 bg-blue-200 rounded',
-                      child: const WText('Item 1', className: 'text-blue-800'),
+                      className: 'p-3 bg-blue-200 rounded px-3',
+                      child: const WText('Item 1', className: 'text-blue-800 text-xs'),
                     ),
                     WContainer(
-                      className: 'p-3 bg-green-200 rounded',
-                      child: const WText('Item 2', className: 'text-green-800'),
+                      className: 'p-3 bg-green-200 rounded px-3',
+                      child: const WText('Item 2', className: 'text-green-800 text-xs'),
                     ),
                     WContainer(
-                      className: 'p-3 bg-red-200 rounded',
-                      child: const WText('Item 3', className: 'text-red-800'),
+                      className: 'p-3 bg-red-200 rounded px-3',
+                      child: const WText('Item 3', className: 'text-red-800 text-xs'),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
                 const WText('gap-4 (16px)', className: 'font-medium mb-2'),
-                WRow(
-                  className: 'gap-4',
+                Wrap(
+                  spacing: 16.0,
+                  runSpacing: 8.0,
                   children: [
                     WContainer(
-                      className: 'p-3 bg-purple-200 rounded',
+                      className: 'p-3 bg-purple-200 rounded px-3',
                       child:
-                          const WText('Item A', className: 'text-purple-800'),
+                          const WText('Item A', className: 'text-purple-800 text-xs'),
                     ),
                     WContainer(
-                      className: 'p-3 bg-yellow-200 rounded',
+                      className: 'p-3 bg-yellow-200 rounded px-3',
                       child:
-                          const WText('Item B', className: 'text-yellow-800'),
+                          const WText('Item B', className: 'text-yellow-800 text-xs'),
                     ),
                     WContainer(
-                      className: 'p-3 bg-pink-200 rounded',
-                      child: const WText('Item C', className: 'text-pink-800'),
+                      className: 'p-3 bg-pink-200 rounded px-3',
+                      child: const WText('Item C', className: 'text-pink-800 text-xs'),
                     ),
                   ],
                 ),
@@ -639,38 +587,50 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                     className: 'font-semibold mb-4 text-purple-600'),
                 const WText('gap-[30px] - 任意值间距',
                     className: 'font-medium mb-2'),
-                WRow(
-                  className: 'gap-[30px]',
-                  children: [
-                    WContainer(
-                      className: 'p-3 bg-cyan-200 rounded',
-                      child:
-                          const WText('30px Gap', className: 'text-cyan-800'),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WContainer(
+                          className: 'p-3 bg-cyan-200 rounded px-4',
+                          child:
+                              const WText('30px Gap', className: 'text-cyan-800 text-xs'),
+                        ),
+                        const SizedBox(width: 30),
+                        WContainer(
+                          className: 'p-3 bg-lime-200 rounded px-4',
+                          child:
+                              const WText('30px Gap', className: 'text-lime-800 text-xs'),
+                        ),
+                      ],
                     ),
-                    WContainer(
-                      className: 'p-3 bg-lime-200 rounded',
-                      child:
-                          const WText('30px Gap', className: 'text-lime-800'),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 12),
                 const WText('gap-[2rem] - rem单位间距',
                     className: 'font-medium mb-2'),
-                WRow(
-                  className: 'gap-[2rem]',
-                  children: [
-                    WContainer(
-                      className: 'p-3 bg-rose-200 rounded',
-                      child:
-                          const WText('2rem Gap', className: 'text-rose-800'),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WContainer(
+                          className: 'p-3 bg-rose-200 rounded px-4',
+                          child:
+                              const WText('2rem Gap', className: 'text-rose-800 text-xs'),
+                        ),
+                        const SizedBox(width: 32), // 2rem = 32px
+                        WContainer(
+                          className: 'p-3 bg-emerald-200 rounded px-4',
+                          child: const WText('2rem Gap',
+                              className: 'text-emerald-800 text-xs'),
+                        ),
+                      ],
                     ),
-                    WContainer(
-                      className: 'p-3 bg-emerald-200 rounded',
-                      child: const WText('2rem Gap',
-                          className: 'text-emerald-800'),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -679,44 +639,48 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '🔘 圆角测试',
               [
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-3 bg-blue-200 rounded-sm',
-                        child: const WText('rounded-sm',
-                            className: 'text-blue-800 text-center text-sm'),
-                      ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WContainer(
+                          className: 'p-3 bg-blue-200 rounded-sm px-4',
+                          child: const WText('rounded-sm',
+                              className: 'text-blue-800 text-center text-sm'),
+                        ),
+                        const SizedBox(width: 16),
+                        WContainer(
+                          className: 'p-3 bg-green-200 rounded-md px-4',
+                          child: const WText('rounded-md',
+                              className: 'text-green-800 text-center text-sm'),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-3 bg-green-200 rounded-md',
-                        child: const WText('rounded-md',
-                            className: 'text-green-800 text-center text-sm'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 8),
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-3 bg-red-200 rounded-lg',
-                        child: const WText('rounded-lg',
-                            className: 'text-red-800 text-center text-sm'),
-                      ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WContainer(
+                          className: 'p-3 bg-red-200 rounded-lg px-4',
+                          child: const WText('rounded-lg',
+                              className: 'text-red-800 text-center text-sm'),
+                        ),
+                        const SizedBox(width: 16),
+                        WContainer(
+                          className: 'p-3 bg-purple-200 rounded-xl px-4',
+                          child: const WText('rounded-xl',
+                              className: 'text-purple-800 text-center text-sm'),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-3 bg-purple-200 rounded-xl',
-                        child: const WText('rounded-xl',
-                            className: 'text-purple-800 text-center text-sm'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 8),
                 WContainer(
@@ -731,44 +695,48 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '🌫️ 阴影测试',
               [
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-4 bg-white shadow-sm rounded-lg',
-                        child: const WText('shadow-sm',
-                            className: 'text-gray-700 text-center'),
-                      ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WContainer(
+                          className: 'p-4 bg-white shadow-sm rounded-lg px-6',
+                          child: const WText('shadow-sm',
+                              className: 'text-gray-700 text-center'),
+                        ),
+                        const SizedBox(width: 16),
+                        WContainer(
+                          className: 'p-4 bg-white shadow-md rounded-lg px-6',
+                          child: const WText('shadow-md',
+                              className: 'text-gray-700 text-center'),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-4 bg-white shadow-md rounded-lg',
-                        child: const WText('shadow-md',
-                            className: 'text-gray-700 text-center'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 12),
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-4 bg-white shadow-lg rounded-lg',
-                        child: const WText('shadow-lg',
-                            className: 'text-gray-700 text-center'),
-                      ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WContainer(
+                          className: 'p-4 bg-white shadow-lg rounded-lg px-6',
+                          child: const WText('shadow-lg',
+                              className: 'text-gray-700 text-center'),
+                        ),
+                        const SizedBox(width: 16),
+                        WContainer(
+                          className: 'p-4 bg-white shadow-xl rounded-lg px-6',
+                          child: const WText('shadow-xl',
+                              className: 'text-gray-700 text-center'),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: WContainer(
-                        className: 'p-4 bg-white shadow-xl rounded-lg',
-                        child: const WText('shadow-xl',
-                            className: 'text-gray-700 text-center'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -777,26 +745,42 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '🎯 图标测试',
               [
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    const WIcon(Icons.home, className: 'text-blue-500'),
-                    const WIcon(Icons.star, className: 'text-yellow-500'),
-                    const WIcon(Icons.favorite, className: 'text-red-500'),
-                    const WIcon(Icons.settings, className: 'text-gray-500'),
-                    const WIcon(Icons.person, className: 'text-green-500'),
-                  ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const WIcon(Icons.home, className: 'text-blue-500'),
+                        const SizedBox(width: 16),
+                        const WIcon(Icons.star, className: 'text-yellow-500'),
+                        const SizedBox(width: 16),
+                        const WIcon(Icons.favorite, className: 'text-red-500'),
+                        const SizedBox(width: 16),
+                        const WIcon(Icons.settings, className: 'text-gray-500'),
+                        const SizedBox(width: 16),
+                        const WIcon(Icons.person, className: 'text-green-500'),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 8),
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    const WIcon(Icons.home, className: 'text-lg text-blue-600'),
-                    const WIcon(Icons.star,
-                        className: 'text-xl text-yellow-600'),
-                    const WIcon(Icons.favorite,
-                        className: 'text-2xl text-red-600'),
-                  ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const WIcon(Icons.home, className: 'text-lg text-blue-600'),
+                        const SizedBox(width: 16),
+                        const WIcon(Icons.star,
+                            className: 'text-xl text-yellow-600'),
+                        const SizedBox(width: 16),
+                        const WIcon(Icons.favorite,
+                            className: 'text-2xl text-red-600'),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -805,26 +789,34 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '👤 头像测试',
               [
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    const WAvatar(
-                      className: 'bg-blue-500',
-                      child: WText('A', className: 'text-white font-bold'),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const WAvatar(
+                          className: 'bg-blue-500',
+                          child: WText('A', className: 'text-white font-bold'),
+                        ),
+                        const SizedBox(width: 16),
+                        const WAvatar(
+                          className: 'bg-green-500',
+                          child: WIcon(Icons.person, className: 'text-white'),
+                        ),
+                        const SizedBox(width: 16),
+                        const WAvatar(
+                          className: 'bg-red-500',
+                          child: WText('B', className: 'text-white font-bold'),
+                        ),
+                        const SizedBox(width: 16),
+                        const WAvatar(
+                          className: 'bg-purple-500',
+                          child: WIcon(Icons.star, className: 'text-white'),
+                        ),
+                      ],
                     ),
-                    const WAvatar(
-                      className: 'bg-green-500',
-                      child: WIcon(Icons.person, className: 'text-white'),
-                    ),
-                    const WAvatar(
-                      className: 'bg-red-500',
-                      child: WText('B', className: 'text-white font-bold'),
-                    ),
-                    const WAvatar(
-                      className: 'bg-purple-500',
-                      child: WIcon(Icons.star, className: 'text-white'),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -833,45 +825,57 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '🔘 按钮测试',
               [
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    WButton(
-                      text: '主要按钮',
-                      className: 'bg-blue-600 text-white px-4 py-2 rounded-lg',
-                      onPressed: () {
-                        setState(() {
-                          _counter++;
-                        });
-                      },
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WButton(
+                          text: '主要按钮',
+                          className: 'bg-blue-600 text-white px-4 py-2 rounded-lg',
+                          onPressed: () {
+                            setState(() {
+                              _counter++;
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 16),
+                        WButton(
+                          text: '次要按钮',
+                          className:
+                              'bg-gray-200 text-gray-700 px-4 py-2 rounded-lg',
+                          onPressed: () {
+                            setState(() {
+                              _counter--;
+                            });
+                          },
+                        ),
+                      ],
                     ),
-                    WButton(
-                      text: '次要按钮',
-                      className:
-                          'bg-gray-200 text-gray-700 px-4 py-2 rounded-lg',
-                      onPressed: () {
-                        setState(() {
-                          _counter--;
-                        });
-                      },
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 8),
-                WRow(
-                  className: 'gap-4',
-                  children: [
-                    WButton(
-                      text: '成功按钮',
-                      className: 'bg-green-600 text-white px-4 py-2 rounded-lg',
-                      onPressed: () {},
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WButton(
+                          text: '成功按钮',
+                          className: 'bg-green-600 text-white px-4 py-2 rounded-lg',
+                          onPressed: () {},
+                        ),
+                        const SizedBox(width: 16),
+                        WButton(
+                          text: '危险按钮',
+                          className: 'bg-red-600 text-white px-4 py-2 rounded-lg',
+                          onPressed: () {},
+                        ),
+                      ],
                     ),
-                    WButton(
-                      text: '危险按钮',
-                      className: 'bg-red-600 text-white px-4 py-2 rounded-lg',
-                      onPressed: () {},
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 8),
                 WContainer(
@@ -908,28 +912,35 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
             _buildSection(
               '🏷️ 徽章测试',
               [
-                WRow(
-                  className: 'gap-6',
-                  children: [
-                    WBadge(
-                      count: _counter,
-                      className: 'bg-red-500',
-                      child: const WIcon(Icons.notifications,
-                          className: 'text-gray-600'),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WBadge(
+                          count: _counter,
+                          className: 'bg-red-500',
+                          child: const WIcon(Icons.notifications,
+                              className: 'text-gray-600'),
+                        ),
+                        const SizedBox(width: 24),
+                        WBadge(
+                          count: 5,
+                          className: 'bg-blue-500',
+                          child: const WIcon(Icons.message,
+                              className: 'text-gray-600'),
+                        ),
+                        const SizedBox(width: 24),
+                        WBadge(
+                          text: 'NEW',
+                          className: 'bg-green-500',
+                          child:
+                              const WIcon(Icons.star, className: 'text-gray-600'),
+                        ),
+                      ],
                     ),
-                    WBadge(
-                      count: 5,
-                      className: 'bg-blue-500',
-                      child: const WIcon(Icons.message,
-                          className: 'text-gray-600'),
-                    ),
-                    WBadge(
-                      text: 'NEW',
-                      className: 'bg-green-500',
-                      child:
-                          const WIcon(Icons.star, className: 'text-gray-600'),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -1075,30 +1086,38 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
               [
                 const WText('透明度变化',
                     className: 'font-semibold mb-4 text-purple-600'),
-                WRow(
-                  className: 'gap-2',
-                  children: [
-                    WContainer(
-                      className: 'p-3 bg-blue-500 opacity-100 rounded',
-                      child: const WText('100%',
-                          className: 'text-white text-center'),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WContainer(
+                          className: 'p-3 bg-blue-500 opacity-100 rounded px-3',
+                          child: const WText('100%',
+                              className: 'text-white text-center text-xs'),
+                        ),
+                        const SizedBox(width: 8),
+                        WContainer(
+                          className: 'p-3 bg-blue-500 opacity-75 rounded px-3',
+                          child: const WText('75%',
+                              className: 'text-white text-center text-xs'),
+                        ),
+                        const SizedBox(width: 8),
+                        WContainer(
+                          className: 'p-3 bg-blue-500 opacity-50 rounded px-3',
+                          child: const WText('50%',
+                              className: 'text-white text-center text-xs'),
+                        ),
+                        const SizedBox(width: 8),
+                        WContainer(
+                          className: 'p-3 bg-blue-500 opacity-25 rounded px-3',
+                          child: const WText('25%',
+                              className: 'text-white text-center text-xs'),
+                        ),
+                      ],
                     ),
-                    WContainer(
-                      className: 'p-3 bg-blue-500 opacity-75 rounded',
-                      child: const WText('75%',
-                          className: 'text-white text-center'),
-                    ),
-                    WContainer(
-                      className: 'p-3 bg-blue-500 opacity-50 rounded',
-                      child: const WText('50%',
-                          className: 'text-white text-center'),
-                    ),
-                    WContainer(
-                      className: 'p-3 bg-blue-500 opacity-25 rounded',
-                      child: const WText('25%',
-                          className: 'text-white text-center'),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 12),
                 WContainer(
@@ -1126,20 +1145,27 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
                 const WText('capitalize text', className: 'capitalize mb-4'),
                 const WText('文本溢出处理',
                     className: 'font-semibold mb-2 text-purple-600'),
-                WContainer(
-                  className: 'w-[200px] p-2 border rounded',
-                  child: const WText(
-                    '这是一段很长的文本，用来测试溢出处理效果',
-                    className: 'overflow-ellipsis',
-                    maxLines: 1,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                WContainer(
-                  className: 'w-[200px] p-2 border rounded',
-                  child: const WText(
-                    '这是一段很长的文本，用来测试行数限制效果。这段文本会被限制在两行内显示。',
-                    className: 'line-clamp-2',
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: WColumn(
+                    children: [
+                      WContainer(
+                        className: 'w-[200px] p-2 border rounded',
+                        child: const WText(
+                          '这是一段很长的文本，用来测试溢出处理效果',
+                          className: 'overflow-ellipsis',
+                          maxLines: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      WContainer(
+                        className: 'w-[200px] p-2 border rounded',
+                        child: const WText(
+                          '这是一段很长的文本，用来测试行数限制效果。这段文本会被限制在两行内显示。',
+                          className: 'line-clamp-2',
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -1217,30 +1243,41 @@ class _CompleteTestPageState extends State<CompleteTestPage> {
     return WCard(
       className: 'bg-white p-6 rounded-lg shadow-sm border border-gray-200',
       child: WColumn(
+        className: 'gap-2',
         children: [
           WText(
             title,
             className: 'text-lg font-semibold text-gray-900 mb-4',
           ),
-          ...children.map((child) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: child,
-              )),
+          ...children,
         ],
       ),
     );
   }
 
   Widget _colorBox(String className, String label) {
-    return Expanded(
+    return SizedBox(
+      height: 48, // h-12
+      width: 80, // 固定宽度避免溢出
       child: WContainer(
-        className: '$className h-12 rounded flex justify-center items-center',
-        child: WText(
-          label,
-          className:
-              'text-xs font-medium ${className.contains('white') || className.contains('100') ? 'text-gray-700' : 'text-white'}',
+        className: '$className rounded px-3',
+        child: Center(
+          child: WText(
+            label,
+            className:
+                'text-xs font-medium ${className.contains('white') || className.contains('100') ? 'text-gray-700' : 'text-white'}',
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _scrollableColorRow(List<Widget> children) {
+    return Wrap(
+      spacing: 8.0,
+      runSpacing: 8.0,
+      children: children,
     );
   }
 

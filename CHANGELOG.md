@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.3.6] - 2024-12-22
+
+### Added
+- **Custom Color Schemes**: Added support for custom brand and accent color schemes
+  - Brand colors: `brand-50` to `brand-900` - Custom brand color palette
+  - Accent colors: `accent-50` to `accent-900` - Custom accent color palette
+  - Full transparency modifier support: `bg-brand-500/20`, `border-accent-400/50`
+- **Enhanced Documentation**: Added custom color scheme examples and screenshots
+- **Demo Application**: Updated demo to showcase custom color schemes with transparency
+
+### Enhanced
+- **WindConfig**: Extended color configuration to include custom color definitions
+- **Color Parser**: Improved support for custom color scheme parsing
+- **Demo Coverage**: Complete test coverage for all custom color variations
+
+### Fixed
+- Custom color schemes not displaying in demo application
+- Missing color definitions in WindConfig for brand and accent colors
+
 ## [0.3.5] - 2024-12-22
 
 ### Added

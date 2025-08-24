@@ -330,6 +330,32 @@ class WindConfig {
         'emerald-800': const Color(0xFF065F46),
         'emerald-900': const Color(0xFF064E3B),
 
+        // 自定义品牌色系
+        'brand': const Color(0xFF6366F1),
+        'brand-50': const Color(0xFFEEF2FF),
+        'brand-100': const Color(0xFFE0E7FF),
+        'brand-200': const Color(0xFFC7D2FE),
+        'brand-300': const Color(0xFFA5B4FC),
+        'brand-400': const Color(0xFF818CF8),
+        'brand-500': const Color(0xFF6366F1),
+        'brand-600': const Color(0xFF4F46E5),
+        'brand-700': const Color(0xFF4338CA),
+        'brand-800': const Color(0xFF3730A3),
+        'brand-900': const Color(0xFF312E81),
+
+        // 自定义强调色系
+        'accent': const Color(0xFFEC4899),
+        'accent-50': const Color(0xFFFDF2F8),
+        'accent-100': const Color(0xFFFCE7F3),
+        'accent-200': const Color(0xFFFBCFE8),
+        'accent-300': const Color(0xFFF9A8D4),
+        'accent-400': const Color(0xFFF472B6),
+        'accent-500': const Color(0xFFEC4899),
+        'accent-600': const Color(0xFFDB2777),
+        'accent-700': const Color(0xFFBE185D),
+        'accent-800': const Color(0xFF9D174D),
+        'accent-900': const Color(0xFF831843),
+
         // 背景色
         'white': const Color(0xFFFFFFFF),
         'black': const Color(0xFF000000),

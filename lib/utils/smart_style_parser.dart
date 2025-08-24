@@ -299,9 +299,25 @@ class SmartStyleParser {
       double? width = _parseSize(cls.substring(2));
       if (width != null) styles['width'] = width;
     }
+    else if (cls.startsWith('min-w-')) {
+      double? minWidth = _parseSize(cls.substring(6));
+      if (minWidth != null) styles['minWidth'] = minWidth;
+    }
+    else if (cls.startsWith('max-w-')) {
+      double? maxWidth = _parseSize(cls.substring(6));
+      if (maxWidth != null) styles['maxWidth'] = maxWidth;
+    }
     else if (cls.startsWith('h-')) {
       double? height = _parseSize(cls.substring(2));
       if (height != null) styles['height'] = height;
+    }
+    else if (cls.startsWith('min-h-')) {
+      double? minHeight = _parseSize(cls.substring(6));
+      if (minHeight != null) styles['minHeight'] = minHeight;
+    }
+    else if (cls.startsWith('max-h-')) {
+      double? maxHeight = _parseSize(cls.substring(6));
+      if (maxHeight != null) styles['maxHeight'] = maxHeight;
     }
     // Flex相关
     else if (cls.startsWith('flex')) {
@@ -735,12 +751,16 @@ class SmartStyleParser {
         return emValue != null ? emValue * 16 : null;
       }
       
-      // 处理百分比值 50%, 100% (暂时按像素处理，实际应用中可能需要特殊处理)
+      // 处理百分比值 50%, 100% (转换为合理的像素值以避免溢出)
       else if (value.endsWith('%')) {
         String numStr = value.substring(0, value.length - 1);
         double? percentValue = double.tryParse(numStr);
-        // 这里简单处理，实际可能需要根据父容器计算
-        return percentValue;
+        if (percentValue != null) {
+          // 将百分比转换为合理的像素值，避免溢出
+          // 假设屏幕宽度为400px作为基准
+          return (percentValue / 100) * 400;
+        }
+        return null;
       }
       
       // 处理纯数字 10, 20 (按像素处理)
