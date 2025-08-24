@@ -1,56 +1,89 @@
-# macOS系统文件
+# ===========================================
+# Flutter Package 发布优化配置
+# 目标：最小化包大小，只保留必要文件
+# 当前包大小：52 KB → 目标：< 30 KB
+# ===========================================
+
+# 系统文件
 .DS_Store
+Thumbs.db
+*.tmp
+*.temp
 
-# Flutter生成的文件（不需要发布）
-example/ios/Flutter/AppFrameworkInfo.plist
-example/ios/Flutter/Debug.xcconfig
-example/ios/Flutter/Generated.xcconfig
-example/ios/Flutter/Release.xcconfig
-example/ios/Flutter/ephemeral/flutter_lldb_helper.py
-example/ios/Flutter/ephemeral/flutter_lldbinit
-example/ios/Flutter/flutter_export_environment.sh
-
-# iOS项目文件（不需要发布）
-example/ios/.gitignore
-example/ios/Runner.xcodeproj/project.pbxproj
-example/ios/Runner.xcodeproj/
-example/ios/Runner/
-example/ios/RunnerTests/
-example/ios/Runner.xcworkspace/
-
-# macOS项目文件（不需要发布）
-example/macos/.gitignore
-example/macos/Flutter/ephemeral/
-example/macos/Runner.xcodeproj/
-example/macos/Runner/
-example/macos/RunnerTests/
-example/macos/Runner.xcworkspace/
-
-# Android项目文件（不需要发布）
-example/android/
-
-# 其他平台文件（不需要发布）
-example/linux/
-example/windows/
-example/web/
-
-# 构建产物和依赖
+# 构建产物和缓存（大文件 - 82M + 335M）
+build/
 example/build/
+.dart_tool/
 example/.dart_tool/
-example/.flutter-plugins
-example/.flutter-plugins-dependencies
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+pubspec.lock
 example/pubspec.lock
 
-# 测试文件
-example/test/
-
-# IDE配置
+# IDE 和编辑器配置
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+flutter_twind.iml
 
-# 开发相关文件
+# 开发和调试文件
 coverage/
+.nyc_output/
 HOT_RELOAD_GUIDE.md
 
-# 图片资源（如果不需要发布）
+# 大型测试文件（保留核心测试，移除大型测试）
+test/performance_stress_test.dart
+test/integration_test.dart
+test/constraint_validation_test.dart
+test/recursion_prevention_test.dart
+test/simple_constraint_test.dart
+test/basic_constraint_test.dart
+test/responsive_design_test.dart
+test/responsive_test.dart
+test/extended_widget_test.dart
+
+# 开发文档（保留核心文档）
+CONSTRAINT_FIX_GUIDE.md
+CONSTRAINT_FIX_SUMMARY.md
+
+# Example 项目的平台特定文件（大幅减少包大小）
+example/android/
+example/ios/
+example/linux/
+example/macos/
+example/windows/
+example/web/
+example/test/
+
+# 大型示例文件（53 KB - 保留核心示例）
+example/lib/flutter_twind_example.dart
+
+# 图片资源（288K - 完全移除）
 images/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+
+# 临时和备份文件
+*.bak
+*.backup
+*.orig
+*.rej
+.*.swp
+
+# Git 相关（不需要发布）
+.git/
+.gitignore
+.gitattributes
+
+# 其他开发文件
+.metadata
+example/.metadata
+example/.gitignore
+analysis_options.yaml
+example/analysis_options.yaml
