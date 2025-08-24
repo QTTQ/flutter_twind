@@ -7,8 +7,8 @@ issue_tracker: https://github.com/QTTQ/flutter_twind/issues
 documentation: https://github.com/QTTQ/flutter_twind#readme
 
 environment:
-  sdk: '^3.8.0'
-  flutter: ">=1.17.0"
+  sdk: '>=2.17.0 <4.0.0'
+  flutter: ">=3.0.0"
 
 dependencies:
   flutter:
@@ -36,5 +36,4 @@ platforms:
   web:
   windows:
 
-screenshots:
 flutter:

@@ -32,7 +32,7 @@ class SimpleConstraintDemoPage extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -41,7 +41,7 @@ class SimpleConstraintDemoPage extends StatelessWidget {
               '🎯 约束功能演示',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             
             // 宽度约束演示
             _buildSection('宽度约束', [
@@ -105,7 +105,7 @@ class SimpleConstraintDemoPage extends StatelessWidget {
             // 测试结果
             _buildSection('测试状态', [
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.green.shade50,
                   border: Border.all(color: Colors.green.shade200),
@@ -122,7 +122,7 @@ class SimpleConstraintDemoPage extends StatelessWidget {
                         color: Colors.green.shade800,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       '• 所有8个测试用例通过\n• 支持 min-w, max-w, min-h, max-h\n• 边界值处理正常\n• 组合约束工作正常',
                       style: TextStyle(color: Colors.green.shade700),
@@ -145,9 +145,9 @@ class SimpleConstraintDemoPage extends StatelessWidget {
           title,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         ...demos,
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
       ],
     );
   }
@@ -163,14 +163,14 @@ class SimpleConstraintDemoPage extends StatelessWidget {
         SizedBox(height: 8),
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade300),
             borderRadius: BorderRadius.circular(8),
           ),
           child: demo,
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
       ],
     );
   }

@@ -31,9 +31,9 @@ class BasicFunctionalityDemo extends StatelessWidget {
               // 基本容器测试
               const Text('1. 基本容器测试:', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
-              WContainer(
+              const WContainer(
                 className: 'bg-blue-500 p-4 rounded-lg',
-                child: const Text(
+                child: Text(
                   '这是一个蓝色背景的容器',
                   style: TextStyle(color: Colors.white),
                 ),
@@ -43,7 +43,7 @@ class BasicFunctionalityDemo extends StatelessWidget {
               // 文本组件测试
               const Text('2. 文本组件测试:', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
-              WText(
+              const WText(
                 '这是一个红色的大文本',
                 className: 'text-lg text-red-500',
               ),
