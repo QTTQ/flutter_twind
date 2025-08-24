@@ -6,17 +6,20 @@ example/ios/Flutter/AppFrameworkInfo.plist
 example/ios/Flutter/Debug.xcconfig
 example/ios/Flutter/Generated.xcconfig
 example/ios/Flutter/Release.xcconfig
-example/ios/Flutter/ephemeral/
+example/ios/Flutter/ephemeral/flutter_lldb_helper.py
+example/ios/Flutter/ephemeral/flutter_lldbinit
 example/ios/Flutter/flutter_export_environment.sh
 
 # iOS项目文件（不需要发布）
 example/ios/.gitignore
+example/ios/Runner.xcodeproj/project.pbxproj
 example/ios/Runner.xcodeproj/
 example/ios/Runner/
 example/ios/RunnerTests/
 example/ios/Runner.xcworkspace/
 
 # macOS项目文件（不需要发布）
+example/macos/.gitignore
 example/macos/Flutter/ephemeral/
 example/macos/Runner.xcodeproj/
 example/macos/Runner/
@@ -31,23 +34,23 @@ example/linux/
 example/windows/
 example/web/
 
-# 构建产物
+# 构建产物和依赖
 example/build/
 example/.dart_tool/
 example/.flutter-plugins
 example/.flutter-plugins-dependencies
 example/pubspec.lock
 
-# 测试和覆盖率文件
-coverage/
+# 测试文件
 example/test/
 
 # IDE配置
 .vscode/
 .idea/
 
+# 开发相关文件
+coverage/
+HOT_RELOAD_GUIDE.md
+
 # 图片资源（如果不需要发布）
 images/
-
-# 开发文档
-HOT_RELOAD_GUIDE.md
