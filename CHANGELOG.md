@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.4.0] - 2025-08-24
+
+### Fixed
+- **Critical Layout Constraint Issues**: Fixed `BoxConstraints forces an infinite height` error
+  - Fixed `WStack` component layout problems with infinite height constraints
+  - Fixed `WContainer` component constraint handling using LayoutBuilder
+  - Fixed `WImage` component sizing issues in Stack layouts
+  - Fixed `semantics.parentDataDirty` assertion failures
+- **Enhanced Constraint Safety**: All layout components now use LayoutBuilder for safe constraint handling
+- **Improved Stack Layouts**: WStack now properly handles nested containers and images
+- **Better Error Prevention**: Added comprehensive constraint validation to prevent layout crashes
+
+### Added
+- **Constraint Fix Guide**: Complete documentation for layout constraint best practices
+- **Safety Examples**: Added `constraint_fix_example.dart` with safe usage patterns
+- **Layout Debugging**: Enhanced constraint debugging capabilities
+
+### Enhanced
+- **Component Stability**: All W components now handle edge cases more gracefully
+- **Performance**: Optimized constraint calculations for better rendering performance
+- **Developer Experience**: Better error messages and debugging information
+
 ## [0.3.6] - 2024-12-22
 
 ### Added

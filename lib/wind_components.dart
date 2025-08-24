@@ -222,19 +222,35 @@ class WContainer extends StatelessWidget {
       }
     }
 
-    return Container(
-      width: width ?? parsedStyles['width'],
-      height: height ?? parsedStyles['height'],
-      padding: padding ?? parsedStyles['padding'],
-      margin: margin ?? parsedStyles['margin'],
-      alignment: alignment ?? parsedStyles['alignment'],
-      clipBehavior: clipBehavior,
-      constraints: finalConstraints,
-      transform: transform,
-      transformAlignment: transformAlignment,
-      foregroundDecoration: foregroundDecoration,
-      decoration: finalDecoration,
-      child: containerChild,
+    // 使用 LayoutBuilder 来安全处理约束
+    return LayoutBuilder(
+      builder: (context, parentConstraints) {
+        // 确保约束在合理范围内
+        BoxConstraints safeConstraints = finalConstraints ?? BoxConstraints();
+        
+        // 如果父约束有限制，确保不超过父约束
+        if (parentConstraints.maxHeight.isFinite && safeConstraints.maxHeight == double.infinity) {
+          safeConstraints = safeConstraints.copyWith(maxHeight: parentConstraints.maxHeight);
+        }
+        if (parentConstraints.maxWidth.isFinite && safeConstraints.maxWidth == double.infinity) {
+          safeConstraints = safeConstraints.copyWith(maxWidth: parentConstraints.maxWidth);
+        }
+        
+        return Container(
+          width: width ?? parsedStyles['width'],
+          height: height ?? parsedStyles['height'],
+          padding: padding ?? parsedStyles['padding'],
+          margin: margin ?? parsedStyles['margin'],
+          alignment: alignment ?? parsedStyles['alignment'],
+          clipBehavior: clipBehavior,
+          constraints: safeConstraints,
+          transform: transform,
+          transformAlignment: transformAlignment,
+          foregroundDecoration: foregroundDecoration,
+          decoration: finalDecoration,
+          child: containerChild,
+        );
+      },
     );
   }
 }
@@ -505,11 +521,21 @@ class WStack extends StatelessWidget {
         margin != null ||
         backgroundColor != null ||
         parsedStyles.isNotEmpty) {
-      stackWidget = Container(
-        padding: padding ?? parsedStyles['padding'],
-        margin: margin ?? parsedStyles['margin'],
-        color: backgroundColor ?? parsedStyles['backgroundColor'],
-        child: stackWidget,
+      // 使用 LayoutBuilder 来处理约束问题
+      stackWidget = LayoutBuilder(
+        builder: (context, constraints) {
+          return Container(
+            padding: padding ?? parsedStyles['padding'],
+            margin: margin ?? parsedStyles['margin'],
+            color: backgroundColor ?? parsedStyles['backgroundColor'],
+            // 确保容器有合理的约束
+            constraints: BoxConstraints(
+              maxWidth: constraints.maxWidth.isFinite ? constraints.maxWidth : double.infinity,
+              maxHeight: constraints.maxHeight.isFinite ? constraints.maxHeight : double.infinity,
+            ),
+            child: stackWidget,
+          );
+        },
       );
     }
 
@@ -1017,31 +1043,52 @@ class WImage extends StatelessWidget {
       context,
     );
 
-    Widget imageWidget = Image(
-      image: image,
-      width: width ?? parsedStyles['width'],
-      height: height ?? parsedStyles['height'],
-      fit: fit ?? parsedStyles['fit'],
-      alignment: alignment,
-      repeat: repeat,
-      color: color ?? parsedStyles['color'],
-      colorBlendMode: colorBlendMode,
-      filterQuality: filterQuality,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 获取安全的宽高值
+        double? safeWidth = width ?? parsedStyles['width'];
+        double? safeHeight = height ?? parsedStyles['height'];
+        
+        // 如果在 Stack 中且没有指定尺寸，使用父约束
+        if (safeWidth == null && constraints.maxWidth.isFinite) {
+          safeWidth = constraints.maxWidth;
+        }
+        if (safeHeight == null && constraints.maxHeight.isFinite) {
+          safeHeight = constraints.maxHeight;
+        }
+
+        Widget imageWidget = Image(
+          image: image,
+          width: safeWidth,
+          height: safeHeight,
+          fit: fit ?? parsedStyles['fit'] ?? BoxFit.contain,
+          alignment: alignment,
+          repeat: repeat,
+          color: color ?? parsedStyles['color'],
+          colorBlendMode: colorBlendMode,
+          filterQuality: filterQuality,
+        );
+
+        if (borderRadius != null || boxShadow != null || border != null || 
+            parsedStyles.containsKey('borderRadius') || 
+            parsedStyles.containsKey('boxShadow') || 
+            parsedStyles.containsKey('border')) {
+          imageWidget = Container(
+            width: safeWidth,
+            height: safeHeight,
+            decoration: BoxDecoration(
+              borderRadius: borderRadius ?? parsedStyles['borderRadius'],
+              boxShadow: boxShadow ?? parsedStyles['boxShadow'],
+              border: border ?? parsedStyles['border'],
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: imageWidget,
+          );
+        }
+
+        return imageWidget;
+      },
     );
-
-    if (borderRadius != null || boxShadow != null || border != null || parsedStyles.containsKey('borderRadius') || parsedStyles.containsKey('boxShadow') || parsedStyles.containsKey('border')) {
-      imageWidget = Container(
-        decoration: BoxDecoration(
-          borderRadius: borderRadius ?? parsedStyles['borderRadius'],
-          boxShadow: boxShadow ?? parsedStyles['boxShadow'],
-          border: border ?? parsedStyles['border'],
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: imageWidget,
-      );
-    }
-
-    return imageWidget;
   }
 }
 
