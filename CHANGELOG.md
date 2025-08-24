@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.4.1] - 2025-08-24
+
+### Fixed
+- **StackOverflow Error Resolution**: Completely eliminated StackOverflow errors in LayoutBuilder
+  - Removed recursive LayoutBuilder from WStack component
+  - Simplified constraint handling in WContainer component
+  - Maintained all safety features without performance overhead
+- **Enhanced Test Coverage**: Added comprehensive constraint validation tests
+  - Basic constraint tests for all components
+  - Edge case handling verification
+  - ListView and Expanded container compatibility tests
+
+### Improved
+- **Performance Optimization**: Simplified constraint validation logic for better performance
+- **Code Stability**: All layout components now handle edge cases gracefully
+- **Developer Experience**: Added detailed constraint fix guide and examples
+
 ## [0.4.0] - 2025-08-24
 
 ### Fixed
