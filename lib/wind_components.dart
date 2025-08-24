@@ -222,35 +222,61 @@ class WContainer extends StatelessWidget {
       }
     }
 
-    // 使用 LayoutBuilder 来安全处理约束
-    return LayoutBuilder(
-      builder: (context, parentConstraints) {
-        // 确保约束在合理范围内
-        BoxConstraints safeConstraints = finalConstraints ?? BoxConstraints();
-        
-        // 如果父约束有限制，确保不超过父约束
-        if (parentConstraints.maxHeight.isFinite && safeConstraints.maxHeight == double.infinity) {
-          safeConstraints = safeConstraints.copyWith(maxHeight: parentConstraints.maxHeight);
-        }
-        if (parentConstraints.maxWidth.isFinite && safeConstraints.maxWidth == double.infinity) {
-          safeConstraints = safeConstraints.copyWith(maxWidth: parentConstraints.maxWidth);
-        }
-        
-        return Container(
-          width: width ?? parsedStyles['width'],
-          height: height ?? parsedStyles['height'],
-          padding: padding ?? parsedStyles['padding'],
-          margin: margin ?? parsedStyles['margin'],
-          alignment: alignment ?? parsedStyles['alignment'],
-          clipBehavior: clipBehavior,
-          constraints: safeConstraints,
-          transform: transform,
-          transformAlignment: transformAlignment,
-          foregroundDecoration: foregroundDecoration,
-          decoration: finalDecoration,
-          child: containerChild,
-        );
-      },
+    // 简化约束处理，避免 LayoutBuilder 递归
+    BoxConstraints? safeConstraints = finalConstraints;
+    
+    // 基本的约束安全检查
+    if (safeConstraints != null) {
+      double minWidth = safeConstraints.minWidth;
+      double maxWidth = safeConstraints.maxWidth;
+      double minHeight = safeConstraints.minHeight;
+      double maxHeight = safeConstraints.maxHeight;
+      
+      // 处理负数约束
+      if (minWidth < 0) minWidth = 0;
+      if (minHeight < 0) minHeight = 0;
+      
+      // 处理极大值约束
+      if (maxWidth > 10000) maxWidth = 10000;
+      if (maxHeight > 10000) maxHeight = 10000;
+      
+      // 确保 min <= max
+      if (minWidth > maxWidth && maxWidth != double.infinity) {
+        minWidth = maxWidth;
+      }
+      if (minHeight > maxHeight && maxHeight != double.infinity) {
+        minHeight = maxHeight;
+      }
+      
+      safeConstraints = BoxConstraints(
+        minWidth: minWidth,
+        maxWidth: maxWidth,
+        minHeight: minHeight,
+        maxHeight: maxHeight,
+      );
+    }
+    
+    // 获取安全的宽高值
+    double? safeWidth = width ?? parsedStyles['width'];
+    double? safeHeight = height ?? parsedStyles['height'];
+    
+    // 验证宽高值
+    if (safeWidth != null && safeWidth < 0) safeWidth = 0;
+    if (safeHeight != null && safeHeight < 0) safeHeight = 0;
+    
+    return Container(
+      width: safeWidth,
+      height: safeHeight,
+      padding: padding ?? parsedStyles['padding'],
+      margin: margin ?? parsedStyles['margin'],
+      alignment: alignment ?? parsedStyles['alignment'],
+      clipBehavior: clipBehavior,
+      constraints: safeConstraints,
+      transform: transform,
+      transformAlignment: transformAlignment,
+      foregroundDecoration: foregroundDecoration,
+      decoration: finalDecoration,
+      child: containerChild,
     );
   }
 }
@@ -521,21 +547,12 @@ class WStack extends StatelessWidget {
         margin != null ||
         backgroundColor != null ||
         parsedStyles.isNotEmpty) {
-      // 使用 LayoutBuilder 来处理约束问题
-      stackWidget = LayoutBuilder(
-        builder: (context, constraints) {
-          return Container(
-            padding: padding ?? parsedStyles['padding'],
-            margin: margin ?? parsedStyles['margin'],
-            color: backgroundColor ?? parsedStyles['backgroundColor'],
-            // 确保容器有合理的约束
-            constraints: BoxConstraints(
-              maxWidth: constraints.maxWidth.isFinite ? constraints.maxWidth : double.infinity,
-              maxHeight: constraints.maxHeight.isFinite ? constraints.maxHeight : double.infinity,
-            ),
-            child: stackWidget,
-          );
-        },
+      // 直接使用 Container，不使用 LayoutBuilder 避免递归
+      stackWidget = Container(
+        padding: padding ?? parsedStyles['padding'],
+        margin: margin ?? parsedStyles['margin'],
+        color: backgroundColor ?? parsedStyles['backgroundColor'],
+        child: stackWidget,
       );
     }
 
