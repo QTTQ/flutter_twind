@@ -1,5 +1,5 @@
 name: flutter_twind_example
-description: A Flutter example app demonstrating the flutter_twind package.
+description: Example app for flutter_twind package
 version: 1.0.0+1
 
 environment:
@@ -19,3 +19,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+# 如果有指定main文件的地方，更新为：
+# main: lib/flutter_twind_example.dart

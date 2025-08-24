@@ -1,57 +1,53 @@
-# macOS
+# macOS系统文件
 .DS_Store
 
-# Build directories
-build/
-example/build/
-.dart_tool/
+# Flutter生成的文件（不需要发布）
+example/ios/Flutter/AppFrameworkInfo.plist
+example/ios/Flutter/Debug.xcconfig
+example/ios/Flutter/Generated.xcconfig
+example/ios/Flutter/Release.xcconfig
+example/ios/Flutter/ephemeral/
+example/ios/Flutter/flutter_export_environment.sh
 
-# iOS platform files
-example/ios/
-example/macos/
+# iOS项目文件（不需要发布）
+example/ios/.gitignore
+example/ios/Runner.xcodeproj/
+example/ios/Runner/
+example/ios/RunnerTests/
+example/ios/Runner.xcworkspace/
 
-# Web platform files (if not needed)
+# macOS项目文件（不需要发布）
+example/macos/Flutter/ephemeral/
+example/macos/Runner.xcodeproj/
+example/macos/Runner/
+example/macos/RunnerTests/
+example/macos/Runner.xcworkspace/
+
+# Android项目文件（不需要发布）
+example/android/
+
+# 其他平台文件（不需要发布）
+example/linux/
+example/windows/
 example/web/
 
-# Test files (keep only if needed for package testing)
-example_test.dart
-test_border_text.dart
-test_hsl_colors.dart
-test_hsl_simple.dart
-wind_components_demo.dart
-
-# Lock files
+# 构建产物
+example/build/
+example/.dart_tool/
+example/.flutter-plugins
+example/.flutter-plugins-dependencies
 example/pubspec.lock
-pubspec.lock
 
-# IDE files
+# 测试和覆盖率文件
+coverage/
+example/test/
+
+# IDE配置
 .vscode/
 .idea/
-*.iml
-.codebuddy/
-.metadata
 
-# Temporary files
-*.tmp
-*.temp
+# 图片资源（如果不需要发布）
+images/
 
-# Log files
-*.log
-
-# Coverage files
-coverage/
-
-# Generated files
-*.g.dart
-*.freezed.dart
-*.mocks.dart
-
-# Flutter/Dart specific
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-.pub-cache/
-.pub/
-
-# Git files
-.git/
+# 开发文档
+HOT_RELOAD_GUIDE.md
